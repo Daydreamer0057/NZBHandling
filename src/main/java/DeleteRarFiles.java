@@ -10,7 +10,7 @@ public class DeleteRarFiles {
 
 	public DeleteRarFiles() {
 		// Dossier a supprimer
-		File base = new File("z://test/burn notice");
+		File base = new File("z://test/film france");
 //		File base = new File("F://The Mandalorian");
 
 		File[] fichiers = base.listFiles();
