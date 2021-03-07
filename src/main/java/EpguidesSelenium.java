@@ -28,7 +28,7 @@ public class EpguidesSelenium {
 
 		// ChromeOptions options = new ChromeOptions();
 		// options.setBinary("C://Program Files/Google/Chrome/Application/chrome.exe");
-		// System.setProperty("webdriver.chrome.driver", "f://temp/chromedriver.exe");
+		// System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
 		System.setProperty("webdriver.chrome.driver",
 				"c://programdata/chocolatey/lib/chromedriver/tools/chromedriver.exe");
 		List<String> listURL = new ArrayList<String>();

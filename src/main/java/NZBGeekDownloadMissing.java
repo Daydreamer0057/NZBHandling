@@ -65,14 +65,14 @@ public class NZBGeekDownloadMissing {
 				// TimeUnit.HOURS.sleep(8);
 				WebDriver driver = null;
 
-				// File fichierChrome = new File("f://temp/chromedriver 2");
+				// File fichierChrome = new File("e://temp/chromedriver 2");
 				// File[] fichiers = fichierChrome.listFiles();
 				//
 				// for (File fichierTemp : fichiers) {
 				// boolean test = false;
 				try {
 					// System.out.println(fichierTemp.getPath());
-					System.setProperty("webdriver.chrome.driver", "f://temp/chromedriver.exe");
+					System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
 					driver = new ChromeDriver(chromeOptions);
 				} catch (Exception ex) {
 					// test = true;

@@ -14,7 +14,7 @@ public class CopyTrim {
 		HashSet<File> listeFichier = new HashSet<File>();
 		ArrayList<File> listeDirectory = new ArrayList<File>();
 		// listeDirectory.add(new File("f://series"));
-		// listeDirectory.add(new File("f://temp 2/main"));
+		// listeDirectory.add(new File("e://temp 2/main"));
 
 		// for (File fichier : fichiers) {
 		// if (fichier.isDirectory()) {

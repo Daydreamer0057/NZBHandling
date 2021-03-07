@@ -69,7 +69,7 @@ public class SubtitlesDownload {
         //for (File fichierTemp : listeDriver) {
         //  boolean test = false;
         try {
-            System.setProperty("webdriver.chrome.driver", "f://temp/chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
             driver = new ChromeDriver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -133,7 +133,7 @@ public class SubtitlesDownload {
                     File[] listeDriver2 = fichierDriver2.listFiles();
 
                     try {
-                        System.setProperty("webdriver.chrome.driver", "f://temp/chromedriver.exe");
+                        System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
                         driver2 = new ChromeDriver();
                     } catch (Exception ex) {
                         ex.printStackTrace();

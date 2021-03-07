@@ -12,11 +12,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 public class NZBGeekDownloadSeries {
 
 	public NZBGeekDownloadSeries() {
-		// ArrayList<String> listNot = new ArrayList<String>();
+		ArrayList<String> listNot = new ArrayList<String>();
 
-		ArrayList<String> listNot = preparation("z://series/");
+		//ArrayList<String> listNot = preparation("z://series/Trial & Error");
 
-		int code = 281342;
+		int code = 248835;
 		int seasons = 2;
 		int compteurMax = 0;
 
@@ -25,14 +25,14 @@ public class NZBGeekDownloadSeries {
 			// TimeUnit.HOURS.sleep(8);
 			WebDriver driver = null;
 
-			// File fichierChrome = new File("f://temp/chromedriver 2");
+			// File fichierChrome = new File("e://temp/chromedriver 2");
 			// File[] fichiers = fichierChrome.listFiles();
 			//
 			// for (File fichierTemp : fichiers) {
 			// boolean test = false;
 			try {
 				// System.out.println(fichierTemp.getPath());
-				System.setProperty("webdriver.chrome.driver", "f://temp/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
 				driver = new ChromeDriver();
 			} catch (Exception ex) {
 				// test = true;
