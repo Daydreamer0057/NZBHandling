@@ -19,7 +19,7 @@ public class DeleteDuplicatesFilmTotal {
 		HashMap<String, ArrayList> map1080 = new HashMap<String, ArrayList>();
 		HashMap<String, ArrayList> map2160 = new HashMap<String, ArrayList>();
 
-		String pathNew ="20210224";
+		String pathNew ="20210312";
 
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);

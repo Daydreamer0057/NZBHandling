@@ -48,7 +48,7 @@ public class PopulateNZB {
 
 		// NZBService nzbService = new NZBService();
 
-		File basePrincipal = new File("f://NZBFile");
+		File basePrincipal = new File("e://NZBFile");
 
 		File[] listPrincipal = basePrincipal.listFiles();
 
@@ -58,7 +58,7 @@ public class PopulateNZB {
 			listePrincipale.add(fichier);
 		}
 
-		File base = new File("f://NZBFile/new");
+		File base = new File("e://NZBFile/new");
 
 		File[] fichiers = base.listFiles();
 

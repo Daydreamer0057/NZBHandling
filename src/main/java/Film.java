@@ -8,9 +8,9 @@ public class Film {
 
 	public Film() {
 		// Dossier a supprimer
-		 File base = new File("z://test/film france");
+		 //File base = new File("z://test/film");
 		//File base = new File("Z://test/film2");
-//		File base = new File("z://documentaires/Deadliest Catch");
+		File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
 
 		File[] fichiers = base.listFiles();
@@ -41,8 +41,9 @@ public class Film {
 		}
 
 		int compteur = 0;
-		File fichier = new File("z://temp/convert");
-		//File fichier = new File("f://convert");
+		//File fichier = new File("z://temp/convert");
+		//File fichier = new File("e://convert");
+		File fichier = new File("e://theatre/h265");
 		File[] files = fichier.listFiles();
 
 		for (File fichierTemp : files) {

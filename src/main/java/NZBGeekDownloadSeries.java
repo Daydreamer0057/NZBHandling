@@ -16,7 +16,7 @@ public class NZBGeekDownloadSeries {
 
 		//ArrayList<String> listNot = preparation("z://series/Trial & Error");
 
-		int code = 248835;
+		int code = 78020;
 		int seasons = 2;
 		int compteurMax = 0;
 

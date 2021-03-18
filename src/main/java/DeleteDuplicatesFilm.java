@@ -29,7 +29,7 @@ public class DeleteDuplicatesFilm {
 		System.out.println("debut " + ms);
 		try {
 //			File base = new File("z://film/new");
-			File base = new File("z://test/film france");
+			File base = new File("z://test/film");
 
 			File[] fichiers = base.listFiles();
 
