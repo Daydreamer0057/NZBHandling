@@ -21,7 +21,7 @@ public class SubtitlesDownload {
 
     public SubtitlesDownload() {
         long seconds = System.currentTimeMillis();
-        File base = new File("z://film/new");
+        File base = new File("Z://Film/New/20210318");
 
         File[] fichiers = base.listFiles();
 
@@ -65,7 +65,7 @@ public class SubtitlesDownload {
         try {
             System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
             driver = new ChromeDriver();
-            driver.manage().window().setPosition(new Point(-2000, 0));
+            driver.manage().window().setPosition(new Point(0, -2000));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -73,7 +73,7 @@ public class SubtitlesDownload {
         int compteur = 0;
         for (File fichierTemp : listeFichier) {
             compteur++;
-            if (compteur >= 2505) {
+            if (compteur >= 0) {
                 System.out.println("Compteur " + compteur+ " / "+listeFichier.size());
                 /*Pattern pattern = Pattern.compile("\\([0-9]+");
                 Matcher matcher = pattern.matcher(fichierTemp.getName());
@@ -93,7 +93,7 @@ public class SubtitlesDownload {
                         try {
                             System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
                             driver3 = new ChromeDriver();
-                            driver3.manage().window().setPosition(new Point(0, 2000));
+                            driver3.manage().window().setPosition(new Point(0, -2000));
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -130,7 +130,7 @@ public class SubtitlesDownload {
                             try {
                                 System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
                                 driver = new ChromeDriver();
-                                driver.manage().window().setPosition(new Point(-2000, 0));
+                                driver.manage().window().setPosition(new Point(0, -2000));
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -148,7 +148,7 @@ public class SubtitlesDownload {
                             try {
                                 System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
                                 driver2 = new ChromeDriver();
-                                driver2.manage().window().setPosition(new Point(-2000, 0));
+                                driver2.manage().window().setPosition(new Point(0, -2000));
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }

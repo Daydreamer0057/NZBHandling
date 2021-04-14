@@ -21,12 +21,12 @@ public class ListFiles {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			fw = new FileWriter("f://log/" + ms + "_log_populate.txt");
+			fw = new FileWriter("e://log/" + ms + "_log_populate.txt");
 			pw = new PrintWriter(fw);
 
 //			File base = new File("z://series");
 			
-			File base = new File("z://test/film2");
+			File base = new File("z://film");
 
 			File[] fichiers = base.listFiles();
 
@@ -37,6 +37,7 @@ public class ListFiles {
 			listeDirectory.add(new File("z://Series"));
 			listeDirectory.add(new File("z://Games"));
 			listeDirectory.add(new File("z://Onedrive"));
+			listeDirectory.add(new File("z://Documentaires"));
 
 			for (File fichier : fichiers) {
 				if (fichier.isDirectory()) {

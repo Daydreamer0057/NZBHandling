@@ -58,7 +58,7 @@ public class PopulateNZB {
 			listePrincipale.add(fichier);
 		}
 
-		File base = new File("e://NZBFile/new");
+		File base = new File("e://NZBFile");
 
 		File[] fichiers = base.listFiles();
 
@@ -111,20 +111,17 @@ public class PopulateNZB {
 				while (line != null) {
 					line = br.readLine();
 					if (line!=null&&line.contains("subject")) {
-						if (!listePrincipale.contains(fichierTemp)) {
-							String queryExist = ("SELECT * from articles_nzb where nzb_name = ? and real_name = ?");
+						//if (!listePrincipale.contains(fichierTemp)) {
+							String queryExist = ("SELECT * from articles_nzb where filename = ?");
 							PreparedStatement stmt = conn.prepareStatement(queryExist);
 
-							stmt.setString(1, line);
-							realName = fichierTemp.getName();
-							realName = realName.substring(0, realName.length() - 4);
-							stmt.setString(2, realName);
+							stmt.setString(1, fichierTemp.getName());
 							ResultSet result = stmt.executeQuery();
 
 							if (!result.next()) {
 
-								String query = "insert into articles_nzb (id_nzb, real_name,nzb_name)"
-										+ " values (?, ?, ?)";
+								String query = "insert into articles_nzb (id_nzb, real_name,nzb_name,filename)"
+										+ " values (?, ?, ?,?)";
 
 								PreparedStatement preparedStmt = conn.prepareStatement(query);
 								preparedStmt.setLong(1, 0L);
@@ -132,6 +129,7 @@ public class PopulateNZB {
 								realName = realName.substring(0, realName.length() - 4);
 								preparedStmt.setString(2, realName);
 								preparedStmt.setString(3, line);
+								preparedStmt.setString(4, fichierTemp.getName());
 
 								// execute the preparedstatement
 								int success = preparedStmt.executeUpdate();
@@ -143,7 +141,7 @@ public class PopulateNZB {
 								break;
 							} else {
 								total++;
-							}
+						//	}
 						}
 					}
 					System.out.println("Fichier " + compteur + " / " + listeFichier.size() + "    changes " + change

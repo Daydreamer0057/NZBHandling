@@ -8,9 +8,9 @@ public class Film {
 
 	public Film() {
 		// Dossier a supprimer
-		 //File base = new File("z://test/film");
-		//File base = new File("Z://test/film2");
-		File base = new File("e://theatre/convert");
+		File base = new File("z://documentaires/film");
+		//File base = new File("Z://film/new");
+		//File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
 
 		File[] fichiers = base.listFiles();
@@ -41,9 +41,9 @@ public class Film {
 		}
 
 		int compteur = 0;
-		//File fichier = new File("z://temp/convert");
+		File fichier = new File("z://temp/convert");
 		//File fichier = new File("e://convert");
-		File fichier = new File("e://theatre/h265");
+		//File fichier = new File("e://theatre/h265");
 		File[] files = fichier.listFiles();
 
 		for (File fichierTemp : files) {
@@ -66,20 +66,19 @@ public class Film {
 
 			listeFichier.forEach(res -> {
 				String nameRes = res.getName();
-				if(nameRes.contains("Naples")&&path2.contains("Naples")){
-					System.out.println("");
-				}
-				if (nameRes.indexOf("_0") != -1 || nameRes.indexOf("_1") != -1 || nameRes.indexOf("_2") != -1
-						|| nameRes.indexOf("_3") != -1 || nameRes.indexOf("_4") != -1 || nameRes.indexOf("_5") != -1
-						|| nameRes.indexOf("_6") != -1 || nameRes.indexOf("_7") != -1 || nameRes.indexOf("_8") != -1
-						|| nameRes.indexOf("_9") != -1) {
-					nameRes = nameRes.substring(0, nameRes.length() - 6);
-				} else {
-					nameRes = nameRes.substring(0, nameRes.length() - 4);
-				}
-				if (nameRes.equalsIgnoreCase(path2)) {
-					res.delete();
-					System.out.println(res.getPath() + "    " + listeFichier.size());
+				if(!nameRes.equalsIgnoreCase(".classpath")) {
+					if (nameRes.indexOf("_0") != -1 || nameRes.indexOf("_1") != -1 || nameRes.indexOf("_2") != -1
+							|| nameRes.indexOf("_3") != -1 || nameRes.indexOf("_4") != -1 || nameRes.indexOf("_5") != -1
+							|| nameRes.indexOf("_6") != -1 || nameRes.indexOf("_7") != -1 || nameRes.indexOf("_8") != -1
+							|| nameRes.indexOf("_9") != -1) {
+						nameRes = nameRes.substring(0, nameRes.length() - 6);
+					} else {
+						nameRes = nameRes.substring(0, nameRes.length() - 4);
+					}
+					if (nameRes.equalsIgnoreCase(path2)) {
+						res.delete();
+						System.out.println(res.getPath() + "    " + listeFichier.size());
+					}
 				}
 			});
 		}

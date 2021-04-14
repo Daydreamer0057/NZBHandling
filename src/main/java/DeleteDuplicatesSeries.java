@@ -21,7 +21,7 @@ public class DeleteDuplicatesSeries {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			File base = new File("z://series/burn notice");
+			File base = new File("z://series/flash");
 
 			File[] fichiers = base.listFiles();
 

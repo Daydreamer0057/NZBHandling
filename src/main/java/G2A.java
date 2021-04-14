@@ -1,29 +1,19 @@
-import Utilities.UnzipFiles;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class SteamWishlist {
+public class G2A {
     ChromeDriver driver;
     ChromeDriver driver2;
     ChromeDriver driver3;
 
-    public SteamWishlist() throws Exception{
+    public G2A() throws Exception{
         FileReader fr = new FileReader("c:/log/wishlist.txt");
         BufferedReader br = new BufferedReader(fr);
             System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
@@ -34,15 +24,20 @@ public class SteamWishlist {
         while(line!=null) {
             line = br.readLine();
             if(line!=null) {
-                driver.get("https://www.dlcompare.fr/");
-
-
-                driver.findElement(By.id("right-label-large")).sendKeys(line);
-
-                WebElement webElementTemp2 = driver.findElement(By.id("right-label-large"));
-                webElementTemp2.submit();
-
                 Robot robot = new Robot();
+
+                driver.get("https://www.instant-gaming.com/");
+
+                //driver.findElement(By.className("checkbox-wrapper__checkbox--regular")).click();
+
+                //driver.findElement(By.className("button--type-full")).click();
+
+
+                driver.findElement(By.id("ig-header-search-box-input")).sendKeys(line);
+
+                robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
+
                 robot.keyPress(KeyEvent.VK_CONTROL);
                 robot.keyPress(KeyEvent.VK_T);
                 robot.keyRelease(KeyEvent.VK_CONTROL);
@@ -61,7 +56,7 @@ public class SteamWishlist {
     public static void main(String[] args)
     {
         try {
-            SteamWishlist nzb = new SteamWishlist();
+            G2A nzb = new G2A();
         } catch (Exception ex) {
         ex.printStackTrace();
     }
