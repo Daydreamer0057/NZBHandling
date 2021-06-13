@@ -64,8 +64,8 @@ public class VerifyNamesNZB {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("Driver O.K.");
 
-			String url = "jdbc:mysql://10.0.0.100:3306/nzb?serverTimezone=UTC";
-			String user = "test";
+			String url = "jdbc:mysql://localhost:3306/nzb?serverTimezone=UTC";
+			String user = "root";
 			String passwd = "test";
 
 			conn = DriverManager.getConnection(url, user, passwd);

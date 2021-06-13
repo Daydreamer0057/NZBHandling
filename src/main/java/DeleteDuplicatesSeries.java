@@ -21,7 +21,7 @@ public class DeleteDuplicatesSeries {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			File base = new File("z://series/flash");
+			File base = new File("z://test/main a traiter");
 
 			File[] fichiers = base.listFiles();
 
@@ -35,8 +35,6 @@ public class DeleteDuplicatesSeries {
 					if ((fichier.getName().endsWith("mkv") || fichier.getName().endsWith("mp4")
 							|| fichier.getName().endsWith("avi"))) {
 						listeFichier.add(fichier);
-					} else {
-						System.out.println("=================================" + fichier.getPath());
 					}
 				}
 			}
@@ -54,8 +52,6 @@ public class DeleteDuplicatesSeries {
 							if ((fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
 									|| fichierTemp.getName().endsWith("avi"))) {
 								listeFichier.add(fichierTemp);
-							} else {
-								System.out.println("=================================" + fichier.getPath());
 							}
 						}
 					}
@@ -169,6 +165,8 @@ public class DeleteDuplicatesSeries {
 				}
 			}
 
+			int compteur = 0;
+
 			// ====================================1080
 			if (map1080.size() > 0) {
 				Set<String> set = map1080.keySet();
@@ -199,6 +197,7 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 						if (map2160.containsKey(lineTemp)) {
@@ -208,6 +207,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -221,6 +221,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -234,6 +235,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -247,6 +249,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -260,6 +263,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -273,6 +277,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -312,6 +317,7 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 						// if (map1080.containsKey(lineTemp)) {
@@ -334,6 +340,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -347,6 +354,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -360,6 +368,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -373,6 +382,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -386,6 +396,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -426,6 +437,7 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 
@@ -436,6 +448,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -449,6 +462,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -462,6 +476,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -475,6 +490,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -514,6 +530,7 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 
@@ -524,6 +541,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -537,6 +555,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -550,6 +569,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -589,6 +609,7 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 
@@ -599,6 +620,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -612,6 +634,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -651,6 +674,7 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 
@@ -661,6 +685,7 @@ public class DeleteDuplicatesSeries {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									fichierTemp.delete();
+									compteur++;
 								} catch (Exception ex) {
 
 								}
@@ -700,13 +725,14 @@ public class DeleteDuplicatesSeries {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
+								compteur++;
 							}
 						}
 
 					}
 				}
 			}
-
+			System.out.println("Deleted "+compteur);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

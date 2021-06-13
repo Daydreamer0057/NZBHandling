@@ -1,3 +1,4 @@
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -11,7 +12,8 @@ import java.util.regex.Pattern;
 public class RenameObfu {
 
 	public RenameObfu() {
-		File base = new File("z://test/main");
+		String pathPrincipal = "z://test/main";
+		File base = new File(pathPrincipal);
 //		File base = new File("F://The Mandalorian");
 
 		File[] fichiers = base.listFiles();
@@ -24,8 +26,8 @@ public class RenameObfu {
 			if (fichier.isDirectory()) {
 				listeDirectory.add(fichier);
 			} else {
-				if (fichier.getName().endsWith("mkv") || fichier.getName().endsWith("mp4")
-						|| fichier.getName().endsWith("avi") || fichier.getName().endsWith("srt")) {
+				if (fichier.getName().endsWith(".mkv") || fichier.getName().endsWith(".mp4")
+						|| fichier.getName().endsWith(".avi")) {
 					listeFichier.add(fichier);
 				}
 			}
@@ -40,8 +42,8 @@ public class RenameObfu {
 				if (fichierTemp.isDirectory()) {
 					listeDirectory.add(fichierTemp);
 				} else {
-					if (fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
-							|| fichierTemp.getName().endsWith("avi")) {
+					if (fichierTemp.getName().endsWith(".mkv") || fichierTemp.getName().endsWith(".mp4")
+							|| fichierTemp.getName().endsWith(".avi")) {
 						listeFichier.add(fichierTemp);
 					}
 				}
@@ -55,12 +57,9 @@ public class RenameObfu {
 			String path2 = folder2.toString();
 			path2 = path2.replaceAll("\\\\", "/");
 
-			Pattern pattern = Pattern.compile("[sS][0-9]+[eE][0-9]+");
-			Matcher matcher = pattern.matcher(fichierObfu.getName());
-			boolean testMaj = matcher.find();
-
-			if(!matcher.find()){
-				fichierObfu.renameTo(new File(path2+"/"+path2.substring(path2.lastIndexOf("/")+1,path2.length())+ FilenameUtils.getExtension(fichierObfu.getName())));
+			if(fichierObfu.isFile()&&!path2.toLowerCase().equals(pathPrincipal)){
+				String path3 = path2.substring(pathPrincipal.length(),path2.length());
+				fichierObfu.renameTo(new File(path2+"/"+path3+"."+ FilenameUtils.getExtension(fichierObfu.getName())));
 			}
 
 		}

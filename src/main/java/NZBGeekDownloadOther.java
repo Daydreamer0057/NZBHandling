@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NZBGeekDownloadTotal {
+public class NZBGeekDownloadOther {
 
-	public NZBGeekDownloadTotal() {
+	public NZBGeekDownloadOther() {
 		 ArrayList<String> listNot = new ArrayList<String>();
 
 		String series = "Your Honor";
@@ -42,34 +42,6 @@ public class NZBGeekDownloadTotal {
 				// test = true;
 				ex.printStackTrace();
 			}
-			// if (!test) {
-			// break;
-			// }
-			// }
-
-//			driver.get("http://epguides.com/" + seriesSeasons);
-//			driver.get("http://epguides.com/" + alt);
-
-//			String body = driver.getPageSource();
-//
-//			Pattern pattern = Pattern.compile("Season[ ]*[0-9]+");
-//			Matcher matcher = pattern.matcher(body);
-//			int compteurSeason = 0;
-//			try {
-//				while (matcher.find()) {
-//					Pattern pattern2 = Pattern.compile("[0-9]+");
-//					Matcher matcher2 = pattern2.matcher(matcher.group());
-//					if (matcher2.find()) {
-//						if (Integer.parseInt(matcher2.group()) > compteurSeason) {
-//							compteurSeason = Integer.parseInt(matcher2.group());
-//						}
-//					}
-//				}
-//			} catch (Exception e) {
-//
-//			}
-//			
-//			s = compteurSeason;
 
 			driver.get("https://nzbgeek.info/logon.php");
 
@@ -85,45 +57,9 @@ public class NZBGeekDownloadTotal {
 
 			List<String> listHref = new ArrayList<String>();
 
-			for (int season = 1; season < 15; season++) {
-				System.out.println(season + " / " + season);
-				for (int episode = 1; episode < 100; episode++) {
-					boolean test = false;
-					// driver.get("https://nzbgeek.info/geekseek.php?c=5000&browseincludewords=will%20grace&search="
-					// + i);
-					if (season < 10) {
-						if (episode < 10) {
-							if (!listNot.contains("S0" + season + "E0" + episode)) {
 								driver.get(
-										"https://nzbgeek.info/geekseek.php?moviesgeekseek=1&c=5000&browseincludewords="
-												+ series + "+s0" + season + "e0" + episode);
-								test = true;
-							}
-						} else {
-							if (!listNot.contains("S0" + season + "E" + episode)) {
-								driver.get(
-										"https://nzbgeek.info/geekseek.php?moviesgeekseek=1&c=5000&browseincludewords="
-												+ series + "+s0" + season + "e" + episode);
-								test = true;
-							}
-						}
-					} else {
-						if (episode < 10) {
-							if (!listNot.contains("S" + season + "E0" + episode)) {
-								driver.get(
-										"https://nzbgeek.info/geekseek.php?moviesgeekseek=1&c=5000&browseincludewords="
-												+ series + "+s" + season + "e0" + episode);
-								test = true;
-							}
-						} else {
-							if (!listNot.contains("S" + season + "E" + episode)) {
-								driver.get(
-										"https://nzbgeek.info/geekseek.php?moviesgeekseek=1&c=5000&browseincludewords="
-												+ series + "+s" + season + "e" + episode);
-								test = true;
-							}
-						}
-					}
+										"https://nzbgeek.info/geekseek.php?&browseincludewords=dvdfab&search=2");
+
 
 					List<WebElement> links = driver.findElements(By.tagName("a"));
 
@@ -136,12 +72,8 @@ public class NZBGeekDownloadTotal {
 							compteurEpisodes++;
 						}
 					}
-					System.out.println("compteur " + compteurEpisodes);
-					if (test&&compteurEpisodes == 0) {
-						break;
-					}
-				}
-			}
+
+
 			// for (int i = 0; i < 12; i++) {
 
 			// }
@@ -195,7 +127,7 @@ public class NZBGeekDownloadTotal {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		NZBGeekDownloadTotal nz = new NZBGeekDownloadTotal();
+		NZBGeekDownloadOther nz = new NZBGeekDownloadOther();
 	}
 
 }

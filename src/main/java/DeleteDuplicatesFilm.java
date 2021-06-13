@@ -163,11 +163,11 @@ public class DeleteDuplicatesFilm {
 				}
 			}
 
-			// ====================================2160
-			if (map2160.size() > 0) {
-				Set<String> set = map2160.keySet();
+			// ====================================1080
+			if (map1080.size() > 0) {
+				Set<String> set = map1080.keySet();
 				for (String lineTemp : set) {
-					ArrayList<File> listFile2 = map2160.get(lineTemp);
+					ArrayList<File> listFile2 = map1080.get(lineTemp);
 					if (listFile2.size() > 0) {
 						File fichier = listFile2.get(0);
 						long taille = 0;
@@ -193,9 +193,9 @@ public class DeleteDuplicatesFilm {
 								fichierTemp.delete();
 							}
 						}
-						if (map1080.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map1080.get(lineTemp);
-							map1080.remove(lineTemp);
+						if (map2160.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map2160.get(lineTemp);
+							map2160.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
@@ -274,11 +274,11 @@ public class DeleteDuplicatesFilm {
 					}
 				}
 			}
-			// ====================================1080
-			if (map1080.size() > 0) {
-				Set<String> set = map1080.keySet();
+			// ====================================2160
+			if (map2160.size() > 0) {
+				Set<String> set = map2160.keySet();
 				for (String lineTemp : set) {
-					ArrayList<File> listFile2 = map1080.get(lineTemp);
+					ArrayList<File> listFile2 = map2160.get(lineTemp);
 					if (listFile2.size() > 0) {
 						File fichier = listFile2.get(0);
 						long taille = 0;

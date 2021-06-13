@@ -16,7 +16,7 @@ public class NZBGeekDownloadSeries {
 
 		//ArrayList<String> listNot = preparation("z://series/Trial & Error");
 
-		int code = 286407;
+		int code = 263365;
 		int seasons = 2;
 		int compteurMax = 0;
 
@@ -68,30 +68,32 @@ public class NZBGeekDownloadSeries {
 			}
 
 			for (Integer season : listSeasons) {
-				System.out.println(season+" / "+listSeasons.size());
+				if (season > 2) {
+					System.out.println(season + " / " + listSeasons.size());
 
-				if (season < 10) {
-					driver.get(
-							"https://nzbgeek.info/geekseek.php?tvid=" + code + "&season=S0" + season + "&episode=all");
-				}
-				if (season >= 10) {
-					driver.get(
-							"https://nzbgeek.info/geekseek.php?tvid=" + code + "&season=S" + season + "&episode=all");
-				}
-
-				List<WebElement> links = driver.findElements(By.tagName("a"));
-
-				// System.out.println("links size " + links.size());
-				int compteurEpisodes = 0;
-				for (WebElement webElement : links) {
-					// if (webElement.getAttribute("title").equalsIgnoreCase("Download NZB")) {
-					if (webElement.getAttribute("href") != null
-							&& webElement.getAttribute("href").contains("api?t=get")) {
-						listHref.add(webElement.getAttribute("href"));
-						compteurEpisodes++;
+					if (season < 10) {
+						driver.get(
+								"https://nzbgeek.info/geekseek.php?tvid=" + code + "&season=S0" + season + "&episode=all");
 					}
+					if (season >= 10) {
+						driver.get(
+								"https://nzbgeek.info/geekseek.php?tvid=" + code + "&season=S" + season + "&episode=all");
+					}
+
+					List<WebElement> links = driver.findElements(By.tagName("a"));
+
+					// System.out.println("links size " + links.size());
+					int compteurEpisodes = 0;
+					for (WebElement webElement : links) {
+						// if (webElement.getAttribute("title").equalsIgnoreCase("Download NZB")) {
+						if (webElement.getAttribute("href") != null
+								&& webElement.getAttribute("href").contains("api?t=get")) {
+							listHref.add(webElement.getAttribute("href"));
+							compteurEpisodes++;
+						}
+					}
+					System.out.println("compteur " + compteurEpisodes);
 				}
-				System.out.println("compteur " + compteurEpisodes);
 			}
 
 			driver.close();

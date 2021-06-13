@@ -13,7 +13,7 @@ public class MoveSeries {
 
 	public MoveSeries() {
 		boolean testSerie = false;
-		File file = new File("f://NZBFile MKV");
+		File file = new File("z://test/main");
 
 		File base = new File("z:///series");
 

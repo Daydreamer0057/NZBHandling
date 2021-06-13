@@ -8,12 +8,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public class G2A {
+public class G2AWishlist {
     ChromeDriver driver;
     ChromeDriver driver2;
     ChromeDriver driver3;
 
-    public G2A() throws Exception{
+    public G2AWishlist() throws Exception{
         FileReader fr = new FileReader("c:/log/wishlist.txt");
         BufferedReader br = new BufferedReader(fr);
             System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
@@ -24,20 +24,17 @@ public class G2A {
         while(line!=null) {
             line = br.readLine();
             if(line!=null) {
+                line = line.replaceAll(" ","%20");
+                driver.get("https://www.g2a.com/search?query="+line);
+
+                WebElement webElement = driver.findElement(By.id("checkbox-all-agreed"));
+                webElement.click();;
+
+                WebElement webElementTemp2 = driver.findElement(By.className("button button--size-large button--type-full"));
+                webElementTemp2.submit();
+
+
                 Robot robot = new Robot();
-
-                driver.get("https://www.instant-gaming.com/");
-
-                //driver.findElement(By.className("checkbox-wrapper__checkbox--regular")).click();
-
-                //driver.findElement(By.className("button--type-full")).click();
-
-
-                driver.findElement(By.id("ig-header-search-box-input")).sendKeys(line);
-
-                robot.keyPress(KeyEvent.VK_ENTER);
-                robot.keyRelease(KeyEvent.VK_ENTER);
-
                 robot.keyPress(KeyEvent.VK_CONTROL);
                 robot.keyPress(KeyEvent.VK_T);
                 robot.keyRelease(KeyEvent.VK_CONTROL);
@@ -56,7 +53,7 @@ public class G2A {
     public static void main(String[] args)
     {
         try {
-            G2A nzb = new G2A();
+            G2AWishlist nzb = new G2AWishlist();
         } catch (Exception ex) {
         ex.printStackTrace();
     }

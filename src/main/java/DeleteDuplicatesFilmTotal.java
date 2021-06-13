@@ -19,7 +19,7 @@ public class DeleteDuplicatesFilmTotal {
 		HashMap<String, ArrayList> map1080 = new HashMap<String, ArrayList>();
 		HashMap<String, ArrayList> map2160 = new HashMap<String, ArrayList>();
 
-		String pathNew ="20210318";
+		String pathNew ="convert";
 
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
@@ -168,30 +168,14 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
 						}
+
 						if (map1080.containsKey(lineTemp)) {
 							ArrayList<File> listDelete = map1080.get(lineTemp);
 							map1080.remove(lineTemp);
@@ -282,30 +266,14 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
 						}
+
 						if (map720.containsKey(lineTemp)) {
 							ArrayList<File> listDelete = map720.get(lineTemp);
 							map720.remove(lineTemp);
@@ -382,26 +350,9 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
@@ -471,26 +422,9 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
@@ -547,26 +481,9 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
@@ -610,26 +527,9 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
@@ -660,31 +560,13 @@ public class DeleteDuplicatesFilmTotal {
 						File fichier = listFile2.get(0);
 						long taille = 0;
 						long tailleTemp = 0;
+						boolean testFile = false;
 						for (File fichierTemp : listFile2) {
-							if (fichierTemp.length() > taille) {
-								fichier = fichierTemp;
-								taille = tailleTemp;
-							}
-						}
-
-						if(fichier.getPath().contains(pathNew)){
-							taille = 0;
-							tailleTemp = 0;
-							for (File fichierTemp : listFile2) {
-								if (fichierTemp.length() > taille&&!fichierTemp.getPath().contains(pathNew)) {
-									fichier = fichierTemp;
-									taille = tailleTemp;
-								}
-							}
-						}
-
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
+							if(fichierTemp.getPath().contains(pathNew)){
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
 								fichierTemp.delete();
 							}
 						}
-
 					}
 				}
 			}

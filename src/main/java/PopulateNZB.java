@@ -26,7 +26,7 @@ public class PopulateNZB {
 
 	final static Logger logger = Logger.getLogger(PopulateNZB.class);
 
-	public PopulateNZB() {
+	public PopulateNZB() throws  Exception {
 		try {
 			fw = new FileWriter("c://temp/log_populate.txt");
 			pw = new PrintWriter(fw);
@@ -34,8 +34,8 @@ public class PopulateNZB {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("Driver O.K.");
 
-			String url = "jdbc:mysql://10.0.0.100:3306/nzb?serverTimezone=UTC";
-			String user = "test";
+			String url = "jdbc:mysql://localhost:3306/nzb?serverTimezone=UTC";
+			String user = "root";
 			String passwd = "test";
 
 			conn = DriverManager.getConnection(url, user, passwd);
@@ -48,7 +48,7 @@ public class PopulateNZB {
 
 		// NZBService nzbService = new NZBService();
 
-		File basePrincipal = new File("e://NZBFile");
+		File basePrincipal = new File("e://NZBFile/new");
 
 		File[] listPrincipal = basePrincipal.listFiles();
 
@@ -58,42 +58,12 @@ public class PopulateNZB {
 			listePrincipale.add(fichier);
 		}
 
-		File base = new File("e://NZBFile");
-
-		File[] fichiers = base.listFiles();
-
-		HashSet<File> listeFichier = new HashSet<File>();
-		ArrayList<File> listeDirectory = new ArrayList<File>();
-
-		for (File fichier : fichiers) {
-			if (fichier.isDirectory()) {
-				listeDirectory.add(fichier);
-			} else {
-				listeFichier.add(fichier);
-			}
-		}
-
-		while (listeDirectory.size() > 0) {
-			File fichier = listeDirectory.get(0);
-
-			File[] fichierListe = fichier.listFiles();
-
-			for (File fichierTemp : fichierListe) {
-				if (fichierTemp.isDirectory()) {
-					listeDirectory.add(fichierTemp);
-				} else {
-					listeFichier.add(fichierTemp);
-				}
-			}
-			listeDirectory.remove(0);
-		}
-
 		int compteur = 0;
 		int total = 0;
 		int change = 0;
-		for (File fichierTemp : listeFichier) {
+		for (File fichierTemp : listePrincipale) {
 			compteur++;
-			try {
+			if (compteur >= 0) {
 				// BasicFileAttributes attrs = Files.readAttributes(fichierTemp.toPath(),
 				// BasicFileAttributes.class);
 				// FileTime createTime = attrs.creationTime();
@@ -110,8 +80,8 @@ public class PopulateNZB {
 				String realName = "";
 				while (line != null) {
 					line = br.readLine();
-					if (line!=null&&line.contains("subject")) {
-						//if (!listePrincipale.contains(fichierTemp)) {
+					if (line != null && line.toLowerCase().contains("subject")) {
+						if (!listePrincipale.contains(fichierTemp)) {
 							String queryExist = ("SELECT * from articles_nzb where filename = ?");
 							PreparedStatement stmt = conn.prepareStatement(queryExist);
 
@@ -131,6 +101,8 @@ public class PopulateNZB {
 								preparedStmt.setString(3, line);
 								preparedStmt.setString(4, fichierTemp.getName());
 
+								//System.out.println(realName+"    "+line+"    "+fichierTemp.getName());
+
 								// execute the preparedstatement
 								int success = preparedStmt.executeUpdate();
 
@@ -138,35 +110,39 @@ public class PopulateNZB {
 								if (successResult) {
 									change++;
 								}
-								break;
-							} else {
+							/*else {
 								total++;
-						//	}
+								//	}
+							}*/
+								break;
+							}
 						}
 					}
-					System.out.println("Fichier " + compteur + " / " + listeFichier.size() + "    changes " + change
-							+ "    ignore " + total);
 				}
 				br.close();
 				fr.close();
+				System.out.println("Fichier " + compteur + " / " + listePrincipale.size() + "    changes " + change
+						+ "    ignore " + total);
 			}
-			// fichierTemp.renameTo(new File(fichierTemp + ".old"));
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		try
 
-		{
-			conn.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+
+				}
+				// fichierTemp.renameTo(new File(fichierTemp + ".old"));
+
+
+
+		conn.close();
+
 		System.out.println("Chargement " + change);
 	}
 
+
 	public static void main(String[] args) {
-		PopulateNZB populate = new PopulateNZB();
+		try {
+			PopulateNZB populate = new PopulateNZB();
+		} catch(Exception ex){
+			ex.printStackTrace();
+		}
 
 	}
 
