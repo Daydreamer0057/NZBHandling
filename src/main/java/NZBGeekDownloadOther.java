@@ -14,14 +14,6 @@ public class NZBGeekDownloadOther {
 	public NZBGeekDownloadOther() {
 		 ArrayList<String> listNot = new ArrayList<String>();
 
-		String series = "Your Honor";
-//		String alt = "KominskyMethod";
-//		String seriesSeasons = series;
-//		seriesSeasons = seriesSeasons.replace(" ","");
-//		ArrayList<String> listNot = preparation("f://humour/" + series);
-//		series = series.replace(' ', '+');
-		int s = 1;
-
 		int compteurMax = 0;
 
 		int change = 0;
@@ -37,66 +29,70 @@ public class NZBGeekDownloadOther {
 			try {
 				// System.out.println(fichierTemp.getPath());
 				System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
-				driver = new ChromeDriver();
 			} catch (Exception ex) {
 				// test = true;
 				ex.printStackTrace();
 			}
 
-			driver.get("https://nzbgeek.info/logon.php");
+			for(int i=1;i<15;i++) {
 
-			// Input Email id and Password If you are already Register
-			driver.findElement(By.name("username")).sendKeys("Daydreamer057");
-			driver.findElement(By.name("password")).sendKeys("ULbwkKMxNM0umW7AmcppNLEhXwFW0K0K");
+				driver = new ChromeDriver();
 
-			WebElement webElementTemp2 = driver.findElement(By.name("username"));
-			webElementTemp2.submit();
+				driver.get("https://nzbgeek.info/logon.php");
 
-			/*webElementTemp2 = driver.findElement(By.className("warning_button"));*/
-			/*webElementTemp2.submit();*/
+				// Input Email id and Password If you are already Register
+				driver.findElement(By.name("username")).sendKeys("Daydreamer057a");
+				driver.findElement(By.name("password")).sendKeys("N0dQMkLgH3KP3yxae6CZj3CnkBQLlNfp");
 
-			List<String> listHref = new ArrayList<String>();
+				WebElement webElementTemp2 = driver.findElement(By.name("username"));
+				webElementTemp2.submit();
 
-								driver.get(
-										"https://nzbgeek.info/geekseek.php?&browseincludewords=dvdfab&search=2");
+				/*webElementTemp2 = driver.findElement(By.className("warning_button"));*/
+				/*webElementTemp2.submit();*/
+
+				List<String> listHref = new ArrayList<String>();
+
+				driver.get(
+						"https://nzbgeek.info/geekseek.php?moviesgeekseek=1&c=5000&browseincludewords=olympic&search=" +i);
 
 
-					List<WebElement> links = driver.findElements(By.tagName("a"));
+				List<WebElement> links = driver.findElements(By.tagName("a"));
 
-					// System.out.println("links size " + links.size());
-					int compteurEpisodes = 0;
-					for (WebElement webElement : links) {
-						// if (webElement.getAttribute("title").equalsIgnoreCase("Download NZB")) {
-						if (webElement.getAttribute("href")!=null&&webElement.getAttribute("href").contains("api?t=get")) {
-							listHref.add(webElement.getAttribute("href"));
-							compteurEpisodes++;
-						}
+				// System.out.println("links size " + links.size());
+				int compteurEpisodes = 0;
+				for (WebElement webElement : links) {
+					// if (webElement.getAttribute("title").equalsIgnoreCase("Download NZB")) {
+					if (webElement.getAttribute("href") != null && webElement.getAttribute("href").contains("api?t=get")) {
+						listHref.add(webElement.getAttribute("href"));
+						compteurEpisodes++;
 					}
+				}
 
 
-			// for (int i = 0; i < 12; i++) {
+				// for (int i = 0; i < 12; i++) {
 
-			// }
-			driver.close();
+				// }
+				driver.close();
 
-			driver = new ChromeDriver();
-			driver.get("https://nzbgeek.info/logon.php");
+				driver = new ChromeDriver();
+				driver.get("https://nzbgeek.info/logon.php");
 
-			// Input Email id and Password If you are already Register
-			driver.findElement(By.name("username")).sendKeys("Daydreamer057");
-			driver.findElement(By.name("password")).sendKeys("ULbwkKMxNM0umW7AmcppNLEhXwFW0K0K");
+				// Input Email id and Password If you are already Register
+				driver.findElement(By.name("username")).sendKeys("Daydreamer057a");
+				driver.findElement(By.name("password")).sendKeys("N0dQMkLgH3KP3yxae6CZj3CnkBQLlNfp");
 
-			WebElement webElementTemp3 = driver.findElement(By.name("username"));
-			webElementTemp3.submit();
+				WebElement webElementTemp3 = driver.findElement(By.name("username"));
+				webElementTemp3.submit();
 
 
-			int compteurFinal = 0;
-			for (String lineTemp : listHref) {
-				System.out.println(compteurFinal+" / "+listHref.size());
-				driver.get(lineTemp);
-				compteurFinal++;
+				int compteurFinal = 0;
+				for (String lineTemp : listHref) {
+					compteurFinal++;
+					System.out.println(compteurFinal + " / " + listHref.size());
+					driver.get(lineTemp);
+				}
+				driver.close();
 			}
-			driver.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

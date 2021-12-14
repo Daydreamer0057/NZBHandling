@@ -1,3 +1,5 @@
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,12 +11,12 @@ public class TrimFailedUnpack {
 
 	public TrimFailedUnpack() {
 		// Dossier a supprimer
-		File base = new File("Z://test/main");
+		File base = new File("Z://test/film");
 
 		File[] fichiers = base.listFiles();
 
 		for(File fichier : fichiers){
-			if(fichier.isDirectory()&&(fichier.getName().contains("FAILED")||fichier.getName().contains("UNPACK"))){
+			if(fichier.isDirectory()&&(fichier.getName().toLowerCase().contains("failed")||fichier.getName().toLowerCase().contains("unpack"))){
 				Path p2 = Paths.get(fichier.getPath());
 				Path folder2 = p2.getParent();
 
@@ -23,7 +25,21 @@ public class TrimFailedUnpack {
 
 				String name = fichier.getName().substring(8,fichier.getName().length());
 
-				fichier.renameTo(new File(chemin2 + "/" + name));
+				int compteur = 0;
+				if (new File(chemin2 + "/" + name).exists()) {
+					boolean test = false;
+					boolean testFile = false;
+					while(!test){
+						testFile = fichier.renameTo(new File(chemin2 + "/" + name + "_" + compteur));
+						if(testFile){
+							test = true;
+						} else {
+							compteur++;
+						}
+					}
+				} else {
+					fichier.renameTo(new File(chemin2 + "/" + name));
+				}
 			}
 		}
 

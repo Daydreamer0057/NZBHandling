@@ -26,7 +26,7 @@ public class SteamWishlist {
     public SteamWishlist() throws Exception{
         FileReader fr = new FileReader("c:/log/wishlist.txt");
         BufferedReader br = new BufferedReader(fr);
-            System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "e://temp/chrome/chromedriver.exe");
             driver = new ChromeDriver();
             //driver.manage().window().setPosition(new Point(-2000, 0));
 

@@ -14,7 +14,7 @@ public class Epguides {
 	public Epguides() {
 		try {
 
-			File base = new File("f://epguides");
+			File base = new File("e://epguides");
 
 			File[] fichiers = base.listFiles();
 

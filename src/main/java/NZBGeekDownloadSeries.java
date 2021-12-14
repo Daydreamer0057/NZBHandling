@@ -16,7 +16,7 @@ public class NZBGeekDownloadSeries {
 
 		//ArrayList<String> listNot = preparation("z://series/Trial & Error");
 
-		int code = 263365;
+		int code = 260315;
 		int seasons = 2;
 		int compteurMax = 0;
 
@@ -32,7 +32,7 @@ public class NZBGeekDownloadSeries {
 			// boolean test = false;
 			try {
 				// System.out.println(fichierTemp.getPath());
-				System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "e://temp/chrome/chromedriver.exe");
 				driver = new ChromeDriver();
 			} catch (Exception ex) {
 				// test = true;
@@ -46,8 +46,8 @@ public class NZBGeekDownloadSeries {
 			driver.get("https://nzbgeek.info/logon.php");
 
 			// Input Email id and Password If you are already Register
-			driver.findElement(By.name("username")).sendKeys("Daydreamer057");
-			driver.findElement(By.name("password")).sendKeys("ULbwkKMxNM0umW7AmcppNLEhXwFW0K0K");
+			driver.findElement(By.name("username")).sendKeys("Daydreamer057057");
+			driver.findElement(By.name("password")).sendKeys("erNqHyay1A7Hds1XcLMcdX7g9ve8KzqH");
 
 			WebElement webElementTemp2 = driver.findElement(By.name("username"));
 			webElementTemp2.submit();
@@ -102,8 +102,8 @@ public class NZBGeekDownloadSeries {
 			driver.get("https://nzbgeek.info/logon.php");
 
 			// Input Email id and Password If you are already Register
-			driver.findElement(By.name("username")).sendKeys("Daydreamer057");
-			driver.findElement(By.name("password")).sendKeys("ULbwkKMxNM0umW7AmcppNLEhXwFW0K0K");
+			driver.findElement(By.name("username")).sendKeys("Daydreamer057a");
+			driver.findElement(By.name("password")).sendKeys("N0dQMkLgH3KP3yxae6CZj3CnkBQLlNfp");
 
 			WebElement webElementTemp3 = driver.findElement(By.name("username"));
 			webElementTemp3.submit();

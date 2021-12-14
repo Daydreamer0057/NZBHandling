@@ -1,21 +1,17 @@
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DownloadComics {
+public class DownloadSteamWishList {
 
-	public DownloadComics() {
+	public DownloadSteamWishList() {
 		 ArrayList<String> listNot = new ArrayList<String>();
 
 		int compteurMax = 0;
@@ -28,14 +24,15 @@ public class DownloadComics {
 			WebDriver driver = null;
 
 			try {
-				System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", "e://temp/chrome/chromedriver.exe");
 				driver = new ChromeDriver();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 
-			driver.get("https://nzbgeek.info/logon.php");
+			driver.get("https://store.steampowered.com/wishlist/profiles/76561198028546793/#sort=name&type=Game&ex_vr=1");
 
+			System.exit(0);
 			// Input Email id and Password If you are already Register
 			driver.findElement(By.name("username")).sendKeys("Daydreamer057a");
 			driver.findElement(By.name("password")).sendKeys("N0dQMkLgH3KP3yxae6CZj3CnkBQLlNfp");
@@ -134,7 +131,7 @@ public class DownloadComics {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		DownloadComics nz = new DownloadComics();
+		DownloadSteamWishList nz = new DownloadSteamWishList();
 	}
 
 }

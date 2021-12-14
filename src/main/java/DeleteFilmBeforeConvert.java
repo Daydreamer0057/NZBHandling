@@ -4,14 +4,17 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.StringTokenizer;
 
-public class Film {
+public class DeleteFilmBeforeConvert {
 	static String path2;
+	static String year;
+	static String nameSeries;
 	static int compteurDelete = 0;
 
-	public Film() {
+	public DeleteFilmBeforeConvert() {
 		// Dossier a supprimer
-		File base = new File("z://test/test");
+		File base = new File("z://test/film");
 		//File base = new File("Z://film/new");
 		//File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
@@ -51,8 +54,7 @@ public class Film {
 		HashSet<File> fileBase = new HashSet<File>();
 		HashSet<File> files = new HashSet<File>();
 //		fileBase.add(new File("e://convert"));
-		fileBase.add(new File("z://temp/convert"));
-//		fileBase.add(new File("z://film/main/blockbuster"));
+		fileBase.add(new File("z://film/new"));
 //		fileBase.add(new File("z://test/temp"));
 
 		ArrayList<File> listeDirectory2 = new ArrayList<File>();
@@ -82,20 +84,38 @@ public class Film {
 
 		for (File fichierTemp : files) {
 			String nomFichier = "";
+			final String path = "";
 			if ((fichierTemp.getName().indexOf("_")>fichierTemp.getName().length()-6)&&(
 					fichierTemp.getName().indexOf("_0") != -1 || fichierTemp.getName().indexOf("_1") != -1
 							|| fichierTemp.getName().indexOf("_2") != -1 || fichierTemp.getName().indexOf("_3") != -1
 							|| fichierTemp.getName().indexOf("_4") != -1 || fichierTemp.getName().indexOf("_5") != -1
 							|| fichierTemp.getName().indexOf("_6") != -1 || fichierTemp.getName().indexOf("_7") != -1
 							|| fichierTemp.getName().indexOf("_8") != -1 || fichierTemp.getName().indexOf("_9") != -1)) {
-				nomFichier = fichierTemp.getName().substring(0, fichierTemp.getName().length() - 6);
-				//path2 = nomFichier.replaceAll("_", "'");
+				path2 = fichierTemp.getName().substring(0, fichierTemp.getName().length() - 6);
 			} else {
 				// System.out.println("Compteur " + compteur + " / " + files.length);
 				compteur++;
-				final String path = fichierTemp.getName();
+				 path2 = fichierTemp.getName();
 				//path2 = path.replaceAll("_", "'");
-				path2 = path.substring(0, path.length() - 4);
+				path2 = FilenameUtils.removeExtension(path2);
+			}
+			if(path2!=""){
+				StringTokenizer stk = new StringTokenizer(path2,"(");
+				if(stk.hasMoreTokens()) {
+					try {
+						nameSeries = stk.nextToken().trim();
+					} catch (Exception ex){
+
+					}
+				}
+				if(stk.hasMoreTokens()) {
+					try {
+						String line = stk.nextToken();
+						year = line.substring(0, 4).trim();
+					} catch (Exception ex){
+
+					}
+				}
 			}
 
 
@@ -113,8 +133,50 @@ public class Film {
 						}
 						nameRes = FilenameUtils.removeExtension(nameRes);
 //						System.out.println(path2+"    "+nameRes);
-						if (nameRes.equalsIgnoreCase(path2)) {
-							res.delete();
+						StringTokenizer stk = new StringTokenizer(nameRes,"(");
+						String nameFinal = "";
+						String yearFinal = "";
+						if(stk.hasMoreTokens()) {
+							nameFinal = stk.nextToken().trim();
+						}
+						if(stk.hasMoreTokens()) {
+							yearFinal = stk.nextToken().substring(0,4).trim();
+						}
+						int sizePath = 0;
+						if(nameRes.toLowerCase().contains("2160p")){
+							sizePath = 2160;
+						}
+						if(nameRes.toLowerCase().contains("1080p")){
+							sizePath = 1080;
+						}
+						if(nameRes.toLowerCase().contains("720p")){
+							sizePath = 720;
+						}
+						if(nameRes.toLowerCase().contains("576p")){
+							sizePath = 576;
+						}
+						if(nameRes.toLowerCase().contains("480p")){
+							sizePath = 480;
+						}
+
+						int sizeRes = 0;
+						if(nameFinal.toLowerCase().contains("2160p")){
+							sizeRes = 2160;
+						}
+						if(nameFinal.toLowerCase().contains("1080p")){
+							sizeRes = 1080;
+						}
+						if(nameFinal.toLowerCase().contains("720p")){
+							sizeRes = 720;
+						}
+						if(nameFinal.toLowerCase().contains("576p")){
+							sizeRes = 576;
+						}
+						if(nameFinal.toLowerCase().contains("480p")){
+							sizeRes = 480;
+						}
+						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))&&(sizeRes<sizePath)) {
+//							res.delete();
 							System.out.println(res.getPath() + "    " + listeFichier.size());
 						}
 					}
@@ -126,7 +188,7 @@ public class Film {
 	}
 
 	public static void main(String[] args) {
-		Film epguides = new Film();
+		DeleteFilmBeforeConvert epguides = new DeleteFilmBeforeConvert();
 
 	}
 

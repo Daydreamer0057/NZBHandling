@@ -1,6 +1,8 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -12,21 +14,25 @@ import org.apache.commons.io.FileUtils;
 public class MoveSeries {
 
 	public MoveSeries() {
-		boolean testSerie = false;
-		File file = new File("z://test/main");
-
-		File base = new File("z:///series");
+		File base = new File("z://test/stockage");
+//		File base = new File("x://convert");
 
 		File[] fichiers = base.listFiles();
 
 		HashSet<File> listeFichier = new HashSet<File>();
 		ArrayList<File> listeDirectory = new ArrayList<File>();
+		//listeDirectory.add(new File("d://series"));
+		//listeDirectory.add(new File("d://temp 2/main"));
 
 		for (File fichier : fichiers) {
 			if (fichier.isDirectory()) {
-				listeDirectory.add(fichier);
+				if (fichier.getPath().indexOf("anime") == -1 || fichier.getPath().indexOf("Anime") == -1) {
+					listeDirectory.add(fichier);
+				}
 			} else {
-				listeFichier.add(fichier);
+				if (fichier.getPath().indexOf("anime") == -1 || fichier.getPath().indexOf("Anime") == -1) {
+					listeFichier.add(fichier);
+				}
 			}
 		}
 
@@ -45,103 +51,36 @@ public class MoveSeries {
 			listeDirectory.remove(0);
 		}
 
-		File[] listNzb = file.listFiles();
+		File[] listeSeries = new File("z://series").listFiles();
 
-		HashSet<File> listFile = new HashSet<File>();
-		ArrayList<File> listDirectory = new ArrayList<File>();
+		for (File fichierTemp : listeFichier) {
+			for (File fichierSeries : listeSeries) {
+				if (fichierTemp.getName().indexOf(" - ") != -1) {
+					String name = fichierTemp.getName().substring(0, fichierTemp.getName().indexOf(" - ")).trim();
+					name = name.replace("_", "'");
 
-		for (File fichier : listNzb) {
-			if (fichier.isDirectory()) {
-				listDirectory.add(fichier);
-			} else {
-				listFile.add(fichier);
-			}
-		}
+					Pattern p1 = Pattern.compile("([0-9][0-9][0-9][0-9])");
+					Matcher m = p1.matcher(fichierTemp.getName().toLowerCase());
 
-		while (listDirectory.size() > 0) {
-			File fichier = listDirectory.get(0);
+					if (m.find()) {
+						name = name.replaceAll(m.group(0),"");
+					}
+					String nameLowerCase = name.toLowerCase();
+					String nameSeriesLowerCase = fichierSeries.getName().toLowerCase();
+					if (nameLowerCase.indexOf(nameSeriesLowerCase) != -1) {
+						Path p = Paths.get(fichierSeries.getPath());
 
-			File[] fichierListe = fichier.listFiles();
-
-			for (File fichierTemp : fichierListe) {
-				if (fichierTemp.isDirectory()) {
-					listDirectory.add(fichierTemp);
-				} else {
-					listFile.add(fichierTemp);
-				}
-			}
-			listDirectory.remove(0);
-		}
-
-		HashSet<File> listFinal = new HashSet<File>();
-		for (File fichierTemp : listFile) {
-			listFinal.add(fichierTemp);
-		}
-
-		int compteur = 0;
-		for (File fichierNzb : listFile) {
-			System.out.println("fichierNzb " + compteur + " / " + listFile.size());
-			compteur++;
-			String episode = episode(fichierNzb);
-			String name = name(fichierNzb);
-			for (File fichierSeries : listeFichier) {
-				String episodeSeries = episode(fichierSeries);
-				String nameSeries = name(fichierSeries);
-				if (!episode.equals("") && !name.equals("") && !episodeSeries.equals("") && !nameSeries.equals("")
-						&& episode.equalsIgnoreCase(episodeSeries) && (name.equalsIgnoreCase(nameSeries))) {
-					listFinal.remove(fichierNzb);
+						String path = p.toString();
+						String chemin = path.replaceAll("\\\\", "/");
+						System.out.println(chemin + "/" + fichierTemp.getName());
+						fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+					}
 				}
 			}
 		}
-
-		compteur = 0;
-		for (File fichierTemp : listFinal) {
-			System.out.println("Final " + compteur + " / " + listFinal.size());
-			compteur++;
-			try {
-				FileUtils.copyFile(fichierTemp, new File("f://NZBFile MKV/Final/" + fichierTemp.getName()));
-			} catch (IOException ioex) {
-				ioex.printStackTrace();
-			}
-		}
-
 	}
 
-	public String episode(File fichier) {
-		Pattern pattern = Pattern.compile("S[0-9]*E[0-9]*");
-		Matcher matcher = pattern.matcher(fichier.getName());
-		String episode = "";
-		try {
-			while (matcher.find()) {				episode = matcher.group(0);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		episode = episode.trim();
-
-		return episode;
-	}
-
-	public String name(File fichier) {
-		String name = "";
-
-		StringTokenizer stk = new StringTokenizer(fichier.getName(), "-");
-
-		if (stk.hasMoreTokens()) {
-			name = stk.nextToken();
-		}
-
-		if (name.indexOf("(") != -1) {
-			name = name.substring(0, name.indexOf("(") - 1);
-		}
-
-		name = name.trim();
-
-		return name;
-	}
-
-	public static void main(String[] args) {
+		public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		MoveSeries du = new MoveSeries();
 	}

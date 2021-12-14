@@ -33,7 +33,7 @@ public class ListFiles {
 			HashSet<File> listeFichier = new HashSet<File>();
 			ArrayList<File> listeDirectory = new ArrayList<File>();
 
-//			listeDirectory.add(new File("z://Film"));
+//			listeDirectory.add(new File("z://Film"));bu
 			listeDirectory.add(new File("z://Series"));
 			listeDirectory.add(new File("z://Games"));
 			listeDirectory.add(new File("z://Onedrive"));

@@ -28,7 +28,13 @@ public class DeleteRarFiles {
 				setDirectory.add(fichier);
 			} else {
 				if (!(fichier.getName().endsWith("mkv") || fichier.getName().endsWith("mp4")
-						|| fichier.getName().endsWith("avi") || fichier.getName().endsWith("srt")|| fichier.getName().endsWith("sample")|| fichier.getName().endsWith("cbz")|| fichier.getName().endsWith("cbr")|| fichier.getName().endsWith("iso"))) {
+						|| fichier.getName().endsWith("avi") || fichier.getName().endsWith("cbz")|| fichier.getName().endsWith("cbr")
+						|| fichier.getName().endsWith("iso")
+						|| fichier.getName().endsWith(".!qB")
+//						|| fichier.getName().endsWith("rar")
+//						|| fichier.getName().toLowerCase().endsWith("par2")
+				)) {
+
 					listeFichier.add(fichier);
 				}
 			}
@@ -46,7 +52,13 @@ public class DeleteRarFiles {
 					setDirectory.add(fichierTemp);
 				} else {
 					if (!(fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
-							|| fichierTemp.getName().endsWith("avi") || fichierTemp.getName().endsWith("srt")|| fichierTemp.getName().endsWith("sample")|| fichierTemp.getName().endsWith("cbz")|| fichierTemp.getName().endsWith("cbr")|| fichier.getName().endsWith("iso"))) {
+							|| fichierTemp.getName().endsWith("avi") || fichierTemp.getName().endsWith("cbz")|| fichierTemp.getName().endsWith("cbr")
+							|| fichierTemp.getName().endsWith("iso")
+							|| fichierTemp.getName().endsWith(".!qB")
+//							|| fichierTemp.getName().endsWith("rar")
+//							|| fichierTemp.getName().toLowerCase().endsWith("par2")
+					))
+					 {
 						listeFichier.add(fichierTemp);
 					}
 				}

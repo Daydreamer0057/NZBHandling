@@ -7,17 +7,18 @@ public class CheckNZB {
 	public CheckNZB() {
 		try {
 
-			File basePrincipal = new File("u://nzb/old");
+			File basePrincipal = new File("w://nzb/old");
 
 			File[] listPrincipal = basePrincipal.listFiles();
 
 			HashSet<File> listePrincipale = new HashSet<File>();
 
+
 			for (File fichier : listPrincipal) {
 				listePrincipale.add(fichier);
 			}
 
-			File basePrincipalNew = new File("u://nzb/new");
+			File basePrincipalNew = new File("w://nzb/new");
 
 			File[] listPrincipalNew = basePrincipalNew.listFiles();
 

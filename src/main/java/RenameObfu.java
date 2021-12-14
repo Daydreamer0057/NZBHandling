@@ -23,6 +23,7 @@ public class RenameObfu {
 		// listeDirectory.add(new File("z://test/film"));
 
 		for (File fichier : fichiers) {
+			System.out.println("Files "+listeFichier.size()+"    Directory "+listeDirectory.size());
 			if (fichier.isDirectory()) {
 				listeDirectory.add(fichier);
 			} else {
@@ -34,6 +35,7 @@ public class RenameObfu {
 		}
 
 		while (listeDirectory.size() > 0) {
+			System.out.println("Files "+listeFichier.size()+"    Directory "+listeDirectory.size());
 			File fichier = listeDirectory.get(0);
 
 			File[] fichierListe = fichier.listFiles();
@@ -57,9 +59,19 @@ public class RenameObfu {
 			String path2 = folder2.toString();
 			path2 = path2.replaceAll("\\\\", "/");
 
-			if(fichierObfu.isFile()&&!path2.toLowerCase().equals(pathPrincipal)){
-				String path3 = path2.substring(pathPrincipal.length(),path2.length());
-				fichierObfu.renameTo(new File(path2+"/"+path3+"."+ FilenameUtils.getExtension(fichierObfu.getName())));
+			if(fichierObfu.isFile()&&!path2.toLowerCase().equals(pathPrincipal.toLowerCase())){
+				try {
+//					System.out.println("1 "+fichierObfu.getPath()+"    "+pathPrincipal.length()+"    "+ path2.length());
+//					System.out.println("path2 "+path2);
+//					String path3 = path2.substring(pathPrincipal.length(), path2.length());
+
+//					System.out.println("2 "+path3);
+					String path4 = path2.replaceAll("z:/test/main/","");
+					fichierObfu.renameTo(new File(path2 + "/" + path4 + "." + FilenameUtils.getExtension(fichierObfu.getName())));
+
+				} catch(StringIndexOutOfBoundsException ex){
+					ex.printStackTrace();
+				}
 			}
 
 		}

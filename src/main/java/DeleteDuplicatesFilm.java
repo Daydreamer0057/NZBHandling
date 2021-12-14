@@ -1,20 +1,9 @@
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
-import antlr.ParserSharedInputState;
-
 public class DeleteDuplicatesFilm {
-
-	/** The Constant logger. */
-	private static final Logger logger = Logger.getLogger(DeleteDuplicatesFilm.class);
 
 	public DeleteDuplicatesFilm() {
 		HashMap<String, ArrayList> map240 = new HashMap<String, ArrayList>();
@@ -28,8 +17,8 @@ public class DeleteDuplicatesFilm {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-//			File base = new File("z://film/new");
-			File base = new File("z://test/film");
+			File base = new File("Z://test/film");
+			//File base = new File("d://te/film");
 
 			File[] fichiers = base.listFiles();
 
@@ -77,7 +66,7 @@ public class DeleteDuplicatesFilm {
 				}
 
 				if (!episode.equals("") && episode != null) {
-					if (fichierTemp.getName().contains("720p")) {
+					if (fichierTemp.getName().toLowerCase().contains("720p")) {
 						ArrayList<File> listFile = map720.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -89,7 +78,7 @@ public class DeleteDuplicatesFilm {
 						}
 					}
 
-					if (fichierTemp.getName().contains("576p")) {
+					if (fichierTemp.getName().toLowerCase().contains("576p")) {
 						ArrayList<File> listFile = map576.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -101,7 +90,7 @@ public class DeleteDuplicatesFilm {
 						}
 					}
 
-					if (fichierTemp.getName().contains("480p")) {
+					if (fichierTemp.getName().toLowerCase().contains("480p")) {
 						ArrayList<File> listFile = map480.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -113,7 +102,7 @@ public class DeleteDuplicatesFilm {
 						}
 					}
 
-					if (fichierTemp.getName().contains("360p")) {
+					if (fichierTemp.getName().toLowerCase().contains("360p")) {
 						ArrayList<File> listFile = map360.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -125,7 +114,7 @@ public class DeleteDuplicatesFilm {
 						}
 					}
 
-					if (fichierTemp.getName().contains("240p")) {
+					if (fichierTemp.getName().toLowerCase().contains("240p")) {
 						ArrayList<File> listFile = map240.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -137,7 +126,7 @@ public class DeleteDuplicatesFilm {
 						}
 					}
 
-					if (fichierTemp.getName().contains("1080p")) {
+					if (fichierTemp.getName().toLowerCase().contains("1080p")) {
 						ArrayList<File> listFile = map1080.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -149,7 +138,7 @@ public class DeleteDuplicatesFilm {
 						}
 					}
 
-					if (fichierTemp.getName().contains("2160p")) {
+					if (fichierTemp.getName().toLowerCase().contains("2160p")) {
 						ArrayList<File> listFile = map2160.get(episode);
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
@@ -158,6 +147,120 @@ public class DeleteDuplicatesFilm {
 						} else {
 							listFile.add(fichierTemp);
 							map2160.put(episode, listFile);
+						}
+					}
+				}
+			}
+
+
+			// ====================================2160
+			if (map2160.size() > 0) {
+				Set<String> set = map2160.keySet();
+				for (String lineTemp : set) {
+					ArrayList<File> listFile2 = map2160.get(lineTemp);
+					if (listFile2.size() > 0) {
+						File fichier = listFile2.get(0);
+						long taille = 0;
+						long tailleTemp = 0;
+						for (File fichierTemp : listFile2) {
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
+							}
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
+							}
+						}
+
+						for (File fichierTemp : listFile2) {
+							if (fichierTemp != fichier) {
+								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+								fichierTemp.delete();
+							}
+						}
+
+						if (map1080.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map1080.get(lineTemp);
+							map1080.remove(lineTemp);
+							for (File fichierTemp : listDelete) {
+								try {
+									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+									fichierTemp.delete();
+								} catch (Exception ex) {
+
+								}
+							}
+						}
+
+						if (map720.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map720.get(lineTemp);
+							map720.remove(lineTemp);
+							for (File fichierTemp : listDelete) {
+								try {
+									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+									fichierTemp.delete();
+								} catch (Exception ex) {
+
+								}
+							}
+						}
+
+						if (map576.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map576.get(lineTemp);
+							map576.remove(lineTemp);
+							for (File fichierTemp : listDelete) {
+								try {
+									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+									fichierTemp.delete();
+								} catch (Exception ex) {
+
+								}
+							}
+						}
+
+						if (map480.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map480.get(lineTemp);
+							map480.remove(lineTemp);
+							for (File fichierTemp : listDelete) {
+								try {
+									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+									fichierTemp.delete();
+								} catch (Exception ex) {
+
+								}
+							}
+						}
+
+						if (map360.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map360.get(lineTemp);
+							map360.remove(lineTemp);
+							for (File fichierTemp : listDelete) {
+								try {
+									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+									fichierTemp.delete();
+								} catch (Exception ex) {
+
+								}
+							}
+						}
+
+						if (map240.containsKey(lineTemp)) {
+							ArrayList<File> listDelete = map240.get(lineTemp);
+							map240.remove(lineTemp);
+							for (File fichierTemp : listDelete) {
+								try {
+									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+									fichierTemp.delete();
+								} catch (Exception ex) {
+
+								}
+							}
 						}
 					}
 				}
@@ -173,17 +276,18 @@ public class DeleteDuplicatesFilm {
 						long taille = 0;
 						long tailleTemp = 0;
 						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
-
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
 							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
 							}
 						}
 
@@ -191,18 +295,6 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								fichierTemp.delete();
-							}
-						}
-						if (map2160.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map2160.get(lineTemp);
-							map2160.remove(lineTemp);
-							for (File fichierTemp : listDelete) {
-								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-									fichierTemp.delete();
-								} catch (Exception ex) {
-
-								}
 							}
 						}
 
@@ -274,103 +366,8 @@ public class DeleteDuplicatesFilm {
 					}
 				}
 			}
-			// ====================================2160
-			if (map2160.size() > 0) {
-				Set<String> set = map2160.keySet();
-				for (String lineTemp : set) {
-					ArrayList<File> listFile2 = map2160.get(lineTemp);
-					if (listFile2.size() > 0) {
-						File fichier = listFile2.get(0);
-						long taille = 0;
-						long tailleTemp = 0;
-						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
 
-							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
-							}
-						}
 
-						for (File fichierTemp : listFile2) {
-							if (fichierTemp != fichier) {
-								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-								fichierTemp.delete();
-							}
-						}
-						if (map720.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map720.get(lineTemp);
-							map720.remove(lineTemp);
-							for (File fichierTemp : listDelete) {
-								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-									fichierTemp.delete();
-								} catch (Exception ex) {
-
-								}
-							}
-						}
-
-						if (map576.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map576.get(lineTemp);
-							map576.remove(lineTemp);
-							for (File fichierTemp : listDelete) {
-								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-									fichierTemp.delete();
-								} catch (Exception ex) {
-
-								}
-							}
-						}
-
-						if (map480.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map480.get(lineTemp);
-							map480.remove(lineTemp);
-							for (File fichierTemp : listDelete) {
-								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-									fichierTemp.delete();
-								} catch (Exception ex) {
-
-								}
-							}
-						}
-
-						if (map360.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map360.get(lineTemp);
-							map360.remove(lineTemp);
-							for (File fichierTemp : listDelete) {
-								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-									fichierTemp.delete();
-								} catch (Exception ex) {
-
-								}
-							}
-						}
-
-						if (map240.containsKey(lineTemp)) {
-							ArrayList<File> listDelete = map240.get(lineTemp);
-							map240.remove(lineTemp);
-							for (File fichierTemp : listDelete) {
-								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-									fichierTemp.delete();
-								} catch (Exception ex) {
-
-								}
-							}
-						}
-					}
-				}
-			}
 			// ====================================720
 			if (map720.size() > 0) {
 				Set<String> set = map720.keySet();
@@ -381,17 +378,18 @@ public class DeleteDuplicatesFilm {
 						long taille = 0;
 						long tailleTemp = 0;
 						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
-
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
 							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
 							}
 						}
 
@@ -467,17 +465,18 @@ public class DeleteDuplicatesFilm {
 						long taille = 0;
 						long tailleTemp = 0;
 						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
-
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
 							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
 							}
 						}
 
@@ -540,17 +539,18 @@ public class DeleteDuplicatesFilm {
 						long taille = 0;
 						long tailleTemp = 0;
 						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
-
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
 							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
 							}
 						}
 
@@ -601,17 +601,18 @@ public class DeleteDuplicatesFilm {
 						long taille = 0;
 						long tailleTemp = 0;
 						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
-
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
 							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
 							}
 						}
 
@@ -649,17 +650,18 @@ public class DeleteDuplicatesFilm {
 						long taille = 0;
 						long tailleTemp = 0;
 						for (File fichierTemp : listFile2) {
-							Pattern patternTemp = Pattern.compile("[0-9]* kbps");
-							Matcher matcherTemp = patternTemp.matcher(fichierTemp.getName());
-							try {
-								while (matcherTemp.find()) {
-									tailleTemp = Long.parseLong(matcherTemp.group(0).substring(0,matcherTemp.group(0).indexOf(" ")));
-								}
-							} catch (Exception e) {
-
+							StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+							String rate = "";
+							while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+								rate = stk.nextToken();
 							}
-							if (tailleTemp > taille) {
-								fichier = fichierTemp;
+							if(rate.contains("kbps")) {
+								rate = rate.substring(0, rate.indexOf("kbps") - 1);
+								rate = rate.replaceAll(",", "").trim();
+								if (Integer.parseInt(rate) >= taille) {
+									fichier = fichierTemp;
+									taille = Integer.parseInt(rate);
+								}
 							}
 						}
 
@@ -677,7 +679,7 @@ public class DeleteDuplicatesFilm {
 
 		} catch (
 
-		Exception ex) {
+				Exception ex) {
 			ex.printStackTrace();
 		}
 	}
@@ -685,4 +687,5 @@ public class DeleteDuplicatesFilm {
 	public static void main(String[] args) {
 		DeleteDuplicatesFilm del = new DeleteDuplicatesFilm();
 	}
+
 }
