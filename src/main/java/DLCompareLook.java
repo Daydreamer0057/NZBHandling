@@ -3,20 +3,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.awt.*;
-import java.io.*;
-import java.util.ArrayList;
-
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 
-public class SteamLook {
+public class DLCompareLook {
     ChromeDriver driver;
     ChromeDriver driver2;
     ChromeDriver driver3;
 
-    public SteamLook() throws Exception {
-        FileWriter fw = new FileWriter("e://temp/list_steam.txt");
-        PrintWriter pw = new PrintWriter(fw);
+    public DLCompareLook() throws Exception {
         File base = new File("z://games");
         //File base = new File("d://film/new/Film 20200226");
 
@@ -48,31 +45,20 @@ public class SteamLook {
             listeDirectory.remove(0);
         }
 
-        for(File fichierTemp : listeDirectoryFinal){
-            pw.println(fichierTemp.getName());
-        }
-
-        pw.flush();
-        pw.close();
-        fw.close();
-
-//        System.exit(0);
-
         long seconds = System.currentTimeMillis();
 
         System.setProperty("webdriver.chrome.driver", "e://temp/chrome/chromedriver.exe");
         driver = new ChromeDriver();
 
         for(File fichierTemp : listeDirectoryFinal){
-                driver.get("https://store.steampowered.com/");
+                driver.get("https://dlcompare.fr/");
 
                 // Input Email id and Password If you are already Register
                 int pos = fichierTemp.getPath().lastIndexOf("\\");
                 String path = fichierTemp.getPath().substring(pos+1,fichierTemp.getPath().length());
-                driver.findElement(By.name("term")).sendKeys(path);
-                System.out.println(path);
+                driver.findElement(By.id("right-label-large")).sendKeys(path);
 
-                WebElement webElementTemp2 = driver.findElement(By.name("term"));
+                WebElement webElementTemp2 = driver.findElement(By.id("right-label-large"));
                 webElementTemp2.submit();
 
                 Robot robot = new Robot();
@@ -84,14 +70,13 @@ public class SteamLook {
                 ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
                 //System.out.println("Handle info"+ driver.getWindowHandles());
                 driver.switchTo().window(tabs.get(tabs.size() - 1));
-//                Thread.sleep(5000);
         }
     }
 
 
     public static void main(String[] args) {
         try {
-            SteamLook nzb = new SteamLook();
+            DLCompareLook nzb = new DLCompareLook();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

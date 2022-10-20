@@ -10,13 +10,14 @@ import java.util.regex.Pattern;
 
 public class DeleteSeriesBeforeConvert {
 	static String path2;
-	static String episode;
+	static String year;
 	static String nameSeries;
+	static int resolutionSeries = 0;
 	static int compteurDelete = 0;
 
 	public DeleteSeriesBeforeConvert() {
 		// Dossier a supprimer
-		File base = new File("z://test/main a traiter");
+		File base = new File("z://test/done");
 		//File base = new File("Z://film/new");
 		//File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
@@ -97,24 +98,49 @@ public class DeleteSeriesBeforeConvert {
 			} else {
 				// System.out.println("Compteur " + compteur + " / " + files.length);
 				compteur++;
-				 path2 = fichierTemp.getName();
+				path2 = fichierTemp.getName();
 				//path2 = path.replaceAll("_", "'");
 				path2 = FilenameUtils.removeExtension(path2);
 			}
 			if(path2!=""){
 				StringTokenizer stk = new StringTokenizer(path2,"-");
 				if(stk.hasMoreTokens()) {
-					nameSeries = stk.nextToken().trim();
+					try {
+						nameSeries = stk.nextToken().trim();
+					} catch (Exception ex){
+
+					}
 				}
 				if(stk.hasMoreTokens()) {
-					episode = stk.nextToken().trim();
+					try {
+						String line = stk.nextToken();
+						year = line.trim();
+					} catch (Exception ex){
+
+					}
 				}
+			}
+
+			if(fichierTemp.getName().toLowerCase().contains("2160p")){
+				resolutionSeries = 2160;
+			}
+			if(fichierTemp.getName().toLowerCase().contains("1080p")){
+				resolutionSeries = 1080;
+			}
+			if(fichierTemp.getName().toLowerCase().contains("720p")){
+				resolutionSeries = 720;
+			}
+			if(fichierTemp.getName().toLowerCase().contains("576p")){
+				resolutionSeries = 576;
+			}
+			if(fichierTemp.getName().toLowerCase().contains("480p")){
+				resolutionSeries = 480;
 			}
 
 
 			listeFichier.forEach(res -> {
 				try {
-					compteurDelete++;
+//					compteurDelete++;
 					String nameRes = res.getName();
 					if (!nameRes.equalsIgnoreCase(".classpath")) {
 						if (FilenameUtils.removeExtension(nameRes).endsWith("_0") || FilenameUtils.removeExtension(nameRes).endsWith("_1") || FilenameUtils.removeExtension(nameRes).endsWith("_2") || FilenameUtils.removeExtension(nameRes).endsWith("_3") || FilenameUtils.removeExtension(nameRes).endsWith("_4") || FilenameUtils.removeExtension(nameRes).endsWith("_5") || FilenameUtils.removeExtension(nameRes).endsWith("_6") || FilenameUtils.removeExtension(nameRes).endsWith("_7") || FilenameUtils.removeExtension(nameRes).endsWith("_8") || FilenameUtils.removeExtension(nameRes).endsWith("_9")) {
@@ -128,51 +154,40 @@ public class DeleteSeriesBeforeConvert {
 //						System.out.println(path2+"    "+nameRes);
 						StringTokenizer stk = new StringTokenizer(nameRes,"-");
 						String nameFinal = "";
-						String episodeFinal = "";
+						String yearFinal = "";
 						if(stk.hasMoreTokens()) {
 							nameFinal = stk.nextToken().trim();
 						}
 						if(stk.hasMoreTokens()) {
-							episodeFinal = stk.nextToken().trim();
+							yearFinal = stk.nextToken().trim();
+						}
+						int sizeFinal = 0;
+						if(nameRes.toLowerCase().contains("2160p")){
+							sizeFinal = 2160;
+						}
+						if(nameRes.toLowerCase().contains("1080p")){
+							sizeFinal = 1080;
+						}
+						if(nameRes.toLowerCase().contains("720p")){
+							sizeFinal = 720;
+						}
+						if(nameRes.toLowerCase().contains("576p")){
+							sizeFinal = 576;
+						}
+						if(nameRes.toLowerCase().contains("480p")){
+							sizeFinal = 480;
 						}
 
-						int sizePath = 0;
-						if(path2.contains("2160p")){
-							sizePath = 2160;
-						}
-						if(path2.contains("1080p")){
-							sizePath = 1080;
-						}
-						if(path2.contains("720p")){
-							sizePath = 720;
-						}
-						if(path2.contains("576p")){
-							sizePath = 576;
-						}
-						if(path2.contains("480p")){
-							sizePath = 480;
-						}
 
-						int sizeRes = 0;
-						if(nameFinal.contains("2160p")){
-							sizeRes = 2160;
-						}
-						if(nameFinal.contains("1080p")){
-							sizeRes = 1080;
-						}
-						if(nameFinal.contains("720p")){
-							sizeRes = 720;
-						}
-						if(nameFinal.contains("576p")){
-							sizeRes = 576;
-						}
-						if(nameFinal.contains("480p")){
-							sizeRes = 480;
-						}
-//						System.out.println(sizeRes+"    "+sizePath);
-						if (nameFinal.equalsIgnoreCase(nameSeries)&&(episode.equalsIgnoreCase(episodeFinal))&&(sizeRes<sizePath)) {
+
+//						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))){
+//							System.out.println("nameFinal "+nameFinal+"    nameSeries "+nameSeries+"    yearFinal "+yearFinal+"    year "+year+"    sizeFinal "+sizeFinal+"    sizeSeries "+resolutionSeries);
+//						}
+						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))&&(resolutionSeries>=sizeFinal)) {
 							res.delete();
-							System.out.println(res.getPath() + "    " + listeFichier.size()+"    "+path2);
+//							System.out.println(nameFinal+"    "+nameSeries+"    delete "+compteurDelete++);
+							System.out.println("nameFinal "+nameFinal+"    nameSeries "+nameSeries+"    yearFinal "+yearFinal+"    year "+year+"    resolutionnSeries "+resolutionSeries+"    sizeFinal "+sizeFinal+"    delete "+compteurDelete++);
+
 						}
 					}
 				}catch(Exception ex) {

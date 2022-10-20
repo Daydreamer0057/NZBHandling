@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Properties;
 
 public class Epguides {
@@ -14,7 +15,7 @@ public class Epguides {
 	public Epguides() {
 		try {
 
-			File base = new File("e://epguides");
+			File base = new File("d://epguides2");
 
 			File[] fichiers = base.listFiles();
 
@@ -25,7 +26,7 @@ public class Epguides {
 				if (fichierTemp.isDirectory()) {
 					listeDirectory.add(fichierTemp);
 				} else {
-					if (fichierTemp.getName().contains("index.html") || fichierTemp.getName().contains("index.htm")) {
+					if (fichierTemp.getPath().toLowerCase().contains("html")) {
 						listeFichier.add(fichierTemp);
 					}
 				}
@@ -40,8 +41,8 @@ public class Epguides {
 					if (fichierTemp.isDirectory()) {
 						listeDirectory.add(fichierTemp);
 					} else {
-						if (fichierTemp.getName().contains("index.html")
-								|| fichierTemp.getName().contains("index.htm")) {
+						if (fichierTemp.getPath().toLowerCase().contains("html")
+								) {
 							listeFichier.add(fichierTemp);
 						}
 					}
@@ -53,8 +54,8 @@ public class Epguides {
 
 			for (File fichier : listeFichier) {
 				boolean foundEpisode = false;
-				boolean found30Minutes = false;
-				boolean testNetflix = true;
+				boolean found2022 = false;
+				boolean testNetflix = false;
 				boolean testYear = false;
 				FileReader fr = new FileReader(fichier);
 				BufferedReader br = new BufferedReader(fr);
@@ -73,15 +74,13 @@ public class Epguides {
 					// testYear = true;
 					// }
 					// }
-					if (line != null && (line.contains("30 min"))) {
-						testNetflix = false;
-					}
-					if (line != null && line.contains("Science Fiction")) {
-						found30Minutes = true;
-						// foundEpisode = true;
-					}
-					if (line != null &&line.contains("Season 2")) {
-						testYear = true;
+					if (line != null && (line.toLowerCase().contains("start date")))	 {
+						if(line.toLowerCase().contains("2022")){
+//							System.out.println(line);
+							testNetflix = true;
+							found2022 = true;
+						}
+						break;
 					}
 				}
 				br.close();
@@ -89,9 +88,10 @@ public class Epguides {
 
 				System.out.println("" + compteur + " / " + listeFichier.size());
 				compteur++;
-				System.out.println(testNetflix + "    " + testYear);
+//				System.out.println(testNetflix + "    " + testYear);
 				// if (!testNetflix || !testYear || found30Minutes) {
-				if (!testNetflix || !found30Minutes || !testYear) {
+				if (!testNetflix) {
+//					System.out.println("Serie "+fichier.getPath()+"    "+line);
 					fichier.delete();
 				}
 			}

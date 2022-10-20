@@ -1,32 +1,22 @@
-import Utilities.UnzipFiles;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class SteamWishlist {
+public class TwitchStrike {
     ChromeDriver driver;
     ChromeDriver driver2;
     ChromeDriver driver3;
 
-    public SteamWishlist() throws Exception{
+    public TwitchStrike() throws Exception{
         FileReader fr = new FileReader("c:/log/wishlist.txt");
         BufferedReader br = new BufferedReader(fr);
-            System.setProperty("webdriver.chrome.driver", "e://temp/chrome/chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
             driver = new ChromeDriver();
             //driver.manage().window().setPosition(new Point(-2000, 0));
 
@@ -34,12 +24,12 @@ public class SteamWishlist {
         while(line!=null) {
             line = br.readLine();
             if(line!=null) {
-                driver.get("https://www.dlcompare.com/");
+                driver.get("https://isthereanydeal.com/");
 
 
-                driver.findElement(By.id("right-label-large")).sendKeys(line);
+                driver.findElement(By.id("searchbox")).sendKeys(line);
 
-                WebElement webElementTemp2 = driver.findElement(By.id("right-label-large"));
+                WebElement webElementTemp2 = driver.findElement(By.id("searchbox"));
                 webElementTemp2.submit();
 
                 Robot robot = new Robot();
@@ -61,7 +51,7 @@ public class SteamWishlist {
     public static void main(String[] args)
     {
         try {
-            SteamWishlist nzb = new SteamWishlist();
+            TwitchStrike nzb = new TwitchStrike();
         } catch (Exception ex) {
         ex.printStackTrace();
     }

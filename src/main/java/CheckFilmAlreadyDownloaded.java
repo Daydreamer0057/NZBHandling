@@ -52,7 +52,7 @@ public class CheckFilmAlreadyDownloaded {
                 listeDirectory.remove(0);
             }
 
-            File fichierNZB = new File("w://nzb/film en attente/film");
+            File fichierNZB = new File("x://nzb/main");
             File[] listeNZB = fichierNZB.listFiles();
 
             int compteur = 0;
@@ -75,21 +75,6 @@ public class CheckFilmAlreadyDownloaded {
                             year = year.replace('(', ' ');
                             year = year.replace(')', ' ');
                             year = year.trim();
-
-                            ArrayList<String> listNamePart = new ArrayList<>();
-
-                            StringTokenizer stkBlanc = new StringTokenizer(nameFilmMain, " ");
-                            while (stkBlanc.hasMoreTokens()) {
-                                listNamePart.add(stkBlanc.nextToken().trim());
-                            }
-
-//                            System.out.println(fichierNZBTemp.getName()+"    "+nameFilmMain+"    "+year);
-                            ArrayList<Boolean> listTest = new ArrayList<Boolean>();
-                            for (String lineTemp : listNamePart) {
-                                if ((fichierNZBTemp.getName().toLowerCase().contains(lineTemp.toLowerCase()) && fichierNZBTemp.getName().contains(year))) {
-                                    listTest.add(true);
-                                }
-                            }
 
                             int sizePath = 0;
                             if(fichierTempFilm.getName().contains("2160p")){
@@ -125,8 +110,8 @@ public class CheckFilmAlreadyDownloaded {
                                 sizeRes = 480;
                             }
 
-                            if (listNamePart.size()!=0 && listTest.size()!=0 &&(listNamePart.size()==listTest.size())&&(sizePath<sizeRes)) {
-                                System.out.println(fichierNZBTemp+"    "+fichierTempFilm);
+                            if (sizePath>=sizeRes) {
+//                                System.out.println(fichierNZBTemp+"    "+fichierTempFilm);
                                 testNZB = false;
                                 break;
 //                                System.out.println(fichierNZBTemp.getName());
@@ -135,8 +120,8 @@ public class CheckFilmAlreadyDownloaded {
                     }
                 }
                 if(!testNZB){
-//                    fichierNZBTemp.renameTo(new File("z://test/error/" + fichierNZBTemp.getName()));
-                        fichierNZBTemp.delete();
+//                    fichierNZBTemp.renameTo(new File("x://nzb/error/" + fichierNZBTemp.getName()));
+//                        fichierNZBTemp.delete();
                     System.out.println(fichierNZBTemp.getPath());
                 }
             }

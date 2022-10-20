@@ -8,12 +8,13 @@ import java.util.HashSet;
 public class Film {
 	static String path2;
 	static int compteurDelete = 0;
-
 	public Film() {
 		// Dossier a supprimer
 		File base = new File("z://test/test");
-		//File base = new File("Z://film/new");
-		//File base = new File("e://theatre/convert");
+//		File base = new File("z://documentaires/How The Universe Works");
+//		File base = new File("Z://Series/We Own This City");
+//		File base = new File("e://humour/convert");
+//		File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
 
 		File[] fichiers = base.listFiles();
@@ -50,9 +51,9 @@ public class Film {
 		int compteur = 0;
 		HashSet<File> fileBase = new HashSet<File>();
 		HashSet<File> files = new HashSet<File>();
-//		fileBase.add(new File("e://convert"));
 		fileBase.add(new File("z://temp/convert"));
-//		fileBase.add(new File("z://film/main/blockbuster"));
+//		fileBase.add(new File("z://series/Star Trek Strange New Worlds"));
+//		fileBase.add(new File("e://humour/h265"));
 //		fileBase.add(new File("z://test/temp"));
 
 		ArrayList<File> listeDirectory2 = new ArrayList<File>();
@@ -95,7 +96,7 @@ public class Film {
 				compteur++;
 				final String path = fichierTemp.getName();
 				//path2 = path.replaceAll("_", "'");
-				path2 = path.substring(0, path.length() - 4);
+				path2 = path.substring(0, path.length() - 8);
 			}
 
 
@@ -113,8 +114,9 @@ public class Film {
 						}
 						nameRes = FilenameUtils.removeExtension(nameRes);
 //						System.out.println(path2+"    "+nameRes);
-						if (nameRes.equalsIgnoreCase(path2)) {
-							res.delete();
+						if (nameRes.toLowerCase().contains(path2.toLowerCase())) {
+							res.renameTo(new File("z:/test/stockage/"+res.getName()));
+//							res.delete();
 							System.out.println(res.getPath() + "    " + listeFichier.size());
 						}
 					}

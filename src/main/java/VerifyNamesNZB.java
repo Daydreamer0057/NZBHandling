@@ -20,7 +20,7 @@ public class VerifyNamesNZB {
 	PrintWriter pw;
 
 	public VerifyNamesNZB() {
-		File base = new File("z://test/film a traiter/temp");
+		File base = new File("z://test/main a traiter");
 //		File base = new File("F://The Mandalorian");
 
 		File[] fichiers = base.listFiles();

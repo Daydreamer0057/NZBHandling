@@ -46,22 +46,49 @@ public class PopulateNZB {
 			System.exit(0);
 		}
 
-		// NZBService nzbService = new NZBService();
+		File base = new File("w://nzb");
 
-		File basePrincipal = new File("e://NZBFile/new");
+		File[] fichiers = base.listFiles();
 
-		File[] listPrincipal = basePrincipal.listFiles();
+		HashSet<File> listeFichier = new HashSet<File>();
+		ArrayList<File> listeDirectory = new ArrayList<File>();
 
-		HashSet<File> listePrincipale = new HashSet<File>();
+		for (File fichier : fichiers) {
+			if (fichier.isDirectory()) {
+				listeDirectory.add(fichier);
+			} else if (fichier.isFile()) {
+				if (fichier.getName().endsWith("nzb")) {
+					listeFichier.add(fichier);
+				}
+			}
+		}
 
-		for (File fichier : listPrincipal) {
-			listePrincipale.add(fichier);
+		while (listeDirectory.size() > 0) {
+			System.out.println("Files "+listeFichier.size()+"    Directory "+listeDirectory.size());
+			File fichier = listeDirectory.get(0);
+
+			File[] fichierListe = fichier.listFiles();
+
+			if (fichierListe != null) {
+				for (File fichierTemp : fichierListe) {
+					if (!fichierTemp.getPath().startsWith("w:\\nzb\\Film\\")&&!fichierTemp.getPath().startsWith("w:\\nzb\\Temp\\")) {
+						if (fichierTemp.isDirectory()) {
+							listeDirectory.add(fichierTemp);
+						} else if (fichierTemp.isFile()) {
+							if (fichierTemp.getName().endsWith("nzb")) {
+								listeFichier.add(fichierTemp);
+							}
+						}
+					}
+				}
+			}
+			listeDirectory.remove(0);
 		}
 
 		int compteur = 0;
 		int total = 0;
 		int change = 0;
-		for (File fichierTemp : listePrincipale) {
+		for (File fichierTemp : listeFichier) {
 			compteur++;
 			if (compteur >= 0) {
 				// BasicFileAttributes attrs = Files.readAttributes(fichierTemp.toPath(),
@@ -81,7 +108,7 @@ public class PopulateNZB {
 				while (line != null) {
 					line = br.readLine();
 					if (line != null && line.toLowerCase().contains("subject")) {
-						if (!listePrincipale.contains(fichierTemp)) {
+						if (!listeFichier.contains(fichierTemp)) {
 							String queryExist = ("SELECT * from articles_nzb where filename = ?");
 							PreparedStatement stmt = conn.prepareStatement(queryExist);
 
@@ -121,7 +148,7 @@ public class PopulateNZB {
 				}
 				br.close();
 				fr.close();
-				System.out.println("Fichier " + compteur + " / " + listePrincipale.size() + "    changes " + change
+				System.out.println("Fichier " + compteur + " / " + listeFichier.size() + "    changes " + change
 						+ "    ignore " + total);
 			}
 

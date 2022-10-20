@@ -5,7 +5,7 @@ import java.util.HashSet;
 public class Delete0Folder {
 
 	public Delete0Folder() {
-		File base = new File("y://");
+		File base = new File("z://");
 
 		File[] fichiers = base.listFiles();
 
@@ -17,7 +17,9 @@ public class Delete0Folder {
 			}
 		}
 
+		int compteur = 0;
 		while (listeDirectory.size() > 0) {
+			System.out.println(compteur+" / "+ listeDirectory.size());
 			File fichier = listeDirectory.get(0);
 
 			File[] fichierListe = fichier.listFiles();
@@ -26,6 +28,7 @@ public class Delete0Folder {
 				for (File fichierTemp : fichierListe) {
 					if (fichierTemp.isDirectory()) {
 						listeDirectory.add(fichierTemp);
+						compteur++;
 					}
 				}
 			}
@@ -36,10 +39,11 @@ public class Delete0Folder {
 			System.out.println("Effacement");
 
 			listeDirectory.forEach(folder -> {
-				File[] list = folder.listFiles();
+				File[] liste = folder.listFiles();
 
-				if (list.length == 0) {
-					folder.delete();
+				if (liste.length == 0) {
+					System.out.println(folder.getPath());
+//					folder.delete();
 				}
 			});
 

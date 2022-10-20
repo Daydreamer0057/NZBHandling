@@ -25,7 +25,7 @@ public class DeleteDuplicatesSeries {
 
             int compteur = 0;
             for (File fichier : fichiers) {
-                System.out.println("fichiers "+fichiers.length);
+                System.out.println(listeFichier.size()+"    "+listeDirectory.size());
                 compteur++;
                 if (fichier.isDirectory()) {
                     listeDirectory.add(fichier);
@@ -40,7 +40,7 @@ public class DeleteDuplicatesSeries {
             int compteurFile = 0;
             int compteurFolder = 0;
             while (listeDirectory.size() > 0) {
-                System.out.println("fichiers "+compteurFile+"     folders "+compteurFolder);
+                System.out.println(listeFichier.size()+"    "+listeDirectory.size());
                 File fichier = listeDirectory.get(0);
 
                 File[] fichierListe = fichier.listFiles();
@@ -184,22 +184,57 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map2160.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map2160.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
+                        boolean testHdr = false;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
-                            if(rate.contains("kbps")) {
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
                                 rate = rate.substring(0, rate.indexOf("kbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate);
+                                }
+                            }
+                        }
+
+                        if(!testHdr){
+                            for (File fichierTemp : listFile2) {
+                                StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
+                                String rate = "";
+                                while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
+                                    rate = stk.nextToken();
+                                }
+                                if(rate.contains("Mbps")){
+                                    rate = rate.substring(0, rate.indexOf("Mbps") - 1);
+                                    rate = rate.replaceAll(",", "").trim();
+                                    if (Double.parseDouble(rate) * 1000 >= taille) {
+                                        fichier = fichierTemp;
+                                        taille = Double.parseDouble(rate)*1000;
+                                    }
+                                }
+                                if(rate.contains("kbps")){
+                                    rate = rate.substring(0, rate.indexOf("kbps") - 1);
+                                    rate = rate.replaceAll(",", "").trim();
+                                    if (Double.parseDouble(rate) >= taille) {
+                                        fichier = fichierTemp;
+                                        taille = Double.parseDouble(rate);
+                                    }
                                 }
                             }
                         }
@@ -303,22 +338,30 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map1080.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map1080.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
                             String rate = "";
-                            while (!rate.contains("kbps") && stk.hasMoreTokens()) {
+                            while (!rate.contains("Mbps") && stk.hasMoreTokens()) {
                                 rate = stk.nextToken();
                             }
-                            if (rate.contains("kbps")) {
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
                                 rate = rate.substring(0, rate.indexOf("kbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -422,23 +465,30 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map720.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map720.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
                             String rate = "";
-                            while (!rate.contains("kbps") && stk.hasMoreTokens()) {
+                            while (!rate.contains("Mbps") && stk.hasMoreTokens()) {
                                 rate = stk.nextToken();
                             }
-                            if (rate.contains("kbps")) {
-                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
-                                rate = rate.substring(rate.lastIndexOf("-") + 2, rate.length());
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
+                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -515,23 +565,30 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map576.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map576.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
                             String rate = "";
-                            while (!rate.contains("kbps") && stk.hasMoreTokens()) {
+                            while (!rate.contains("Mbps") && stk.hasMoreTokens()) {
                                 rate = stk.nextToken();
                             }
-                            if (rate.contains("kbps")) {
-                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
-                                rate = rate.substring(rate.lastIndexOf("-") + 2, rate.length());
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
+                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -594,23 +651,30 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map480.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map480.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
-                            if(rate.contains("kbps")) {
-                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
-                                rate = rate.substring(rate.lastIndexOf("-") + 2, rate.length());
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
+                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -659,23 +723,30 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map360.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map360.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
-                            if(rate.contains("kbps")) {
-                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
-                                rate = rate.substring(rate.lastIndexOf("-") + 2, rate.length());
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
+                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -710,23 +781,30 @@ public class DeleteDuplicatesSeries {
                 Set<String> set = map240.keySet();
                 for (String lineTemp : set) {
                     ArrayList<File> listFile2 = map240.get(lineTemp);
-                    if (listFile2.size() > 1) {
+                    if (listFile2.size() > 0) {
                         File fichier = listFile2.get(0);
-                        long taille = 0;
-                        long tailleTemp = 0;
+                        double taille = 0;
+                        double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
                             StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while(!rate.contains("kbps")&&stk.hasMoreTokens()){
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
-                            if(rate.contains("kbps")) {
-                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
-                                rate = rate.substring(rate.lastIndexOf("-") + 2, rate.length());
+                            if(rate.contains("Mbps")){
+                                rate = rate.substring(0, rate.indexOf("Mbps") - 1);
                                 rate = rate.replaceAll(",", "").trim();
-                                if (Integer.parseInt(rate) >= taille) {
+                                if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Integer.parseInt(rate);
+                                    taille = Double.parseDouble(rate)*1000;
+                                }
+                            }
+                            if(rate.contains("kbps")){
+                                rate = rate.substring(0, rate.indexOf("kbps") - 1);
+                                rate = rate.replaceAll(",", "").trim();
+                                if (Double.parseDouble(rate) >= taille) {
+                                    fichier = fichierTemp;
+                                    taille = Double.parseDouble(rate);
                                 }
                             }
                         }

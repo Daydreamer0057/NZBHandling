@@ -1,9 +1,5 @@
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,70 +20,73 @@ public class EpguidesSelenium {
 	String rootPath;
 
 	public EpguidesSelenium() throws MalformedURLException, SQLException, ClassNotFoundException, IOException {
+		ArrayList<String> series = new ArrayList<>();
+		ArrayList<String> seriesCompare = new ArrayList<>();
 		ArrayList<String> listIndex = new ArrayList<String>();
+		WebDriver driver = null;
 
-		// ChromeOptions options = new ChromeOptions();
-		// options.setBinary("C://Program Files/Google/Chrome/Application/chrome.exe");
-		// System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
-		System.setProperty("webdriver.chrome.driver",
-				"c://programdata/chocolatey/lib/chromedriver/tools/chromedriver.exe");
-		List<String> listURL = new ArrayList<String>();
-		WebDriver driver = new ChromeDriver();
-		// WebDriver driver = new RemoteWebDriver(new URL("http://10.0.0.100:9515"), new
-		// ChromeOptions);
+//		FileInputStream fin = new FileInputStream("c:/temp/series check.txt");
+//		ObjectInputStream ois = new ObjectInputStream(fin);
+//		seriesCompare = (ArrayList<String>) ois.readObject();
+//		ois.close();
+//		fin.close();
 
-//		driver.get("http://Epguides.com/menu/comedy.shtml");
-		driver.get("http://epguides.com/menu/current.shtml");
-		List<WebElement> listElements = driver.findElements(By.tagName("a"));
-		List<String> listURLs = new ArrayList<String>();
-
-		for (WebElement webE : listElements) {
-			listURLs.add(webE.getAttribute("href"));
+		try {
+			// System.out.println(fichierTemp.getPath());
+			System.setProperty("webdriver.chrome.driver", "e://temp/chrome/chromedriver.exe");
+			driver = new ChromeDriver();
+		} catch (Exception ex) {
+			// test = true;
+			ex.printStackTrace();
 		}
+		driver.get("https://nzbplanet.net");
 
-		int compteur = 0;
-		for (String webElement : listURLs) {
-			System.out.println(compteur+" / " + listURLs.size());
+		// Input Email id and Password If you are already Register
+		driver.findElement(By.name("username")).sendKeys("mbrebis092");
+		driver.findElement(By.name("password")).sendKeys("9cEx4MUWaqRIL]_u");
 
-			if (webElement != null) {
-				driver.get(webElement);
+		WebElement webElementTemp2 = driver.findElement(By.name("username"));
+		webElementTemp2.submit();
 
-				String body = driver.getPageSource();
-				StringReader str = new StringReader(body);
-				BufferedReader br = new BufferedReader(str);
+		String[] adresse = {"0-9", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+		for (int i = 1; i < 27; i++) {
+			driver.get("https://nzbplanet.net/series/" + adresse[i]);
 
-				String line = "";
-				boolean testYear = false;
-				boolean testSeason = false;
-				boolean testNetflix = true;
-				while (line != null) {
-					line = br.readLine();
-					if (line != null) {
-						if ((line.contains("2000") || line.contains("2001") || line.contains("2002") || line.contains("2003") || line.contains("2004") || line.contains("2005") || line.contains("2006") || line.contains("2007") || line.contains("2008") || line.contains("2009") || line.contains("2010") || line.contains("2011") || line.contains("2012") || line.contains("2013") || line.contains("2014") || line.contains("2015") || line.contains("2016") || line.contains("2017") || line.contains("2018") || line.contains("2019") || line.contains("2020")) && !line.contains("<em>") && !line.contains("Text copyright")) {
-							if(line.contains("Start date") || line.contains("End date")) {
-							testYear = true;
-							}
-						}
-//						if(line.contains("Season 2") || line.contains("season 2")) {
-							testSeason = true;
-//						}
-						if(line.contains("Netflix")||line.contains("Amazon")||line.contains("30 min")) {
-							testNetflix = false;
+			List<WebElement> linkSeason = driver.findElements(By.tagName("a"));
+
+			for (WebElement web : linkSeason) {
+				if (web.getAttribute("href").toLowerCase().contains("series")) {
+					series.add(web.getAttribute("text"));
+				}
+			}
+//			try {
+//				FileOutputStream fout = new FileOutputStream(new File("c:/temp/series check.txt"));
+//				ObjectOutputStream oos = new ObjectOutputStream(fout);
+//				oos.writeObject(series);
+//				oos.flush();
+//				oos.close();
+//				fout.flush();
+//				fout.close();
+//			} catch (Exception ex) {
+//				ex.printStackTrace();
+//			}
+
+			ArrayList<String> list1 = new ArrayList<>();
+			ArrayList<String> list2 = new ArrayList<>();
+			list2 = seriesCompare;
+			for (String fichier1 : series) {
+				for (String fichier2 : series) {
+					if (fichier1.toLowerCase().equals(fichier2.toLowerCase())) {
+						try {
+							list2.remove(fichier1);
+						}catch(Exception ex){
+							ex.printStackTrace();
 						}
 					}
 				}
-				if(testSeason && testYear&&testNetflix) {
-					FileWriter fw = new FileWriter("d://epguides/epguides" + compteur + ".html");
-					PrintWriter pw = new PrintWriter(fw);
-					pw.println(body);
-					pw.flush();
-					fw.flush();
-					pw.close();
-					fw.close();
-				}
-				compteur++;
-				br.close();
-				str.close();
+			}
+			for(String line : list2){
+				System.out.println(line);
 			}
 		}
 	}

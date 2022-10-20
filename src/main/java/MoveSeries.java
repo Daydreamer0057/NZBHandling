@@ -1,6 +1,7 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,11 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 public class MoveSeries {
 
 	public MoveSeries() {
-		File base = new File("z://test/stockage");
+		File base = new File("z://test/main a traiter");
 //		File base = new File("x://convert");
 
 		File[] fichiers = base.listFiles();
@@ -51,36 +53,80 @@ public class MoveSeries {
 			listeDirectory.remove(0);
 		}
 
-		File[] listeSeries = new File("z://series").listFiles();
+		for(File fichierTemp : listeFichier) {
+			try {
+				try {
+					String nameLowerCase = fichierTemp.getName();
+					int pos = nameLowerCase.indexOf(" - ");
+					nameLowerCase = nameLowerCase.substring(0,pos);
 
-		for (File fichierTemp : listeFichier) {
-			for (File fichierSeries : listeSeries) {
-				if (fichierTemp.getName().indexOf(" - ") != -1) {
-					String name = fichierTemp.getName().substring(0, fichierTemp.getName().indexOf(" - ")).trim();
-					name = name.replace("_", "'");
+					Files.createDirectories(Paths.get("z://series/"+nameLowerCase));
+//							System.out.println(chemin + "/" + fichierTemp.getName());
 
-					Pattern p1 = Pattern.compile("([0-9][0-9][0-9][0-9])");
-					Matcher m = p1.matcher(fichierTemp.getName().toLowerCase());
+				Path p = Paths.get("z://series/"+ nameLowerCase);
 
-					if (m.find()) {
-						name = name.replaceAll(m.group(0),"");
-					}
-					String nameLowerCase = name.toLowerCase();
-					String nameSeriesLowerCase = fichierSeries.getName().toLowerCase();
-					if (nameLowerCase.indexOf(nameSeriesLowerCase) != -1) {
-						Path p = Paths.get(fichierSeries.getPath());
-
-						String path = p.toString();
-						String chemin = path.replaceAll("\\\\", "/");
-						System.out.println(chemin + "/" + fichierTemp.getName());
-						fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
-					}
+				String path = p.toString();
+				String chemin = path.replaceAll("\\\\", "/");
+				System.out.println(chemin + "/" + nameLowerCase);
+				fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+//						System.out.println(chemin + "/" + fichierTemp.getName());
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 		}
+
+
+//		File[] listeSeries = new File("z://series").listFiles();
+//
+//		for (File fichierTemp : listeFichier) {
+//			for (File fichierSeries : listeSeries) {
+//				if (fichierTemp.getName().indexOf(" - ") != -1) {
+//					String nameLowerCase = fichierTemp.getName().toLowerCase();
+//					int pos = nameLowerCase.indexOf(" - ");
+//					nameLowerCase = nameLowerCase.substring(0,pos);
+//					String nameSeriesLowerCase = fichierSeries.getName().toLowerCase();
+//
+//					if (nameLowerCase.indexOf(nameSeriesLowerCase) != -1) {
+//						Path p = Paths.get(fichierSeries.getPath());
+//
+//						String path = p.toString();
+//						String chemin = path.replaceAll("\\\\", "/");
+//						System.out.println(chemin + "/" + fichierTemp.getName());
+//						fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+//					}
+//				}
+//			}
+//		}
+
+//		File[] listeSeries = new File("e://humour").listFiles();
+//
+//		for (File fichierTemp : listeFichier) {
+//			for (File fichierSeries : listeSeries) {
+//				if(fichierSeries.isDirectory()){
+//					if (fichierTemp.getName().indexOf(" - ") != -1) {
+//						String nameLowerCase = fichierTemp.getName().toLowerCase();
+//						int pos = nameLowerCase.indexOf(" - ");
+//						nameLowerCase = nameLowerCase.substring(0, pos);
+//						String nameSeriesLowerCase = fichierSeries.getName().toLowerCase();
+//
+//						if (nameLowerCase.indexOf(nameSeriesLowerCase) != -1) {
+//							Path p = Paths.get(fichierSeries.getPath());
+//
+//							String path = p.toString();
+//							String chemin = path.replaceAll("\\\\", "/");
+//							System.out.println(chemin + "/" + fichierTemp.getName());
+//							fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 
-		public static void main(String[] args) {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		MoveSeries du = new MoveSeries();
 	}

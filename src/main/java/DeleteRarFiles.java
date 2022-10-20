@@ -2,6 +2,8 @@
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -10,7 +12,7 @@ public class DeleteRarFiles {
 
 	public DeleteRarFiles() {
 		// Dossier a supprimer
-		File base = new File("Z://test/main");
+		File base = new File("Z://test/film a traiter");
 //		File base = new File("F://The Mandalorian");
 
 		File[] fichiers = base.listFiles();
@@ -28,8 +30,8 @@ public class DeleteRarFiles {
 				setDirectory.add(fichier);
 			} else {
 				if (!(fichier.getName().endsWith("mkv") || fichier.getName().endsWith("mp4")
-						|| fichier.getName().endsWith("avi") || fichier.getName().endsWith("cbz")|| fichier.getName().endsWith("cbr")
-						|| fichier.getName().endsWith("iso")
+						|| fichier.getName().endsWith("avi")
+//						|| fichier.getName().endsWith("cbz")|| fichier.getName().endsWith("cbr")
 						|| fichier.getName().endsWith(".!qB")
 //						|| fichier.getName().endsWith("rar")
 //						|| fichier.getName().toLowerCase().endsWith("par2")
@@ -46,20 +48,22 @@ public class DeleteRarFiles {
 
 			File[] fichierListe = fichier.listFiles();
 
-			for (File fichierTemp : fichierListe) {
-				if (fichierTemp.isDirectory()) {
-					listeDirectory.add(fichierTemp);
-					setDirectory.add(fichierTemp);
-				} else {
-					if (!(fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
-							|| fichierTemp.getName().endsWith("avi") || fichierTemp.getName().endsWith("cbz")|| fichierTemp.getName().endsWith("cbr")
-							|| fichierTemp.getName().endsWith("iso")
-							|| fichierTemp.getName().endsWith(".!qB")
+			if(fichierListe!=null) {
+				for (File fichierTemp : fichierListe) {
+					if (fichierTemp.isDirectory()) {
+						listeDirectory.add(fichierTemp);
+						setDirectory.add(fichierTemp);
+					} else {
+						if (!(fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
+								|| fichierTemp.getName().endsWith("avi")
+//								|| fichierTemp.getName().endsWith("cbz") || fichierTemp.getName().endsWith("cbr")
+								|| fichierTemp.getName().endsWith(".!qB")
 //							|| fichierTemp.getName().endsWith("rar")
 //							|| fichierTemp.getName().toLowerCase().endsWith("par2")
-					))
-					 {
-						listeFichier.add(fichierTemp);
+						)) {
+//							System.out.println(fichierTemp.getName());
+							listeFichier.add(fichierTemp);
+						}
 					}
 				}
 			}
@@ -67,13 +71,19 @@ public class DeleteRarFiles {
 		}
 
 		try {
-			int compteur = 0;
+			int compteur = 1;
+			double taille = 0;
+			double moyenne = 0;
 			// PrintWriter pw = new PrintWriter("c://temp/log_delete.txt");
 			for (File fichierTemp : listeFichier) {
-				System.out.println(compteur + " / " + listeFichier.size() + "    " + fichierTemp.getPath());
+				taille += fichierTemp.length();
+				moyenne = new Double(taille/compteur/1024/1024);
+				System.out.println(compteur + " / " + listeFichier.size() + "    " + fichierTemp.getPath()+"    moyenne "+moyenne+"    taille "+(new Double(taille/1024/1024/1024)));
 				compteur++;
 				// pw.println(fichierTemp.getPath());
-				fichierTemp.delete();
+				new Thread(() -> {
+					fichierTemp.delete();
+				}).start();
 			}
 			// pw.flush();
 			// pw.close();

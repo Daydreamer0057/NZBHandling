@@ -11,12 +11,17 @@ public class TrimFailedUnpack {
 
 	public TrimFailedUnpack() {
 		// Dossier a supprimer
-		File base = new File("Z://test/film");
+		File base = new File("Z://test/film a traiter");
 
 		File[] fichiers = base.listFiles();
 
+		int compteurFinal = 0;
 		for(File fichier : fichiers){
+			System.out.println("compteur "+compteurFinal+" / "+fichiers.length);
+			compteurFinal++;
+
 			if(fichier.isDirectory()&&(fichier.getName().toLowerCase().contains("failed")||fichier.getName().toLowerCase().contains("unpack"))){
+//				if(fichier.isFile()&&(fichier.getName().toLowerCase().contains("failed")||fichier.getName().toLowerCase().contains("unpack"))){
 				Path p2 = Paths.get(fichier.getPath());
 				Path folder2 = p2.getParent();
 
@@ -38,6 +43,7 @@ public class TrimFailedUnpack {
 						}
 					}
 				} else {
+					System.out.println(chemin2 + "/" + name+"    "+fichier.getName());
 					fichier.renameTo(new File(chemin2 + "/" + name));
 				}
 			}

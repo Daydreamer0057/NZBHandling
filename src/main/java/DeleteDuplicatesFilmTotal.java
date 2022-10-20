@@ -1,4 +1,3 @@
-package nzbtosql.src.main.java.nzbtosql;
 
 import org.apache.commons.io.FileUtils;
 
@@ -203,9 +202,9 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								////fichierTemp.delete();
 								//fichierTemp.delete();
-								fichierTemp.delete();
 							}
 						}
 
@@ -214,8 +213,8 @@ public class DeleteDuplicatesFilmTotal {
 							map1080.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -227,8 +226,8 @@ public class DeleteDuplicatesFilmTotal {
 							map720.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -240,8 +239,8 @@ public class DeleteDuplicatesFilmTotal {
 							map576.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -253,8 +252,8 @@ public class DeleteDuplicatesFilmTotal {
 							map480.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -266,8 +265,8 @@ public class DeleteDuplicatesFilmTotal {
 							map360.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -279,8 +278,8 @@ public class DeleteDuplicatesFilmTotal {
 							map240.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -330,8 +329,8 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
-								fichierTemp.delete();
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								//fichierTemp.delete();
 							}
 						}
 
@@ -340,8 +339,8 @@ public class DeleteDuplicatesFilmTotal {
 							map720.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -353,8 +352,8 @@ public class DeleteDuplicatesFilmTotal {
 							map576.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -366,8 +365,8 @@ public class DeleteDuplicatesFilmTotal {
 							map480.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -379,8 +378,8 @@ public class DeleteDuplicatesFilmTotal {
 							map360.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -392,8 +391,8 @@ public class DeleteDuplicatesFilmTotal {
 							map240.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -444,8 +443,8 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
-								fichierTemp.delete();
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								//fichierTemp.delete();
 							}
 						}
 
@@ -454,8 +453,8 @@ public class DeleteDuplicatesFilmTotal {
 							map576.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -467,8 +466,8 @@ public class DeleteDuplicatesFilmTotal {
 							map480.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -480,8 +479,8 @@ public class DeleteDuplicatesFilmTotal {
 							map360.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -493,8 +492,8 @@ public class DeleteDuplicatesFilmTotal {
 							map240.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -543,8 +542,8 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
-								fichierTemp.delete();
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								//fichierTemp.delete();
 							}
 						}
 
@@ -553,8 +552,8 @@ public class DeleteDuplicatesFilmTotal {
 							map480.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -566,8 +565,8 @@ public class DeleteDuplicatesFilmTotal {
 							map360.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -579,8 +578,8 @@ public class DeleteDuplicatesFilmTotal {
 							map240.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -629,8 +628,8 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
-								fichierTemp.delete();
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								//fichierTemp.delete();
 							}
 						}
 
@@ -639,8 +638,8 @@ public class DeleteDuplicatesFilmTotal {
 							map360.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -652,8 +651,8 @@ public class DeleteDuplicatesFilmTotal {
 							map240.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -702,8 +701,8 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
-								fichierTemp.delete();
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								//fichierTemp.delete();
 							}
 						}
 
@@ -712,8 +711,8 @@ public class DeleteDuplicatesFilmTotal {
 							map240.remove(lineTemp);
 							for (File fichierTemp : listDelete) {
 								try {
-									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length()+"    "+listFile2.size());
-									fichierTemp.delete();
+									System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+									//fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -762,8 +761,8 @@ public class DeleteDuplicatesFilmTotal {
 
 						for (File fichierTemp : listFile2) {
 							if(!fichierTemp.equals(fichierKeep)) {
-								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+listFile2.size());
-								fichierTemp.delete();
+								System.out.println(fichierKeep.getPath() + "    " + fichierKeep.length()+"    "+fichierTemp.getPath()+"    "+listFile2.size());
+								//fichierTemp.delete();
 							}
 						}
 					}

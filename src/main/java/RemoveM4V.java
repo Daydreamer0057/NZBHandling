@@ -1,6 +1,8 @@
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RemoveM4V {
     public RemoveM4V(){
@@ -10,17 +12,21 @@ public class RemoveM4V {
 
         for(File fichierTemp : fichiers){
             String name = fichierTemp.getName();
-            int pos1 = name.lastIndexOf('-');
-            int pos2 = name.lastIndexOf('.');
-            if(!(pos1==-1 || pos2==-1)) {
-                name = name.substring(0, pos1) + name.substring(pos2, name.length());
+            Pattern pattern = Pattern.compile("[-][0-9]+[.]");
+            Matcher matcher = pattern.matcher(fichierTemp.getName());
+            while(matcher.find()) {
+                int pos1 = name.lastIndexOf('-');
+                int pos2 = name.lastIndexOf('.');
+                if (!(pos1 == -1 || pos2 == -1)) {
+                    name = name.substring(0, pos1-1) + name.substring(pos2, name.length());
 
-                Path p = Paths.get(fichierTemp.getPath());
-                Path folder = p.getParent();
-                String path = folder.toString();
-                path = path.replaceAll("\\\\", "//");
+                    Path p = Paths.get(fichierTemp.getPath());
+                    Path folder = p.getParent();
+                    String path = folder.toString();
+                    path = path.replaceAll("\\\\", "//");
 
-                fichierTemp.renameTo(new File(path + "/" + name));
+                    fichierTemp.renameTo(new File(path + "/" + name));
+                }
             }
         }
     }

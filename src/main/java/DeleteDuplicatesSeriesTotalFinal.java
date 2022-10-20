@@ -13,7 +13,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			File base = new File("z://series");
+			File base = new File("z://test/main a traiter");
 			//File base = new File("d://film/new/Film 20200226");
 
 			File[] fichiers = base.listFiles();
@@ -102,7 +102,10 @@ public class DeleteDuplicatesSeriesTotalFinal {
 					Set<String> setEpisode = (Set<String>) mapSeries.get(lineSeries).keySet();
 					for (String lineEpisode : setEpisode) {
 						ArrayList<File> listFile2 = (ArrayList<File>) mapSeries.get(lineSeries).get(lineEpisode);
-						if (listFile2.size() > 1) {
+						if (listFile2.size() > 0) {
+							if(listFile2.size()>1){
+								System.out.println("test");
+							}
 							File fichier = listFile2.get(0);
 							long taille = 0;
 							long tailleTemp = 0;
@@ -203,12 +206,12 @@ public class DeleteDuplicatesSeriesTotalFinal {
 
 							for (File fichierTemp : keepFile) {
 									System.out.println(fichierTemp.getName());
-//									fichierTemp.delete();
-								try {
-									FileUtils.moveFileToDirectory(fichierTemp, new File("z://test/error"), false);
-								} catch(FileExistsException fex){
-									fex.printStackTrace();
-								}
+									fichierTemp.delete();
+//								try {
+//									FileUtils.moveFileToDirectory(fichierTemp, new File("z://test/error"), false);
+//								} catch(FileExistsException fex){
+//									fex.printStackTrace();
+//								}
 							}
 						}
 					}

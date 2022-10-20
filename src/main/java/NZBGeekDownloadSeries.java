@@ -46,8 +46,8 @@ public class NZBGeekDownloadSeries {
 			driver.get("https://nzbgeek.info/logon.php");
 
 			// Input Email id and Password If you are already Register
-			driver.findElement(By.name("username")).sendKeys("Daydreamer057057");
-			driver.findElement(By.name("password")).sendKeys("erNqHyay1A7Hds1XcLMcdX7g9ve8KzqH");
+			driver.findElement(By.name("username")).sendKeys("Daydreamer057b");
+			driver.findElement(By.name("password")).sendKeys("sOEHZJJr0fqPqXiIyuWdslNrimGQCMng");
 
 			WebElement webElementTemp2 = driver.findElement(By.name("username"));
 			webElementTemp2.submit();
@@ -102,8 +102,8 @@ public class NZBGeekDownloadSeries {
 			driver.get("https://nzbgeek.info/logon.php");
 
 			// Input Email id and Password If you are already Register
-			driver.findElement(By.name("username")).sendKeys("Daydreamer057a");
-			driver.findElement(By.name("password")).sendKeys("N0dQMkLgH3KP3yxae6CZj3CnkBQLlNfp");
+			driver.findElement(By.name("username")).sendKeys("Daydreamer057b");
+			driver.findElement(By.name("password")).sendKeys("sOEHZJJr0fqPqXiIyuWdslNrimGQCMng");
 
 			WebElement webElementTemp3 = driver.findElement(By.name("username"));
 			webElementTemp3.submit();
