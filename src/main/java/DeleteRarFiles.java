@@ -1,9 +1,4 @@
-
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -11,9 +6,13 @@ public class DeleteRarFiles {
 	static String path2;
 
 	public DeleteRarFiles() {
+		double taille = 0;
+		String chemin = "Z://test/film a traiter";
+//		String chemin = "w://download";
 		// Dossier a supprimer
-		File base = new File("Z://test/film a traiter");
+		File base = new File(chemin);
 //		File base = new File("F://The Mandalorian");
+
 
 		File[] fichiers = base.listFiles();
 
@@ -23,27 +22,30 @@ public class DeleteRarFiles {
 
 		int compteurBegin = 0;
 		for (File fichier : fichiers) {
-			compteurBegin++;
-			System.out.println(compteurBegin+" / "+fichiers.length);
+			System.out.println("ListeDirectory Size "+listeDirectory.size());
 			if (fichier.isDirectory()) {
 				listeDirectory.add(fichier);
 				setDirectory.add(fichier);
 			} else {
-				if (!(fichier.getName().endsWith("mkv") || fichier.getName().endsWith("mp4")
-						|| fichier.getName().endsWith("avi")
-//						|| fichier.getName().endsWith("cbz")|| fichier.getName().endsWith("cbr")
-						|| fichier.getName().endsWith(".!qB")
-//						|| fichier.getName().endsWith("rar")
-//						|| fichier.getName().toLowerCase().endsWith("par2")
+				if (!(fichier.getName().toLowerCase().endsWith("mkv") || fichier.getName().toLowerCase().endsWith("mp4")
+						|| fichier.getName().toLowerCase().endsWith("avi")
+//						|| fichier.getName().toLowerCase().endsWith("cbz")|| fichier.getName().toLowerCase().endsWith("cbr")
+						|| fichier.getName().toLowerCase().endsWith(".!qB")
+//						|| fichier.getName().toLowerCase().endsWith("iso")
+//						|| fichier.getName().toLowerCase().toLowerCase().endsWith("par2")
 				)) {
+					System.out.println("Files Deleted " + compteurBegin + " / " + listeFichier.size() + "   Dir Size " + listeDirectory.size() + "    " + fichier.getName());
+						taille += fichier.length();
+						fichier.delete();
+					compteurBegin++;
 
-					listeFichier.add(fichier);
 				}
 			}
 		}
 
 		while (listeDirectory.size() > 0) {
-			System.out.println("Files "+listeFichier.size()+"    Directory "+listeDirectory.size());
+//			System.out.println("ListeDirectory Size "+listeDirectory.size());
+//			System.out.println("Files "+listeFichier.size()+"    Directory "+listeDirectory.size());
 			File fichier = listeDirectory.get(0);
 
 			File[] fichierListe = fichier.listFiles();
@@ -58,11 +60,17 @@ public class DeleteRarFiles {
 								|| fichierTemp.getName().endsWith("avi")
 //								|| fichierTemp.getName().endsWith("cbz") || fichierTemp.getName().endsWith("cbr")
 								|| fichierTemp.getName().endsWith(".!qB")
-//							|| fichierTemp.getName().endsWith("rar")
+//							|| fichierTemp.getName().endsWith("iso")
 //							|| fichierTemp.getName().toLowerCase().endsWith("par2")
 						)) {
 //							System.out.println(fichierTemp.getName());
-							listeFichier.add(fichierTemp);
+//							listeFichier.add(fichierTemp);
+							System.out.println("Files Deleted " + compteurBegin + " / " + listeFichier.size() + "   Dir Size " + listeDirectory.size() + "    " + fichierTemp.getName());
+//							new Thread(() -> {
+							taille += fichier.length();
+								fichierTemp.delete();
+//							}).start();
+							compteurBegin++;
 						}
 					}
 				}
@@ -70,33 +78,9 @@ public class DeleteRarFiles {
 			listeDirectory.remove(0);
 		}
 
-		try {
-			int compteur = 1;
-			double taille = 0;
-			double moyenne = 0;
-			// PrintWriter pw = new PrintWriter("c://temp/log_delete.txt");
-			for (File fichierTemp : listeFichier) {
-				taille += fichierTemp.length();
-				moyenne = new Double(taille/compteur/1024/1024);
-				System.out.println(compteur + " / " + listeFichier.size() + "    " + fichierTemp.getPath()+"    moyenne "+moyenne+"    taille "+(new Double(taille/1024/1024/1024)));
-				compteur++;
-				// pw.println(fichierTemp.getPath());
-				new Thread(() -> {
-					fichierTemp.delete();
-				}).start();
-			}
-			// pw.flush();
-			// pw.close();
+		TrimFailedUnpack t = new TrimFailedUnpack(chemin);
 
-			/*for(File fichierTemp : setDirectory){
-				File[] listDirectory = fichierTemp.listFiles();
-				if(listDirectory.length==0){
-					FileUtils.deleteDirectory(fichierTemp);
-				}
-			}*/
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		System.out.println("Taille gagnee "+taille+"    "+(taille/1000000000));
 
 	}
 

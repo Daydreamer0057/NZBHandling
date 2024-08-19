@@ -2,9 +2,39 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="www.dcm4che.org" />
+      <option name="name" value="dcm4che Repository" />
+      <option name="url" value="http://www.dcm4che.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="www.dcm4che.org" />
+      <option name="name" value="dcm4che Repository" />
+      <option name="url" value="https://maven.dcm4che.org/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="xuggle repo" />
+      <option name="name" value="xuggle repo" />
+      <option name="url" value="https://files.liferay.com/mirrors/xuggle.googlecode.com/svn/trunk/repo/share/java/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jitpack.io" />
+      <option name="name" value="jitpack.io" />
+      <option name="url" value="https://jitpack.io" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="xuggle repo" />
+      <option name="name" value="xuggle" />
+      <option name="url" value="http://xuggle.googlecode.com/svn/trunk/repo/share/java/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven-labri" />
+      <option name="name" value="maven-labri" />
+      <option name="url" value="https://se.labri.fr/maven/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -15,6 +45,16 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="sealtx" />
+      <option name="name" value="sealtx" />
+      <option name="url" value="https://mvnrepository.com/artifact/com.github.sealedtx/java-youtube-downloader" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="xuggle repo" />
+      <option name="name" value="xuggle repo" />
+      <option name="url" value="http://xuggle.googlecode.com/svn/trunk/repo/share/java/" />
     </remote-repository>
   </component>
 </project>

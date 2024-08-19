@@ -1,12 +1,9 @@
-
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DeleteSeriesBeforeConvert {
 	static String path2;
@@ -17,7 +14,7 @@ public class DeleteSeriesBeforeConvert {
 
 	public DeleteSeriesBeforeConvert() {
 		// Dossier a supprimer
-		File base = new File("z://test/done");
+		File base = new File("z://test/convert");
 		//File base = new File("Z://film/new");
 		//File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
@@ -38,6 +35,7 @@ public class DeleteSeriesBeforeConvert {
 		}
 
 		while (listeDirectory.size() > 0) {
+			System.out.println("1st Fichier "+listeFichier.size()+"    Dir "+listeDirectory.size());
 			File fichier = listeDirectory.get(0);
 			File[] fichierListe = fichier.listFiles();
 
@@ -58,7 +56,8 @@ public class DeleteSeriesBeforeConvert {
 		HashSet<File> files = new HashSet<File>();
 //		fileBase.add(new File("e://convert"));
 		fileBase.add(new File("z://series"));
-//		fileBase.add(new File("z://test/temp"));
+		fileBase.add(new File("e://series"));
+//		fileBase.add(new File("e://humour"));
 
 		ArrayList<File> listeDirectory2 = new ArrayList<File>();
 
@@ -71,6 +70,7 @@ public class DeleteSeriesBeforeConvert {
 		}
 
 		while (listeDirectory2.size() > 0) {
+			System.out.println("2nd Fichier "+files.size()+"    Dir "+listeDirectory2.size());
 			File fichier2 = listeDirectory2.get(0);
 			File[] fichierListe2 = fichier2.listFiles();
 
@@ -94,7 +94,11 @@ public class DeleteSeriesBeforeConvert {
 							|| fichierTemp.getName().indexOf("_4") != -1 || fichierTemp.getName().indexOf("_5") != -1
 							|| fichierTemp.getName().indexOf("_6") != -1 || fichierTemp.getName().indexOf("_7") != -1
 							|| fichierTemp.getName().indexOf("_8") != -1 || fichierTemp.getName().indexOf("_9") != -1)) {
-				path2 = fichierTemp.getName().substring(0, fichierTemp.getName().length() - 6);
+				try {
+					path2 = fichierTemp.getName().substring(0, fichierTemp.getName().length() - 6);
+				} catch (Exception ex){
+
+				}
 			} else {
 				// System.out.println("Compteur " + compteur + " / " + files.length);
 				compteur++;
@@ -183,10 +187,16 @@ public class DeleteSeriesBeforeConvert {
 //						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))){
 //							System.out.println("nameFinal "+nameFinal+"    nameSeries "+nameSeries+"    yearFinal "+yearFinal+"    year "+year+"    sizeFinal "+sizeFinal+"    sizeSeries "+resolutionSeries);
 //						}
-						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))&&(resolutionSeries>=sizeFinal)) {
+						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))&&(resolutionSeries>=sizeFinal)&&year!=""&&yearFinal!="") {
 							res.delete();
 //							System.out.println(nameFinal+"    "+nameSeries+"    delete "+compteurDelete++);
-							System.out.println("nameFinal "+nameFinal+"    nameSeries "+nameSeries+"    yearFinal "+yearFinal+"    year "+year+"    resolutionnSeries "+resolutionSeries+"    sizeFinal "+sizeFinal+"    delete "+compteurDelete++);
+							System.out.println("Stockage "+nameFinal+"    nameSeries "+nameSeries+"    yearFinal "+yearFinal+"    year "+year+"    resolutionnSeries "+resolutionSeries+"    sizeFinal "+sizeFinal+"    delete "+compteurDelete++);
+
+						}
+						if (nameFinal.equalsIgnoreCase(nameSeries)&&(year.equalsIgnoreCase(yearFinal))&&(resolutionSeries<sizeFinal)&&year!=""&&yearFinal!="") {
+							fichierTemp.delete();
+//							System.out.println(nameFinal+"    "+nameSeries+"    delete "+compteurDelete++);
+							System.out.println("Series "+nameFinal+"    nameSeries "+nameSeries+"    yearFinal "+yearFinal+"    year "+year+"    resolutionnSeries "+resolutionSeries+"    sizeFinal "+sizeFinal+"    delete "+compteurDelete++);
 
 						}
 					}

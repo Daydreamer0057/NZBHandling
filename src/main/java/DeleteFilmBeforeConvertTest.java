@@ -4,20 +4,24 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class DeleteFilmBeforeConvert {
+public class DeleteFilmBeforeConvertTest {
 	static String path2;
 	static String year;
 	static String nameSeries;
 	static int resolutionFilmNew = 0;
 	static int compteurDelete = 0;
 
-	public DeleteFilmBeforeConvert() {
+	static long taille = 0;
+
+	public DeleteFilmBeforeConvertTest() {
 		ArrayList<String> listPriority = new ArrayList<>();
 		listPriority.add("poiyhoiyh");
 
 		// Dossier a supprimer
-		File base = new File("z://test/test");
+		File base = new File("z://test/film");
 		//		File base = new File("Z://film/new/treated");
 		//File base = new File("e://theatre/convert");
 		// File base = new File("f://Graver/Theatre/Convert");
@@ -32,7 +36,12 @@ public class DeleteFilmBeforeConvert {
 				listeDirectory.add(fichier);
 			} else {
 				if(!fichier.getName().endsWith(".srt")&&(fichier.getName().endsWith(".mp4")||fichier.getName().endsWith(".mkv")||fichier.getName().endsWith(".avi"))) {
-					listeFichierATraiter.add(fichier);
+					Pattern p = Pattern.compile(".*([sS][0-9]+[xXeE][0-9]+).*");
+					Matcher m = p.matcher(fichier.getName().toLowerCase());
+
+					if (!m.matches()) {
+						listeFichierATraiter.add(fichier);
+					}
 				}
 			}
 		}
@@ -46,7 +55,12 @@ public class DeleteFilmBeforeConvert {
 					listeDirectory.add(fichierTemp);
 				} else {
 					if(!fichierTemp.getName().endsWith(".srt")&&(fichierTemp.getName().endsWith(".mp4")||fichierTemp.getName().endsWith(".mkv")||fichierTemp.getName().endsWith(".avi"))) {
-						listeFichierATraiter.add(fichierTemp);
+						Pattern p = Pattern.compile(".*([sS][0-9]+[xXeE][0-9]+).*");
+						Matcher m = p.matcher(fichier.getName().toLowerCase());
+
+						if (!m.matches()) {
+							listeFichierATraiter.add(fichierTemp);
+						}
 					}
 				}
 			}
@@ -161,16 +175,10 @@ public class DeleteFilmBeforeConvert {
 				listeFichierATraiter.forEach(fichierTestTest -> {
 					try {
 						String nameRes = fichierTestTest.getName();
+						nameRes = nameRes.replace('.',' ');
 						//						System.out.println(nameRes);
 						if (!nameRes.equalsIgnoreCase(".classpath")) {
-							if (FilenameUtils.removeExtension(nameRes).endsWith("_0") || FilenameUtils.removeExtension(nameRes).endsWith("_1") || FilenameUtils.removeExtension(nameRes).endsWith("_2") || FilenameUtils.removeExtension(nameRes).endsWith("_3") || FilenameUtils.removeExtension(nameRes).endsWith("_4") || FilenameUtils.removeExtension(nameRes).endsWith("_5") || FilenameUtils.removeExtension(nameRes).endsWith("_6") || FilenameUtils.removeExtension(nameRes).endsWith("_7") || FilenameUtils.removeExtension(nameRes).endsWith("_8") || FilenameUtils.removeExtension(nameRes).endsWith("_9")) {
-								if (nameRes.length() > 5) {
-									nameRes = nameRes.substring(0, nameRes.length() - 6);
-								} else {
-									nameRes = nameRes.substring(0, nameRes.length() - 4);
-								}
-							}
-							nameRes = FilenameUtils.removeExtension(nameRes);
+//							nameRes = FilenameUtils.removeExtension(nameRes);
 							//						System.out.println(path2+"    "+nameRes);
 							//							StringTokenizer stk = new StringTokenizer(nameRes, "(");
 
@@ -178,15 +186,41 @@ public class DeleteFilmBeforeConvert {
 							String yearFinal = "";
 
 							try {
-								if (!(nameRes.indexOf("(") == -1) && nameRes.indexOf("(") < nameRes.length() && nameRes.indexOf("(") > 0) {
-									nameFinal = nameRes.substring(0, nameRes.indexOf("(") - 1);
+								int compteurSplit = 0;
+								String[] nameFinalSplit = nameRes.split(" ");
+								boolean nameTest = false;
+								for(String lineTemp : nameFinalSplit){
+									if(lineTemp.charAt(0)>='0'&&lineTemp.charAt(0)<='9'){
+										int compteurSplit2 = 1;
+										for(String lineTempSplit : nameFinalSplit){
+											if(compteurSplit2<=compteurSplit){
+												nameFinal += lineTempSplit + " ";
+											} else {
+												nameTest = true;
+												break;
+											}
+											compteurSplit2++;
+										}
+										if(nameTest){
+											break;
+										}
+									}
+									compteurSplit++;
 								}
-								if (!(nameRes.indexOf("(") == -1) && nameRes.indexOf("(") < nameRes.length() && nameRes.indexOf("(") > 0) {
-									yearFinal = nameRes.substring(nameRes.indexOf("(") + 1, nameRes.indexOf(")"));
+								nameFinal = nameFinal.trim();
+
+								compteurSplit = 0;
+								String[] yearFinalSplit = nameRes.split(" ");
+								nameTest = false;
+								for(String lineTemp : yearFinalSplit){
+									if(lineTemp.charAt(lineTemp.length()-1)>='0'&&lineTemp.charAt(lineTemp.length()-1)<='9'){
+										yearFinal = lineTemp.trim();
+										break;
+									}
+									compteurSplit++;
 								}
 							} catch (Exception ex) {
 								ex.printStackTrace();
-								System.out.println(nameRes + "     " + nameRes.indexOf("("));
 							}
 
 							int resolutionTestTest = 0;
@@ -214,27 +248,12 @@ public class DeleteFilmBeforeConvert {
 							//							if (nameFinal.equalsIgnoreCase(nameSeries) && (year.equalsIgnoreCase(yearFinal)) && (resolutionSeries <= resolutionTestTest)) {
 							if (nameFinal.equalsIgnoreCase(nameSeries) && (year.equalsIgnoreCase(yearFinal))) {
 								//System.out.println(nameFinal + "    " + nameSeries + "    delete " + compteurDelete+++"    nameres "+resolutionSeries+"    final "+resolutionTestTest);
-
-								if ((resolutionTestTest > resolutionFilmNew)) {
-									System.out.println("Fichier Film New   " + fichierFilmNew.getPath() + "    " + fichierTestTest.getName());
-									try {
-										fichierFilmNew.delete();
-									} catch (Exception ex) {
-
-									}
-								}
 								if ((resolutionTestTest == resolutionFilmNew)) {
 									if (fichierFilmNew.getPath().toLowerCase().contains("treated")) {
 										System.out.println("Fichier Test   " + fichierTestTest.getPath() + "    " + fichierFilmNew.getName());
 										try {
+											taille += fichierTestTest.length();
 											fichierTestTest.delete();
-										} catch (Exception ex) {
-
-										}
-									} else {
-										System.out.println("Fichier New  " + fichierTestTest.getPath() + "    " + fichierFilmNew.getName());
-										try {
-											fichierFilmNew.delete();
 										} catch (Exception ex) {
 
 										}
@@ -243,7 +262,8 @@ public class DeleteFilmBeforeConvert {
 								if ((resolutionTestTest < resolutionFilmNew)) {
 									System.out.println("Fichier Test    " + fichierTestTest.getPath() + "    " + fichierFilmNew.getName());
 									try {
-										fichierTestTest.delete();
+										taille += fichierTestTest.length();
+											fichierTestTest.delete();
 									} catch (Exception ex) {
 
 									}
@@ -257,11 +277,11 @@ public class DeleteFilmBeforeConvert {
 				});
 			}
 		}
-		java.awt.Toolkit.getDefaultToolkit().beep();
+		System.out.println("Taille gagnee "+(taille/1000000000L));
 	}
 
 	public static void main(String[] args) {
-		DeleteFilmBeforeConvert epguides = new DeleteFilmBeforeConvert();
+		DeleteFilmBeforeConvertTest epguides = new DeleteFilmBeforeConvertTest();
 
 	}
 

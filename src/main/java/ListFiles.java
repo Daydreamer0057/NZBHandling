@@ -1,12 +1,6 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystemException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,37 +20,32 @@ public class ListFiles {
 
 //			File base = new File("z://series");
 			
-			File base = new File("z://film");
-
-			File[] fichiers = base.listFiles();
-
 			HashSet<File> listeFichier = new HashSet<File>();
 			ArrayList<File> listeDirectory = new ArrayList<File>();
 
-//			listeDirectory.add(new File("z://Film"));bu
-			listeDirectory.add(new File("z://Series"));
-			listeDirectory.add(new File("z://Games"));
-			listeDirectory.add(new File("z://Onedrive"));
+			listeDirectory.add(new File("z://Books"));
 			listeDirectory.add(new File("z://Documentaires"));
+			listeDirectory.add(new File("z://Film"));
+			listeDirectory.add(new File("z://Series"));
 
-			for (File fichier : fichiers) {
+			listeDirectory.add(new File("z://temp"));
+
+			for (File fichier : listeFichier) {
 				if (fichier.isDirectory()) {
 					listeDirectory.add(fichier);
 				} else {
-					try {
-						BasicFileAttributes attrs = Files.readAttributes(fichier.toPath(), BasicFileAttributes.class);
-						FileTime createTime = attrs.creationTime();
-
-						FileTime modifiedTime = attrs.lastModifiedTime();
+//						BasicFileAttributes attrs >= Files.readAttributes(fichier.toPath(), BasicFileAttributes.class);
+//						FileTime createTime = attrs.creationTime();
+//
+//						FileTime modifiedTime = attrs.lastModifiedTime();
 
 						// FileTime accessTime = attrs.lastAccessTime();
 
-						pw.println(fichier.getPath() + "      Created " + returnDate(new Date(createTime.toMillis()))
-								+ "    Modif " + returnDate(new Date(modifiedTime.toMillis())));
-					} catch (AccessDeniedException ex) {
-						System.out.println(ex);
+//						pw.println(fichier.getPath() + "      Created " + returnDate(new Date(createTime.toMillis()))
+//								+ "    Modif " + returnDate(new Date(modifiedTime.toMillis())));
+						pw.println(fichier.getPath()+"/"+fichier.getName());
 					}
-				}
+
 			}
 
 			while (listeDirectory.size() > 0) {
@@ -69,27 +58,19 @@ public class ListFiles {
 						if (fichierTemp.isDirectory()) {
 							listeDirectory.add(fichierTemp);
 						} else {
-							try {
-								BasicFileAttributes attrs = Files.readAttributes(fichierTemp.toPath(),
-										BasicFileAttributes.class);
-								FileTime createTime = attrs.creationTime();
-
-								FileTime modifiedTime = attrs.lastModifiedTime();
+//								BasicFileAttributes attrs = Files.readAttributes(fichierTemp.toPath(),
+//										BasicFileAttributes.class);
+//								FileTime createTime = attrs.creationTime();
+//
+//								FileTime modifiedTime = attrs.lastModifiedTime();
 
 								// FileTime accessTime = attrs.lastAccessTime();
 
-								pw.println(fichierTemp.getPath() + "      Created "
-										+ returnDate(new Date(createTime.toMillis())) + "    Modif "
-										+ returnDate(new Date(modifiedTime.toMillis())));
-							} catch (AccessDeniedException ex) {
-								System.out.println(ex);
-							} catch (FileSystemException ex) {
-								System.out.println(ex);
-							} catch (InvalidPathException ex) {
-								System.out.println(ex);
+//								pw.println(fichierTemp.getPath() + "      Created "
+//										+ returnDate(new Date(createTime.toMillis())) + "    Modif "
+//										+ returnDate(new Date(modifiedTime.toMillis())));
+								pw.println(fichier.getPath()+"/"+fichier.getName());
 							}
-
-						}
 					}
 				}
 				listeDirectory.remove(0);

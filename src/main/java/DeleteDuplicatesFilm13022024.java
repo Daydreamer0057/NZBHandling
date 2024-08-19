@@ -1,9 +1,9 @@
 import java.io.File;
 import java.util.*;
 
-public class DeleteDuplicatesFilm {
+public class DeleteDuplicatesFilm13022024 {
 
-	public DeleteDuplicatesFilm() {
+	public DeleteDuplicatesFilm13022024() {
 		double taille3 = 0;
 		HashMap<String, ArrayList> map240 = new HashMap<String, ArrayList>();
 		HashMap<String, ArrayList> map360 = new HashMap<String, ArrayList>();
@@ -16,8 +16,7 @@ public class DeleteDuplicatesFilm {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-//			File base = new File("z://test/stockage");
-			File base = new File("z://test/test");
+			File base = new File("z://test/stockage");
 //			File base = new File("z://film/france");
 
 			File[] fichiers = base.listFiles();
@@ -195,7 +194,7 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -206,7 +205,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -220,7 +219,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -234,7 +233,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -248,7 +247,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -262,7 +261,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -276,7 +275,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -323,7 +322,7 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -334,7 +333,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -348,7 +347,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -362,7 +361,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -376,7 +375,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -390,7 +389,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -439,7 +438,7 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -450,7 +449,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -464,7 +463,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -478,7 +477,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -492,7 +491,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -539,7 +538,7 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -550,7 +549,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -564,7 +563,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -578,7 +577,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -626,7 +625,7 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -637,7 +636,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -651,7 +650,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -699,7 +698,7 @@ public class DeleteDuplicatesFilm {
 							if (fichierTemp != fichier) {
 								System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -710,7 +709,7 @@ public class DeleteDuplicatesFilm {
 								try {
 									System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
 									taille3 += fichierTemp.length();
-									fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+									fichierTemp.delete();
 								} catch (Exception ex) {
 
 								}
@@ -759,7 +758,7 @@ public class DeleteDuplicatesFilm {
 								double taille2 = fichierTemp.length()/1024/1024/1024;
 								System.out.println(fichierTemp.getPath() + "    " + taille2);
 								taille3 += fichierTemp.length();
-								fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
+								fichierTemp.delete();
 							}
 						}
 
@@ -773,11 +772,10 @@ public class DeleteDuplicatesFilm {
 			ex.printStackTrace();
 		}
 		System.out.println("Taille gagnee "+(taille3/1000000000));
-//		DeleteFilmBeforeConvert del = new DeleteFilmBeforeConvert();
 	}
 
 	public static void main(String[] args) {
-		DeleteDuplicatesFilm del = new DeleteDuplicatesFilm();
+		DeleteDuplicatesFilm13022024 del = new DeleteDuplicatesFilm13022024();
 	}
 
 }

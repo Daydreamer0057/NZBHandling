@@ -1,193 +1,321 @@
-import Utilities.UnzipFiles;
-import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.hibernate.annotations.Check;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SubtitlesDownloadSeries {
-    ChromeDriver driver;
-    ChromeDriver driver2;
-    ChromeDriver driver3;
-
     public SubtitlesDownloadSeries() {
-        long seconds = System.currentTimeMillis();
-        File base = new File("z://series");
+        String dirFind = "";
+        String fileFind = "";
+        String episode = "";
+        String season = "";
 
-        File[] fichiers = base.listFiles();
 
-        ArrayList<File> listeDirectory = new ArrayList<File>();
+        //                ==========================================================================================================
 
-        for (File fichier : fichiers) {
-            if(fichier.isDirectory()) {
-                listeDirectory.add(fichier);
+        File fichierBase = new File("C:/Users/bmonnet/Downloads/subtitles/");
+        File[] listeFichierBase2 = fichierBase.listFiles();
+
+        HashSet<File> listeFichierBase = new HashSet<File>();
+        ArrayList<File> listeDirectoryBase = new ArrayList<File>();
+        // listeDirectory.add(new File("z://temp/film"));
+
+        for (File fichier : listeFichierBase2) {
+            if (fichier.isDirectory()) {
+                listeDirectoryBase.add(fichier);
+            } else {
+                    listeFichierBase.add(fichier);
+                }
             }
+
+        while (listeDirectoryBase.size() > 0) {
+            File fichierBase2 = listeDirectoryBase.get(0);
+
+            File[] fichierListeBase2 = fichierBase2.listFiles();
+
+            for (File fichierTemp : fichierListeBase2) {
+                if (fichierTemp.isDirectory()) {
+                    listeDirectoryBase.add(fichierTemp);
+                } else {
+                        listeFichierBase.add(fichierTemp);
+                }
+            }
+            listeDirectoryBase.remove(0);
         }
 
-        //listeDirectory.add(new File("z://series/A Discovery of Witches"));
 
-        int compteur = 0;
-        for (File fichierTemp : listeDirectory) {
-            compteur++;
-            if (compteur >= 0 && !fichierTemp.getName().equalsIgnoreCase("3%") && !fichierTemp.getName().equalsIgnoreCase("see") && !fichierTemp.getName().equalsIgnoreCase("dark")) {
+        File baseInit = new File("z:/series/Painkiller");
+        File[] listInitFiles = baseInit.listFiles();
+
+        boolean test = false;
+        boolean testFile = false;
+        for (File fichierInit : listInitFiles) {
+            if (fichierInit.getName().toLowerCase().contains(dirFind.toLowerCase()) || dirFind.equals("")) {
+                test = true;
+            }
+            if (test) {
+                long seconds = System.currentTimeMillis();
+                //        File base = new File("Z://film/new/main");
+                //                String chemin = "c:\\users\\bmonnet\\downloads\\" + fichierInit.getName();
+                String chemin = "C:/Users/bmonnet/Downloads/subtitles/" + fichierInit.getName()+"/subtitles";
+                String chemin2 = "Z:/series/" + fichierInit.getName();
                 try {
-                    System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
-                    driver3 = new ChromeDriver();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    FileUtils.forceMkdir(new File(chemin));
+                } catch (IOException ex) {
+//                    ex.printStackTrace();
                 }
-                driver3.get("https://www.podnapisi.net/en/subtitles/search/?episodes=&movie_type=&year=&keywords=" + fichierTemp.getName() + "&seasons=&type=");
-
-                String pageSource = driver3.getPageSource();
-
-                int pageMax = 1;
-
-                Pattern pattern = Pattern.compile(";page=[0-9]+");
-                Matcher matcher = pattern.matcher(pageSource);
-                try {
-                    while (matcher.find()) {
-                        Pattern pattern2 = Pattern.compile("[0-9]+");
-                        Matcher matcher2 = pattern2.matcher(matcher.group());
-                        while (matcher2.find()) {
-                            if (Integer.parseInt(matcher2.group(0)) > pageMax) {
-                                pageMax = Integer.parseInt(matcher2.group(0));
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-
-                }
-
-                driver3.close();
-
-                System.out.println("pageMax " + pageMax);
-                System.out.println("serie " + fichierTemp.getName());
-
-
-                for (int page = 1; page < (pageMax + 1); page++) {
-                    try {
-                        System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
-                        driver = new ChromeDriver();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    System.out.println("Page " + page);
-                    driver.get("https://www.podnapisi.net/en/subtitles/search/?episodes=&movie_type=&year=&keywords=" + fichierTemp.getName() + "&seasons=&type=&page=" + page);
-
-                    while (driver.getPageSource().contains("503 Service Temporarily Unavailable")) {
-                        driver.get("https://www.podnapisi.net/en/subtitles/search/?episodes=&movie_type=&year=&keywords=" + fichierTemp.getName() + "&seasons=&type=&page=" + page);
-                    }
-
-                    List<WebElement> links = driver.findElements(By.tagName("a"));
-
-                    System.out.println("Links done");
-
-                    try {
-                        System.setProperty("webdriver.chrome.driver", "e://temp/chromedriver.exe");
-                        driver2 = new ChromeDriver();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                    for (WebElement webElement : links) {
-                        try {
-                            if (webElement != null && webElement.getAttribute("href") != null && webElement.getAttribute("href").toLowerCase().indexOf("download") != -1) {
-                                driver2.get(webElement.getAttribute("href"));
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-
-                    driver2.close();
-
-                    driver.close();
-                }
-
-                System.out.println("Download done");
-
-
-
-                File sub = new File("C://Users/bmonnet/Downloads");
-                File[] listSrt = sub.listFiles();
-
-                for (File fileZip : listSrt) {
-                    try {
-                        FileUtils.moveFile(fileZip, new File("c://temp/subtitles/" + fileZip.getName()));
-
-                        UnzipFiles.unzip("c://temp/subtitles/" + fileZip.getName(), "c://temp/subtitles/temp");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                System.out.println("Unzip done");
-
-                File zipPath = new File("c://temp/subtitles/temp");
-
-                File[] listZip = zipPath.listFiles();
-
                 HashSet<File> listeFichier = new HashSet<File>();
-                ArrayList<File> listeDirectory2 = new ArrayList<File>();
+                ArrayList<File> listeDirectory = new ArrayList<File>();
+                if(listInitFiles.length!=1) {
+                    File base = new File(chemin2);
 
-                for (File fichier : listZip) {
-                    if (fichier.isDirectory()) {
-                        listeDirectory2.add(fichier);
-                    } else {
-                        listeFichier.add(fichier);
+                    File[] fichiers = base.listFiles();
+                    if (fichiers.length > 0) {
+                        for (File fichierTemp : fichiers) {
+                            if (fichierTemp.isDirectory()) {
+                                listeDirectory.add(fichierTemp);
+                            } else if (fichierTemp.isFile()) {
+                                listeFichier.add(fichierTemp);
+                            }
+                        }
                     }
                 }
 
-                while (listeDirectory2.size() > 0) {
-                    File fichier = listeDirectory2.get(0);
+                if(listInitFiles.length==1) {
+                    listeFichier.add(fichierInit);
+                }
+                // listeDirectory.add(new File("z://temp/film"));
+
+                while (listeDirectory.size() > 0) {
+                    File fichier = listeDirectory.get(0);
+
                     File[] fichierListe = fichier.listFiles();
 
-                    for (File fichierTemp2 : fichierListe) {
-                        if (fichierTemp2.isDirectory()) {
-                            listeDirectory2.add(fichierTemp2);
+                    for (File fichierTemp : fichierListe) {
+                        if (fichierTemp.isDirectory()) {
+                            listeDirectory.add(fichierTemp);
+                            try {
+                                FileUtils.forceMkdir(fichierTemp);
+                            } catch (Exception ex) {
+//                                ex.printStackTrace();
+                            }
                         } else {
-                            listeFichier.add(fichierTemp2);
+                            if (fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
+                                    || fichierTemp.getName().endsWith("avi")) {
+                                listeFichier.add(fichierTemp);
+                            }
                         }
                     }
-                    listeDirectory2.remove(0);
+                    listeDirectory.remove(0);
                 }
 
-                for (File fichierZip : listeFichier) {
-                    String nameOut = fichierZip.getName();
-                    File unzipPath = new File(fichierTemp.getPath());
-                    File[] listUnzip = unzipPath.listFiles();
-                    for (File fichierUnzip : listUnzip) {
-                        int index = 1;
-                        while (nameOut.equalsIgnoreCase(fichierUnzip.getName())) {
-                            nameOut = FilenameUtils.removeExtension(fichierZip.getName()) + "_" + index + ".srt";
-                            index++;
+                HashSet<String> setLine = new HashSet<>();
+
+                for(File fichierTemp : listeFichier){
+                    setLine.add(fichierTemp.getName());
+                }
+
+                int compteurMax = 0;
+
+                int change = 0;
+
+                int compteur = 0;
+                for (File fichierTemp : listeFichier) {
+                    boolean testDuplicate = false;
+                    if(!(setLine.contains(fichierTemp))){
+
+						/*Pattern pattern = Pattern.compile("\\([0-9]+");
+                Matcher matcher = pattern.matcher(fichierTemp.getName());
+						 */
+                        StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
+                        Integer pos = 0;
+                        String name2 = "";
+                        // Check all occurrences
+                        boolean testName = false;
+                        if (stk.hasMoreTokens()) {
+                            name2 = stk.nextToken();
+                            name2 = name2.trim();
+                            name2 = name2.replaceAll(" ", "+");
+                            System.out.println("name " + name2);
+
+                            Pattern pattern = Pattern.compile("[xXsS][0-9]+");
+                            Matcher matcher = pattern.matcher(fichierTemp.getName());
+
+                            try {
+                                int compteurMatch = 0;
+                                if (matcher.find()) {
+                                    season = matcher.group(0).substring(1,3);
+                                }
+                            } catch (Exception e) {
+
+                            }
+
+                            Pattern pattern2 = Pattern.compile("[eE][0-9]+");
+                            Matcher matcher2 = pattern2.matcher(fichierTemp.getName());
+
+                            try {
+                                int compteurMatch = 0;
+                                if (matcher2.find()) {
+                                    episode = matcher2.group(0).substring(1, 3);
+                                }
+                            } catch (Exception e) {
+
+                            }
+                        } else {
+                            testName = true;
+                        }
+
+                        if (!testName) {
+                            Document doc = new Document("test");
+                            testName = true;
+                            while (testName) {
+                                try {
+                                    doc = Jsoup.connect("https://www.podnapisi.net/en/subtitles/search/?keywords=" + name2 + "&movie_type=tv-series&seasons=" + season + "&episodes=" + episode + "&year=").get();
+                                    https:
+//www.podnapisi.net/en/subtitles/search/?keywords=stargate+atlantis&movie_type=tv-series&seasons=4&episodes=3&year=
+                                    testName = false;
+                                } catch (Exception ex) {
+//                                ex.printStackTrace();
+                                    testName = true;
+                                }
+                            }
+
+                            String pageSource = doc.text();
+
+
+
+                            int pageMax2 = 1;
+
+                            Pattern pattern = Pattern.compile(";page=[0-9]+");
+                            Matcher matcher = pattern.matcher(pageSource);
+                            try {
+                                while (matcher.find()) {
+                                    Pattern pattern2 = Pattern.compile("[0-9]+");
+                                    Matcher matcher2 = pattern2.matcher(matcher.group());
+                                    while (matcher2.find()) {
+                                        if (Integer.parseInt(matcher2.group(0)) > pageMax2) {
+                                            pageMax2 = Integer.parseInt(matcher2.group(0));
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+
+                            }
+
+                            System.out.println("pageMax " + pageMax2);
+                            System.out.println("serie " + fichierTemp.getPath());
+                            final int pageMax = pageMax2;
+                            final String name = name2;
+
+                            System.out.println("Nb Threads  " + Thread.activeCount());
+                            while (Thread.activeCount() > 25) {
+                                try {
+                                    System.out.print("");
+                                } catch (Exception ex) {
+                                    System.out.println("crash thread active count");
+                                }
+                            }
+
+                            final String name3 = name2;
+                            final String season2 = season;
+                            final String episode2 = episode;
+                            final int pageMaxFinal = pageMax;
+                            final File fichierFinal = fichierTemp;
+                            final String cheminFinal = chemin;
+
+                            new Thread(() -> {
+                                for (int page = 1; page < (pageMaxFinal + 1); page++) {
+                                    System.out.println("Page " + page);
+                                    Document doc2 = null;
+//                                    new Document("test");
+                                    boolean testTimeOut = true;
+                                    while (doc2 == null) {
+                                        try {
+                                            doc2 = Jsoup.connect("https://www.podnapisi.net/en/subtitles/search/?keywords=" + name3 + "&movie_type=tv-series&seasons=" + season2 + "&episodes=" + episode2 + "&year=" + "&page=" + page).get();
+                                        } catch (Exception ex) {
+//                                    ex.printStackTrace();
+                                        }
+                                    }
+
+
+                                    Elements element = doc2.select("a");
+
+
+                                    //for(;it.hasNext();){
+                                    for (int index503 = 0; index503 < element.size(); index503++) {
+                                        Element elementTemp = element.get(index503);
+
+//                                        System.out.println("Element "+index+" / "+element.size());
+                                        String elementString = elementTemp.attr("abs:href");
+
+                                        if (elementString != null && elementString.toLowerCase().indexOf("download") != -1 && (!elementString.toLowerCase().contains("fr") && elementString.toLowerCase().contains("en"))
+                                                && elementString.toLowerCase().endsWith("download")) {
+                                            try {
+                                                Pattern pattern3 = Pattern.compile("[sS][0-9]+[xXeE][0-9]+");
+                                                Matcher matcher3 = pattern3.matcher(elementString);
+
+                                                Pattern pattern4 = Pattern.compile("[sS][0-9]+[xXeE][0-9]+");
+                                                Matcher matcher4 = pattern4.matcher(fichierFinal.getName());
+                                                try {
+                                                    if (matcher3.find() && matcher4.find() && matcher3.group(0).toLowerCase().equals(matcher4.group(0).toLowerCase())) {
+                                                        FileUtils.copyURLToFile(new URL(elementString), new File(cheminFinal + "/" + FilenameUtils.removeExtension(fichierFinal.getName()) + index503 + ".zip"));
+                                                    }
+                                                } catch (Exception ex) {
+//                                        ex.printStackTrace();
+                                                    if (ex.toString().toLowerCase().contains("503") || ex.toString().toLowerCase().contains("504") || ex.toString().toLowerCase().contains("502")) {
+                                                        index503--;
+                                                        try {
+                                                            Thread.sleep(10000);
+                                                        } catch (Exception ex2) {
+//                                                ex2.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            } catch (Exception ex) {
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }).start();
+//                        if(listeFichier.size()==1){
+//                            while(Thread.activeCount()>0){
+//
+//                            }
+//                        }
                         }
                     }
-                    try {
-                        FileUtils.moveFile(fichierZip, new File(fichierTemp.getPath() + "/" + nameOut));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
                 }
+//                System.exit(0);
             }
+
+//            try {
+//                ProcessBuilder p = new ProcessBuilder("d://au3/process killer.exe");
+//                p.start();
+//                Thread.sleep(2000);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
         }
+        while(Thread.activeCount()>0){
+
+        }
+        System.out.println("Download done");
     }
 
 
     public static void main(String[] args) {
         SubtitlesDownloadSeries nzb = new SubtitlesDownloadSeries();
     }
-
 }

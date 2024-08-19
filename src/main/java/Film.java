@@ -1,4 +1,3 @@
-
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -8,14 +7,32 @@ import java.util.HashSet;
 public class Film {
 	static String path2;
 	static int compteurDelete = 0;
+
+	static double tailleGagnee = 0.0;
 	public Film() {
+//		File basic = new File("z:/test/sabnzbd");
+//		File[] listFiles = basic.listFiles();
+//
+//		for(File fichierTemp : listFiles){
+//			fichierTemp.renameTo(new File(fichierTemp.getPath().replaceAll("convert","")));
+//		}
+//
+		String eraseName = "z:/test/test";
+//		String eraseName = "z:/test/stockage";
+//		String eraseName = "e:/humour/h265";
+//		String baseName = "z:/temp/main";
+		String baseName = "z:/temp/convert";
+//		String baseName = "e:/humour/convert";
+
+		boolean test01 = ReplaceConvertFiles.ReplaceConvertFiles(baseName);
+		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles(eraseName);
+//		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles("e:/humour/h265");
+//		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles("z://test/Convert Videoproc");
+
 		// Dossier a supprimer
-		File base = new File("z://test/test");
-//		File base = new File("z://documentaires/How The Universe Works");
-//		File base = new File("Z://Series/We Own This City");
+		File base = new File(eraseName);
 //		File base = new File("e://humour/convert");
-//		File base = new File("e://theatre/convert");
-		// File base = new File("f://Graver/Theatre/Convert");
+//		File base = new File("z://film/new/treated");<
 
 		File[] fichiers = base.listFiles();
 
@@ -26,13 +43,14 @@ public class Film {
 			if (fichier.isDirectory()) {
 				listeDirectory.add(fichier);
 			} else {
-				if(!fichier.getName().endsWith(".srt")&&(fichier.getName().endsWith(".mp4")||fichier.getName().endsWith(".mkv")||fichier.getName().endsWith(".avi"))) {
+				if (!fichier.getName().endsWith(".srt") && (fichier.getName().endsWith(".mp4") || fichier.getName().endsWith(".mkv") || fichier.getName().endsWith(".avi"))) {
 					listeFichier.add(fichier);
 				}
 			}
 		}
 
 		while (listeDirectory.size() > 0) {
+			System.out.println(listeFichier.size()+"    "+listeDirectory.size());
 			File fichier = listeDirectory.get(0);
 			File[] fichierListe = fichier.listFiles();
 
@@ -40,7 +58,7 @@ public class Film {
 				if (fichierTemp.isDirectory()) {
 					listeDirectory.add(fichierTemp);
 				} else {
-					if(!fichierTemp.getName().endsWith(".srt")&&(fichierTemp.getName().endsWith(".mp4")||fichierTemp.getName().endsWith(".mkv")||fichierTemp.getName().endsWith(".avi"))) {
+					if (!fichierTemp.getName().endsWith(".srt") && (fichierTemp.getName().endsWith(".mp4") || fichierTemp.getName().endsWith(".mkv") || fichierTemp.getName().endsWith(".avi"))) {
 						listeFichier.add(fichierTemp);
 					}
 				}
@@ -51,10 +69,8 @@ public class Film {
 		int compteur = 0;
 		HashSet<File> fileBase = new HashSet<File>();
 		HashSet<File> files = new HashSet<File>();
-		fileBase.add(new File("z://temp/convert"));
-//		fileBase.add(new File("z://series/Star Trek Strange New Worlds"));
+		fileBase.add(new File(baseName));
 //		fileBase.add(new File("e://humour/h265"));
-//		fileBase.add(new File("z://test/temp"));
 
 		ArrayList<File> listeDirectory2 = new ArrayList<File>();
 
@@ -67,6 +83,7 @@ public class Film {
 		}
 
 		while (listeDirectory2.size() > 0) {
+			System.out.println(files.size()+"    "+listeDirectory2.size());
 			File fichier2 = listeDirectory2.get(0);
 			File[] fichierListe2 = fichier2.listFiles();
 
@@ -81,29 +98,20 @@ public class Film {
 		}
 
 
-		for (File fichierTemp : files) {
+		for (File fichierConvert : files) {
 			String nomFichier = "";
-			if ((fichierTemp.getName().indexOf("_")>fichierTemp.getName().length()-6)&&(
-					fichierTemp.getName().indexOf("_0") != -1 || fichierTemp.getName().indexOf("_1") != -1
-							|| fichierTemp.getName().indexOf("_2") != -1 || fichierTemp.getName().indexOf("_3") != -1
-							|| fichierTemp.getName().indexOf("_4") != -1 || fichierTemp.getName().indexOf("_5") != -1
-							|| fichierTemp.getName().indexOf("_6") != -1 || fichierTemp.getName().indexOf("_7") != -1
-							|| fichierTemp.getName().indexOf("_8") != -1 || fichierTemp.getName().indexOf("_9") != -1)) {
-				nomFichier = fichierTemp.getName().substring(0, fichierTemp.getName().length() - 6);
-				//path2 = nomFichier.replaceAll("_", "'");
-			} else {
-				// System.out.println("Compteur " + compteur + " / " + files.length);
-				compteur++;
-				final String path = fichierTemp.getName();
-				//path2 = path.replaceAll("_", "'");
-				path2 = path.substring(0, path.length() - 8);
-			}
+			// System.out.println("Compteur " + compteur + " / " + files.length);
+			compteur++;
+			int pos = fichierConvert.getName().indexOf("-");
+			final String path = fichierConvert.getName();
+			//path2 = path.replaceAll("_", "'");
+			path2 = path.substring(0, path.length()-8);
 
-
-			listeFichier.forEach(res -> {
+			listeFichier.forEach(fichierTestTest -> {
 				try {
+
 					compteurDelete++;
-					String nameRes = res.getName();
+					String nameRes = fichierTestTest.getName();
 					if (!nameRes.equalsIgnoreCase(".classpath")) {
 						if (FilenameUtils.removeExtension(nameRes).endsWith("_0") || FilenameUtils.removeExtension(nameRes).endsWith("_1") || FilenameUtils.removeExtension(nameRes).endsWith("_2") || FilenameUtils.removeExtension(nameRes).endsWith("_3") || FilenameUtils.removeExtension(nameRes).endsWith("_4") || FilenameUtils.removeExtension(nameRes).endsWith("_5") || FilenameUtils.removeExtension(nameRes).endsWith("_6") || FilenameUtils.removeExtension(nameRes).endsWith("_7") || FilenameUtils.removeExtension(nameRes).endsWith("_8") || FilenameUtils.removeExtension(nameRes).endsWith("_9")) {
 							if (nameRes.length() > 5) {
@@ -114,18 +122,45 @@ public class Film {
 						}
 						nameRes = FilenameUtils.removeExtension(nameRes);
 //						System.out.println(path2+"    "+nameRes);
-						if (nameRes.toLowerCase().contains(path2.toLowerCase())) {
-							res.renameTo(new File("z:/test/stockage/"+res.getName()));
-//							res.delete();
-							System.out.println(res.getPath() + "    " + listeFichier.size());
+						if (nameRes.toLowerCase().contains(path2.toLowerCase()) && fichierConvert.length() > 0) {
+							if (fichierTestTest.length() < fichierConvert.length()) {
+								try {
+									if(fichierTestTest.getName().toLowerCase().contains("2160p")||fichierConvert.getName().toLowerCase().contains("2160p")){
+										System.out.println("Delete 2160p    " + fichierTestTest.getPath() + "    " + fichierConvert.getPath() + "    " + fichierTestTest.length() + "    " + fichierConvert.length());
+										fichierConvert.delete();
+										fichierTestTest.renameTo(new File(baseName + "/" + fichierTestTest.getName()));
+									} else {
+										System.out.println("Delete temp/convert    " + fichierTestTest.getPath() + "    " + fichierConvert.getPath() + "    " + fichierTestTest.length() + "    " + fichierConvert.length());
+										fichierConvert.delete();
+
+										if (fichierTestTest.getPath().toLowerCase().contains("retry")) {
+											fichierTestTest.renameTo(new File(baseName + "/" + fichierTestTest.getName()));
+										} else {
+											fichierTestTest.renameTo(new File(eraseName + "/Retry/" + fichierTestTest.getName()));
+										}
+									}
+								} catch (Exception ex) {
+									ex.printStackTrace();
+									System.out.println("Error in copy to directory line 120");
+								}
+							} else {
+								tailleGagnee += fichierTestTest.length() - fichierConvert.length();
+								fichierTestTest.delete();
+								System.out.println("Delete test/test    " + fichierTestTest.getPath() + "    " + fichierTestTest.length());
+//							}
+							}
 						}
 					}
-				}catch(Exception ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
+					System.out.println("Error in copy to directory line 120");
 				}
 			});
-		}
+
 	}
+		System.out.println("Taille Gagnee "+(tailleGagnee/1000000000));
+		}
+
 
 	public static void main(String[] args) {
 		Film epguides = new Film();

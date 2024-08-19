@@ -1,22 +1,15 @@
-
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 
 public class MoveSeries {
 
 	public MoveSeries() {
-		File base = new File("z://test/main a traiter");
+//		File base = new File("z://test/stockage");
+		File base = new File("z://temp/convert");
 //		File base = new File("x://convert");
 
 		File[] fichiers = base.listFiles();
@@ -53,29 +46,45 @@ public class MoveSeries {
 			listeDirectory.remove(0);
 		}
 
+		int compteur = 0;
 		for(File fichierTemp : listeFichier) {
+			System.out.println(compteur+" / " + listeFichier.size());
 			try {
 				try {
 					String nameLowerCase = fichierTemp.getName();
 					int pos = nameLowerCase.indexOf(" - ");
 					nameLowerCase = nameLowerCase.substring(0,pos);
 
-					Files.createDirectories(Paths.get("z://series/"+nameLowerCase));
+					Files.createDirectories(Paths.get("z:/series/"+nameLowerCase));
 //							System.out.println(chemin + "/" + fichierTemp.getName());
 
-				Path p = Paths.get("z://series/"+ nameLowerCase);
+				Path p = Paths.get("z:/series/"+ nameLowerCase);
 
 				String path = p.toString();
 				String chemin = path.replaceAll("\\\\", "/");
-				System.out.println(chemin + "/" + nameLowerCase);
-				fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+//				System.out.println(chemin + "/" + nameLowerCase);
+					System.out.println("Thread Count "+Thread.activeCount());
+					while(Thread.activeCount()>25){
+						Thread.sleep(100);
+					}
+				Thread t = new Thread(() -> {
+						try {
+							fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					});
+					t.start();
 //						System.out.println(chemin + "/" + fichierTemp.getName());
 				} catch (Exception ex) {
 					ex.printStackTrace();
+					compteur++;
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
+				compteur++;
 			}
+			compteur++;
 		}
 
 

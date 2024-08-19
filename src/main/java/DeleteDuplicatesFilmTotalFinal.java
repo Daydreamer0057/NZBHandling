@@ -1,75 +1,32 @@
 import java.io.File;
 import java.util.*;
 
-public class DeleteDuplicatesSeriesTotalFinal {
-	public DeleteDuplicatesSeriesTotalFinal() {
-		HashMap<String, Map> mapSeries = new HashMap<String, Map>();
-
-		String pathNew = "qsdqgqsfwhfd";
+public class DeleteDuplicatesFilmTotalFinal {
+	public DeleteDuplicatesFilmTotalFinal() {
+		HashMap<String, Map> mapnameFilm = new HashMap<>();
 
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			File base = new File("z://series");
-			//File base = new File("d://film/new/Film 20200226");
+			HashSet<File> listeFichier = FileDirParcours.getParcours("z://film/new", new String[]{".mkv",".mp4","avi"});
 
-			File[] fichiers = base.listFiles();
-
-			HashSet<File> listeFichier = new HashSet<File>();
-			ArrayList<File> listeDirectory = new ArrayList<File>();
-
-			for (File fichier : fichiers) {
-				if (fichier.isDirectory()) {
-					listeDirectory.add(fichier);
-				} else if (fichier.isFile()) {
-					if ((fichier.getName().toLowerCase().endsWith("mkv") || fichier.getName().toLowerCase().endsWith("mp4")
-							|| fichier.getName().toLowerCase().endsWith("avi")
-							|| fichier.getName().toLowerCase().endsWith("m4v"))) {
-						listeFichier.add(fichier);
-					}
-				}
-			}
-
-			while (listeDirectory.size() > 0) {
-				File fichier = listeDirectory.get(0);
-
-				File[] fichierListe = fichier.listFiles();
-
-				if (fichierListe != null) {
-					for (File fichierTemp : fichierListe) {
-						if (fichierTemp.isDirectory()) {
-							listeDirectory.add(fichierTemp);
-						} else if (fichierTemp.isFile()) {
-							if ((fichierTemp.getName().toLowerCase().endsWith("mkv") || fichierTemp.getName().toLowerCase().endsWith("mp4")
-									|| fichierTemp.getName().toLowerCase().endsWith("avi")
-									|| fichierTemp.getName().toLowerCase().endsWith("m4v"))) {
-								listeFichier.add(fichierTemp);
-							}
-						}
-					}
-				}
-				listeDirectory.remove(0);
-			}
-
-			int compteurTest = 0;
 			for (File fichierTemp : listeFichier) {
-//				if(fichierTemp.getName().toLowerCase().contains("succession")&&fichierTemp.getName().toLowerCase().contains("s01e08")){
-//					System.out.println();
-//				}
-				String episode = "";
-				String series = "";
-				StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
-				if (stk.hasMoreTokens()) {
-					series = stk.nextToken().toLowerCase().trim();
+				String year = "";
+				String nameFilm = "";
+
+				try {
+					if (fichierTemp.getName().contains("(")) {
+						nameFilm = fichierTemp.getName().substring(0, fichierTemp.getName().indexOf("(") - 1);
+						year = fichierTemp.getName().substring(fichierTemp.getName().indexOf("(") + 1, fichierTemp.getName().indexOf(")"));
+					}
+				} catch (Exception ex){
+
 				}
-				if (stk.hasMoreTokens()) {
-					episode += stk.nextToken().trim();
-				}
-				episode = episode.toLowerCase().trim();
-				if (!episode.equals("") && episode != null) {
+
+				if (!year.isEmpty()) {
 						ArrayList<File> listFile = null;
 						try {
-							listFile = (ArrayList<File>) mapSeries.get(series).get(episode);
+							listFile = (ArrayList<File>) mapnameFilm.get(nameFilm).get(year);
 						} catch (Exception ex) {
 
 						}
@@ -77,32 +34,29 @@ public class DeleteDuplicatesSeriesTotalFinal {
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
 							listFile.add(fichierTemp);
-							Map<String, ArrayList> listMap = mapSeries.get(series);
+							Map<String, ArrayList> listMap = mapnameFilm.get(nameFilm);
 							if(listMap==null){
 								listMap = new HashMap<>();
 							}
-							listMap.put(episode, listFile);
-							mapSeries.put(series, listMap);
+							listMap.put(year, listFile);
+							mapnameFilm.put(nameFilm, listMap);
 						} else {
 							listFile.add(fichierTemp);
-							Map<String, ArrayList> listMap = (Map<String, ArrayList>) mapSeries.get(series);
-							listMap.put(episode, listFile);
-							mapSeries.put(series, listMap);
+							Map<String, ArrayList> listMap = (Map<String, ArrayList>) mapnameFilm.get(nameFilm);
+							listMap.put(year, listFile);
+							mapnameFilm.put(nameFilm, listMap);
 						}
 					}
 			}
 
 
-			if (mapSeries.size() > 0) {
-				Set<String> setSeries = mapSeries.keySet();
-				for (String lineSeries : setSeries) {
-					Set<String> setEpisode = (Set<String>) mapSeries.get(lineSeries).keySet();
-					for (String lineEpisode : setEpisode) {
-						ArrayList<File> listFile2 = (ArrayList<File>) mapSeries.get(lineSeries).get(lineEpisode);
-						if (listFile2.size() > 0) {
-							if(listFile2.size()>1){
-								System.out.println("test");
-							}
+			if (!mapnameFilm.isEmpty()) {
+				Set<String> setnameFilm = mapnameFilm.keySet();
+				for (String linenameFilm : setnameFilm) {
+					Set<String> setyear = (Set<String>) mapnameFilm.get(linenameFilm).keySet();
+					for (String lineyear : setyear) {
+						ArrayList<File> listFile2 = (ArrayList<File>) mapnameFilm.get(linenameFilm).get(lineyear);
+						if (listFile2.size() > 1) {
 							File fichier = listFile2.get(0);
 							long taille = 0;
 							long tailleTemp = 0;
@@ -119,7 +73,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 									int retour = 0;
 									if (lhs.getName().toLowerCase().contains("2160p")) {
 										if (rhs.getName().toLowerCase().contains("2160p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 										if (rhs.getName().toLowerCase().contains("1080p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("720p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("576p")) retour = -1;
@@ -132,7 +86,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 										if (rhs.getName().toLowerCase().contains("2160p"))
 											retour = 1;
 										if (rhs.getName().toLowerCase().contains("1080p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 										if (rhs.getName().toLowerCase().contains("720p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("576p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("480p")) retour = -1;
@@ -143,7 +97,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 										if (rhs.getName().toLowerCase().contains("2160p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("1080p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("720p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 										if (rhs.getName().toLowerCase().contains("576p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("480p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("360p")) retour = -1;
@@ -155,7 +109,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 										if (rhs.getName().toLowerCase().contains("1080p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("720p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("576p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 										if (rhs.getName().toLowerCase().contains("480p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("360p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("240p")) retour = -1;
@@ -167,7 +121,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 										if (rhs.getName().toLowerCase().contains("720p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("576p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("480p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 										if (rhs.getName().toLowerCase().contains("360p")) retour = -1;
 										if (rhs.getName().toLowerCase().contains("240p")) retour = -1;
 									}
@@ -179,7 +133,7 @@ public class DeleteDuplicatesSeriesTotalFinal {
 										if (rhs.getName().toLowerCase().contains("576p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("480p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("360p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 										if (rhs.getName().toLowerCase().contains("240p")) retour = -1;
 									}
 
@@ -191,24 +145,18 @@ public class DeleteDuplicatesSeriesTotalFinal {
 										if (rhs.getName().toLowerCase().contains("480p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("360p")) retour = 1;
 										if (rhs.getName().toLowerCase().contains("240p"))
-											retour = lhs.length() > rhs.length() ? 1 : (lhs.length() < rhs.length()) ? -1 : 0;
+											retour = Long.compare(lhs.length(), rhs.length());
 									}
 									if(retour==0) retour = -1;
 									return retour;
 								}
 						});
 
-							File fichierKeep = keepFile.get(0);
-							keepFile.remove(0);
+							for(int i=1;i<keepFile.size();i++){
+								File fichierTemp = keepFile.get(i);
 
-							for (File fichierTemp : keepFile) {
-									System.out.println(fichierTemp.getName());
-//									fichierTemp.delete();
-//								try {
-//									FileUtils.moveFileToDirectory(fichierTemp, new File("z://test/error"), false);
-//								} catch(FileExistsException fex){
-//									fex.printStackTrace();
-//								}
+									System.out.println(fichierTemp.getPath());
+									fichierTemp.delete();
 							}
 						}
 					}
@@ -220,6 +168,6 @@ public class DeleteDuplicatesSeriesTotalFinal {
 	}
 
 	public static void main(String[] args) {
-		DeleteDuplicatesSeriesTotalFinal del = new DeleteDuplicatesSeriesTotalFinal();
+		DeleteDuplicatesFilmTotalFinal del = new DeleteDuplicatesFilmTotalFinal();
 	}
 }

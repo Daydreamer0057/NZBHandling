@@ -1,11 +1,11 @@
 import java.io.File;
 import java.util.*;
 
-public class DeleteDuplicatesSeriesTotalFinal {
-	public DeleteDuplicatesSeriesTotalFinal() {
-		HashMap<String, Map> mapSeries = new HashMap<String, Map>();
+public class DeleteDuplicatesSeriesTotalFinal02 {
+	public DeleteDuplicatesSeriesTotalFinal02() {
+		HashMap<String, Map> mapnameFilm = new HashMap<String, Map>();
 
-		String pathNew = "qsdqgqsfwhfd";
+		String pathNew = "treated";
 
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
@@ -25,7 +25,9 @@ public class DeleteDuplicatesSeriesTotalFinal {
 					if ((fichier.getName().toLowerCase().endsWith("mkv") || fichier.getName().toLowerCase().endsWith("mp4")
 							|| fichier.getName().toLowerCase().endsWith("avi")
 							|| fichier.getName().toLowerCase().endsWith("m4v"))) {
-						listeFichier.add(fichier);
+						if(!fichier.getPath().toLowerCase().contains("fallout")&&!fichier.getPath().toLowerCase().contains("halo")&&!fichier.getPath().toLowerCase().contains("doctor")&&!fichier.getPath().toLowerCase().contains("body")) {
+							listeFichier.add(fichier);
+						}
 					}
 				}
 			}
@@ -43,7 +45,9 @@ public class DeleteDuplicatesSeriesTotalFinal {
 							if ((fichierTemp.getName().toLowerCase().endsWith("mkv") || fichierTemp.getName().toLowerCase().endsWith("mp4")
 									|| fichierTemp.getName().toLowerCase().endsWith("avi")
 									|| fichierTemp.getName().toLowerCase().endsWith("m4v"))) {
-								listeFichier.add(fichierTemp);
+								if(!fichier.getPath().toLowerCase().contains("fallout")&&!fichier.getPath().toLowerCase().contains("halo")&&!fichier.getPath().toLowerCase().contains("doctor")&&!fichier.getPath().toLowerCase().contains("body")) {
+									listeFichier.add(fichierTemp);
+								}
 							}
 						}
 					}
@@ -57,19 +61,29 @@ public class DeleteDuplicatesSeriesTotalFinal {
 //					System.out.println();
 //				}
 				String episode = "";
-				String series = "";
+				String nameSeries = "";
+
 				StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
 				if (stk.hasMoreTokens()) {
-					series = stk.nextToken().toLowerCase().trim();
+					try {
+						nameSeries = stk.nextToken().trim();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
 				}
 				if (stk.hasMoreTokens()) {
-					episode += stk.nextToken().trim();
+					try {
+						String line = stk.nextToken();
+						episode = line;
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
 				}
-				episode = episode.toLowerCase().trim();
-				if (!episode.equals("") && episode != null) {
+
+				if (!episode.equals("") && episode != null && fichierTemp.getName().contains("- subs -")) {
 						ArrayList<File> listFile = null;
 						try {
-							listFile = (ArrayList<File>) mapSeries.get(series).get(episode);
+							listFile = (ArrayList<File>) mapnameFilm.get(nameSeries).get(episode);
 						} catch (Exception ex) {
 
 						}
@@ -77,32 +91,32 @@ public class DeleteDuplicatesSeriesTotalFinal {
 						if (listFile == null) {
 							listFile = new ArrayList<File>();
 							listFile.add(fichierTemp);
-							Map<String, ArrayList> listMap = mapSeries.get(series);
+							Map<String, ArrayList> listMap = mapnameFilm.get(nameSeries);
 							if(listMap==null){
 								listMap = new HashMap<>();
 							}
 							listMap.put(episode, listFile);
-							mapSeries.put(series, listMap);
+							mapnameFilm.put(nameSeries, listMap);
 						} else {
 							listFile.add(fichierTemp);
-							Map<String, ArrayList> listMap = (Map<String, ArrayList>) mapSeries.get(series);
+							Map<String, ArrayList> listMap = (Map<String, ArrayList>) mapnameFilm.get(nameSeries);
 							listMap.put(episode, listFile);
-							mapSeries.put(series, listMap);
+							mapnameFilm.put(nameSeries, listMap);
 						}
 					}
 			}
 
 
-			if (mapSeries.size() > 0) {
-				Set<String> setSeries = mapSeries.keySet();
-				for (String lineSeries : setSeries) {
-					Set<String> setEpisode = (Set<String>) mapSeries.get(lineSeries).keySet();
-					for (String lineEpisode : setEpisode) {
-						ArrayList<File> listFile2 = (ArrayList<File>) mapSeries.get(lineSeries).get(lineEpisode);
-						if (listFile2.size() > 0) {
-							if(listFile2.size()>1){
-								System.out.println("test");
-							}
+			if (mapnameFilm.size() > 0) {
+				Set<String> setnameFilm = mapnameFilm.keySet();
+				for (String linenameFilm : setnameFilm) {
+					Set<String> setyear = (Set<String>) mapnameFilm.get(linenameFilm).keySet();
+					for (String lineyear : setyear) {
+						ArrayList<File> listFile2 = (ArrayList<File>) mapnameFilm.get(linenameFilm).get(lineyear);
+						if (listFile2.size() > 1) {
+//							if(listFile2.size()>1){
+//								System.out.println("test");
+//							}
 							File fichier = listFile2.get(0);
 							long taille = 0;
 							long tailleTemp = 0;
@@ -198,11 +212,30 @@ public class DeleteDuplicatesSeriesTotalFinal {
 								}
 						});
 
-							File fichierKeep = keepFile.get(0);
-							keepFile.remove(0);
+//							boolean testKeep = false;
+//							ArrayList<File> listeFichierKeep = new ArrayList<>();
 
-							for (File fichierTemp : keepFile) {
-									System.out.println(fichierTemp.getName());
+//							Iterator keepFileIT = keepFile.iterator();
+//							while(keepFileIT.hasNext()){
+//								File fichierKeep = (File)keepFileIT.next();
+//								if(fichierKeep.getPath().toLowerCase().contains(pathNew)) {
+//									keepFileIT.remove();
+//									testKeep = true;
+//								}
+//							}
+
+//							if(!testKeep){
+//								Iterator keepFileIT2 = keepFile.iterator();
+//								if(keepFileIT2.hasNext()){
+//									File fichierKeep2 = (File)keepFileIT2.next();
+//									keepFileIT2.remove();
+//								}
+//
+//							}
+							for(int i=1;i<keepFile.size();i++){
+								File fichierTemp = keepFile.get(i);
+
+									System.out.println(fichierTemp.getPath());
 //									fichierTemp.delete();
 //								try {
 //									FileUtils.moveFileToDirectory(fichierTemp, new File("z://test/error"), false);
@@ -220,6 +253,6 @@ public class DeleteDuplicatesSeriesTotalFinal {
 	}
 
 	public static void main(String[] args) {
-		DeleteDuplicatesSeriesTotalFinal del = new DeleteDuplicatesSeriesTotalFinal();
+		DeleteDuplicatesSeriesTotalFinal02 del = new DeleteDuplicatesSeriesTotalFinal02();
 	}
 }

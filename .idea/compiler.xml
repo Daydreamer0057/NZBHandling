@@ -9,8 +9,9 @@
         <module name="NZBToSql" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="NZBToSql" target="1.8" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="8" />
+  </component>
+  <component name="JavacSettings">
+    <option name="PREFER_TARGET_JDK_COMPILER" value="false" />
   </component>
 </project>

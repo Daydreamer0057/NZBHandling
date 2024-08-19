@@ -1,12 +1,8 @@
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DeleteDuplicatesSeries {
     FileWriter fw;
@@ -16,7 +12,7 @@ public class DeleteDuplicatesSeries {
         long ms = System.currentTimeMillis();
         System.out.println("debut " + ms);
         try {
-            File base = new File("z://test/main a traiter");
+            File base = new File("z://test/convert");
 
             File[] fichiers = base.listFiles();
 
@@ -35,6 +31,22 @@ public class DeleteDuplicatesSeries {
                         listeFichier.add(fichier);
                     }
                 }
+            }
+
+            while (listeDirectory.size() > 0) {
+                File fichier = listeDirectory.get(0);
+                File[] fichierListe = fichier.listFiles();
+
+                for (File fichierTemp : fichierListe) {
+                    if (fichierTemp.isDirectory()) {
+                        listeDirectory.add(fichierTemp);
+                    } else {
+                        if(!fichierTemp.getName().endsWith(".srt")&&(fichierTemp.getName().endsWith(".mp4")||fichierTemp.getName().endsWith(".mkv")||fichierTemp.getName().endsWith(".avi"))) {
+                            listeFichier.add(fichierTemp);
+                        }
+                    }
+                }
+                listeDirectory.remove(0);
             }
 
             int compteurFile = 0;
@@ -80,6 +92,7 @@ public class DeleteDuplicatesSeries {
                     episode += " - " + stk.nextToken();
                 }
 
+                episode = episode.toLowerCase().trim();
 //                Pattern pattern = Pattern.compile("[a-zA-z0-9$()& ]+ - S[0-9]*E[0-9]*");
 //                Matcher matcher = pattern.matcher(fichierTemp.getName());
 //                String episode = "";

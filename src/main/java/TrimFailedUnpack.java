@@ -1,17 +1,14 @@
-import org.apache.commons.io.FilenameUtils;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class TrimFailedUnpack {
 	static String path2;
 
-	public TrimFailedUnpack() {
+	public TrimFailedUnpack(String chemin) {
+//		chemin = "z://test/film a traiter";
 		// Dossier a supprimer
-		File base = new File("Z://test/film a traiter");
+		File base = new File(chemin);
 
 		File[] fichiers = base.listFiles();
 
@@ -44,15 +41,20 @@ public class TrimFailedUnpack {
 					}
 				} else {
 					System.out.println(chemin2 + "/" + name+"    "+fichier.getName());
+					if(name.toLowerCase().contains("(Comedy)")){
+						name = name.replace("(","");
+						name = name.replace(")","");
+					}
 					fichier.renameTo(new File(chemin2 + "/" + name));
 				}
 			}
 		}
+//		RenameObfu r = new RenameObfu(chemin);
 
 	}
 
 	public static void main(String[] args) {
-		TrimFailedUnpack epguides = new TrimFailedUnpack();
+		TrimFailedUnpack epguides = new TrimFailedUnpack("Z://test/film a traiter");
 
 	}
 
