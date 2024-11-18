@@ -7,7 +7,7 @@ public class DeleteRarFiles {
 
 	public DeleteRarFiles() {
 		double taille = 0;
-		String chemin = "Z://test/film a traiter";
+		String chemin = "Z://test/main a traiter";
 //		String chemin = "w://download";
 		// Dossier a supprimer
 		File base = new File(chemin);
@@ -66,10 +66,17 @@ public class DeleteRarFiles {
 //							System.out.println(fichierTemp.getName());
 //							listeFichier.add(fichierTemp);
 							System.out.println("Files Deleted " + compteurBegin + " / " + listeFichier.size() + "   Dir Size " + listeDirectory.size() + "    " + fichierTemp.getName());
-//							new Thread(() -> {
 							taille += fichier.length();
+							while(Thread.activeCount()>50){
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException ex){
+									ex.printStackTrace();
+								}
+							}
+							new Thread(() -> {
 								fichierTemp.delete();
-//							}).start();
+							}).start();
 							compteurBegin++;
 						}
 					}

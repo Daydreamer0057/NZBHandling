@@ -5,21 +5,98 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
-public class DeleteSeriesBeforeConvert {
+public class DeleteFilmBeforeConvertTestOnly {
 	static String path2;
 	static String year;
 	static String nameSeries;
 	static int resolutionFilmNew = 0;
 	static int compteurDelete = 0;
 
-	public DeleteSeriesBeforeConvert() {
+	public DeleteFilmBeforeConvertTestOnly() {
 		ArrayList<String> listPriority = new ArrayList<>();
 		listPriority.add("poiyhoiyh");
 
-		HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/test", new String[]{".mp4",".mkv",".avi"});
+		// Dossier a supprimer
+//		File base = new File("z://test/test");
+		File base = new File("z://test/stockage");
+		//		File base = new File("Z://film/new/treated");
+		//File base = new File("e://theatre/convert");
+		// File base = new File("f://Graver/Theatre/Convert");
+
+		File[] fichiers = base.listFiles();
+
+		HashSet<File> listeFichierATraiter = new HashSet<File>();
+		ArrayList<File> listeDirectory = new ArrayList<File>();
+
+		for (File fichier : fichiers) {
+			if (fichier.isDirectory() && !fichier.getPath().toLowerCase().contains("retry")) {
+				listeDirectory.add(fichier);
+			} else {
+				if(!fichier.getName().endsWith(".srt")&&(fichier.getName().endsWith(".mp4")||fichier.getName().endsWith(".mkv")||fichier.getName().endsWith(".avi"))) {
+					listeFichierATraiter.add(fichier);
+				}
+			}
+		}
+
+		while (listeDirectory.size() > 0) {
+			File fichier = listeDirectory.get(0);
+			File[] fichierListe = fichier.listFiles();
+
+			for (File fichierTemp : fichierListe) {
+				if (fichierTemp.isDirectory() && fichierTemp.getPath().toLowerCase().contains("retry")) {
+					listeDirectory.add(fichierTemp);
+				} else {
+					if(!fichierTemp.getName().endsWith(".srt")&&(fichierTemp.getName().endsWith(".mp4")||fichierTemp.getName().endsWith(".mkv")||fichierTemp.getName().endsWith(".avi"))) {
+						listeFichierATraiter.add(fichierTemp);
+					}
+				}
+			}
+			listeDirectory.remove(0);
+		}
 
 		int compteur = 0;
-		HashSet<File> filesFilmNew = FileDirParcours.getParcours("z://series", new String[]{".mp4",".mkv",".avi"});
+		HashSet<File> fileBase = new HashSet<File>();
+		HashSet<File> filesFilmNew = new HashSet<File>();
+		//		fileBase.add(new File("e://convert"));
+		fileBase.add(new File("z:/film/new"));
+		fileBase.add(new File("z:/film/treated"));
+		//		fileBase.add(new File("z:/temp/convert"));
+		//		fileBase.add(new File("z://test/temp"));
+
+		ArrayList<File> listeDirectory2 = new ArrayList<File>();
+
+		for (File filesTemp : fileBase) {
+			System.out.println(fileBase.size());
+			if (filesTemp.isDirectory()) {
+				listeDirectory2.add(filesTemp);
+			} else {
+				if (filesTemp.getName().toLowerCase().endsWith("mkv") || filesTemp.getName().toLowerCase().endsWith("mp4")
+						|| filesTemp.getName().toLowerCase().endsWith("avi")
+						|| filesTemp.getName().toLowerCase().endsWith("m4v")) {
+					filesFilmNew.add(filesTemp);
+				}
+			}
+		}
+
+		while (listeDirectory2.size() > 0) {
+			File fichier2 = listeDirectory2.get(0);
+			File[] fichierListe2 = fichier2.listFiles();
+			System.out.println(filesFilmNew.size()+"    "+listeDirectory2.size());
+
+			for (File fichierTemp : fichierListe2) {
+
+				if (fichierTemp.isDirectory()) {
+					listeDirectory2.add(fichierTemp);
+				} else {
+					if (fichierTemp.getName().toLowerCase().endsWith("mkv") || fichierTemp.getName().toLowerCase().endsWith("mp4")
+							|| fichierTemp.getName().toLowerCase().endsWith("avi")
+							|| fichierTemp.getName().toLowerCase().endsWith("m4v")) {
+						filesFilmNew.add(fichierTemp);
+					}
+				}
+			}
+			listeDirectory2.remove(0);
+		}
 
 		System.out.println("Debut files");
 		for (File fichierFilmNew : filesFilmNew) {
@@ -45,7 +122,7 @@ public class DeleteSeriesBeforeConvert {
 				path2 = FilenameUtils.removeExtension(path2);
 			}
 			if (path2 != "") {
-				StringTokenizer stk = new StringTokenizer(path2, " - ");
+				StringTokenizer stk = new StringTokenizer(path2, "(");
 				if (stk.hasMoreTokens()) {
 					try {
 						nameSeries = stk.nextToken().trim();
@@ -55,7 +132,8 @@ public class DeleteSeriesBeforeConvert {
 				}
 				if (stk.hasMoreTokens()) {
 					try {
-						year = stk.nextToken();
+						String line = stk.nextToken();
+						year = line.substring(0, 4).trim();
 					} catch (Exception ex) {
 						testFiles = true;
 					}
@@ -101,20 +179,11 @@ public class DeleteSeriesBeforeConvert {
 							String yearFinal = "";
 
 							try {
-								StringTokenizer stk = new StringTokenizer(nameRes, " - ");
-								if (stk.hasMoreTokens()) {
-									try {
-										nameFinal = stk.nextToken().trim();
-									} catch (Exception ex) {
-
-									}
+								if (!(nameRes.indexOf("(") == -1) && nameRes.indexOf("(") < nameRes.length() && nameRes.indexOf("(") > 0) {
+									nameFinal = nameRes.substring(0, nameRes.indexOf("(") - 1);
 								}
-								if (stk.hasMoreTokens()) {
-									try {
-										yearFinal = stk.nextToken();
-									} catch (Exception ex) {
-
-									}
+								if (!(nameRes.indexOf("(") == -1) && nameRes.indexOf("(") < nameRes.length() && nameRes.indexOf("(") > 0) {
+									yearFinal = nameRes.substring(nameRes.indexOf("(") + 1, nameRes.indexOf(")"));
 								}
 							} catch (Exception ex) {
 								ex.printStackTrace();
@@ -150,7 +219,7 @@ public class DeleteSeriesBeforeConvert {
 								if ((resolutionTestTest > resolutionFilmNew)) {
 									System.out.println("Fichier Film New   " + fichierFilmNew.getPath() + "    " + fichierTestTest.getName());
 									try {
-										fichierFilmNew.delete();
+//										fichierFilmNew.delete();
 									} catch (Exception ex) {
 
 									}
@@ -166,7 +235,7 @@ public class DeleteSeriesBeforeConvert {
 									} else {
 										System.out.println("Fichier New  " + fichierTestTest.getPath() + "    " + fichierFilmNew.getName());
 										try {
-											fichierFilmNew.delete();
+//											fichierFilmNew.delete();
 										} catch (Exception ex) {
 
 										}
@@ -189,10 +258,11 @@ public class DeleteSeriesBeforeConvert {
 				});
 			}
 		}
-		java.awt.Toolkit.getDefaultToolkit().beep();	}
+		java.awt.Toolkit.getDefaultToolkit().beep();
+	}
 
 	public static void main(String[] args) {
-		DeleteSeriesBeforeConvert epguides = new DeleteSeriesBeforeConvert();
+		DeleteFilmBeforeConvertTestOnly epguides = new DeleteFilmBeforeConvertTestOnly();
 
 	}
 

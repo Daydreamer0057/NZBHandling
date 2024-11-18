@@ -15,11 +15,29 @@ public class FileDirParcours {
 
         for (File fichier : fichiers) {
             if (fichier.isDirectory()) {
-                listeDirectory.add(fichier);
+                while (Thread.activeCount() > 50) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                new Thread(() -> {
+                    listeDirectory.add(fichier);
+                }).start();
             } else {
-                for(int i = 0;i<fileType.length;i++) {
-                    if (fichier.getName().toLowerCase().endsWith(fileType[i].toLowerCase())) {
-                        listeFichier.add(fichier);
+                for (int i = 0; i < fileType.length; i++) {
+                    if (fichier.getName().toLowerCase().endsWith(fileType[i].toLowerCase()) || fileType[i].equals("*")) {
+                        while (Thread.activeCount() > 50) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        new Thread(() -> {
+                            listeFichier.add(fichier);
+                        }).start();
                     }
                 }
             }
@@ -27,24 +45,53 @@ public class FileDirParcours {
 
         while (listeDirectory.size() > 0) {
             File fichier = listeDirectory.get(0);
-            System.out.println("Dir Size "+listeDirectory.size()+"    "+fichier.getPath());
 
-            File[] fichierListe = fichier.listFiles();
+            if (fichier != null) {
+                File[] fichierListe = fichier.listFiles();
 
-            if(fichierListe!=null) {
-                for (File fichierTemp : fichierListe) {
-                    if (fichierTemp.isDirectory()) {
-                        listeDirectory.add(fichierTemp);
-                    } else {
-                        for (int i = 0; i < fileType.length; i++) {
-                            if (fichierTemp.getName().toLowerCase().endsWith(fileType[i].toLowerCase())) {
-                                listeFichier.add(fichierTemp);
+                System.out.println("Dir Size " + listeDirectory.size() + "    nb fichiers " + listeFichier.size() + "    " + fichier.getPath() + "    Threads "+Thread.activeCount());
+
+                if (fichierListe != null) {
+                    for (File fichierTemp : fichierListe) {
+                        if (fichierTemp.isDirectory()) {
+                            while (Thread.activeCount() > 50) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                            new Thread(() -> {
+                                listeDirectory.add(fichierTemp);
+                            }).start();
+                        } else {
+                            for (int i = 0; i < fileType.length; i++) {
+                                if (fichierTemp.getName().toLowerCase().endsWith(fileType[i].toLowerCase()) || fileType[i].equals("*")) {
+                                    while (Thread.activeCount() > 50) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                    new Thread(() -> {
+                                        listeFichier.add(fichierTemp);
+                                    }).start();
+                                }
                             }
                         }
                     }
                 }
             }
             listeDirectory.remove(0);
+        }
+        while(Thread.activeCount()>2){
+            try {
+//                System.out.println("Threads " + Thread.activeCount());
+                Thread.sleep(1000);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return listeFichier;
     }

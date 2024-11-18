@@ -12,21 +12,23 @@ public class DeleteEmptyDirectories {
 			File[] listLevel1 = base.listFiles();
 
 			for(File fichierTemp : listLevel1){
-				File base2 = fichierTemp;
-				File[] listLevel2 = base2.listFiles();
+				if(!fichierTemp.getPath().toLowerCase().contains("tools")&&!fichierTemp.getPath().toLowerCase().contains("music")){
+					File base2 = fichierTemp;
+					File[] listLevel2 = base2.listFiles();
 
-				for(File fichierLvl2 : listLevel2){
-					File base3 = fichierLvl2;
-					File[] listLevel3 = base3.listFiles();
-					if(listLevel3!=null) {
-						for (File fichierFinal : listLevel3) {
-							if (fichierFinal.isDirectory()) {
+					for(File fichierLvl2 : listLevel2){
+						File base3 = fichierLvl2;
+						File[] listLevel3 = base3.listFiles();
+						if(listLevel3!=null) {
+							for (File fichierFinal : listLevel3) {
+								if (fichierFinal.isDirectory()) {
 //							calculTaille(fichierFinal) == 0L
-								System.out.println(fichierFinal.getPath());
-								try {
-									FileUtils.deleteDirectory(fichierFinal);
-								} catch (Exception ex) {
+									System.out.println(fichierFinal.getPath());
+									try {
+										FileUtils.deleteDirectory(fichierFinal);
+									} catch (Exception ex) {
 
+									}
 								}
 							}
 						}

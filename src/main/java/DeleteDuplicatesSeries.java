@@ -9,100 +9,32 @@ public class DeleteDuplicatesSeries {
     PrintWriter pw;
 
     public DeleteDuplicatesSeries() {
+        double taille3 = 0;
+        HashMap<String, ArrayList> map240 = new HashMap<String, ArrayList>();
+        HashMap<String, ArrayList> map360 = new HashMap<String, ArrayList>();
+        HashMap<String, ArrayList> map480 = new HashMap<String, ArrayList>();
+        HashMap<String, ArrayList> map576 = new HashMap<String, ArrayList>();
+        HashMap<String, ArrayList> map720 = new HashMap<String, ArrayList>();
+        HashMap<String, ArrayList> map1080 = new HashMap<String, ArrayList>();
+        HashMap<String, ArrayList> map2160 = new HashMap<String, ArrayList>();
+
         long ms = System.currentTimeMillis();
         System.out.println("debut " + ms);
         try {
-            File base = new File("z://test/convert");
-
-            File[] fichiers = base.listFiles();
-
-            HashSet<File> listeFichier = new HashSet<File>();
-            ArrayList<File> listeDirectory = new ArrayList<File>();
-
-            int compteur = 0;
-            for (File fichier : fichiers) {
-                System.out.println(listeFichier.size()+"    "+listeDirectory.size());
-                compteur++;
-                if (fichier.isDirectory()) {
-                    listeDirectory.add(fichier);
-                } else if (fichier.isFile()) {
-                    if ((fichier.getName().endsWith("mkv") || fichier.getName().endsWith("mp4")
-                            || fichier.getName().endsWith("avi"))) {
-                        listeFichier.add(fichier);
-                    }
-                }
-            }
-
-            while (listeDirectory.size() > 0) {
-                File fichier = listeDirectory.get(0);
-                File[] fichierListe = fichier.listFiles();
-
-                for (File fichierTemp : fichierListe) {
-                    if (fichierTemp.isDirectory()) {
-                        listeDirectory.add(fichierTemp);
-                    } else {
-                        if(!fichierTemp.getName().endsWith(".srt")&&(fichierTemp.getName().endsWith(".mp4")||fichierTemp.getName().endsWith(".mkv")||fichierTemp.getName().endsWith(".avi"))) {
-                            listeFichier.add(fichierTemp);
-                        }
-                    }
-                }
-                listeDirectory.remove(0);
-            }
-
-            int compteurFile = 0;
-            int compteurFolder = 0;
-            while (listeDirectory.size() > 0) {
-                System.out.println(listeFichier.size()+"    "+listeDirectory.size());
-                File fichier = listeDirectory.get(0);
-
-                File[] fichierListe = fichier.listFiles();
-
-                if (fichierListe != null) {
-                    for (File fichierTemp : fichierListe) {
-                        if (fichierTemp.isDirectory()) {
-                            listeDirectory.add(fichierTemp);
-                            compteurFolder++;
-                        } else if (fichierTemp.isFile()) {
-                            if ((fichierTemp.getName().endsWith("mkv") || fichierTemp.getName().endsWith("mp4")
-                                    || fichierTemp.getName().endsWith("avi"))) {
-                                listeFichier.add(fichierTemp);
-                                compteurFile++;
-                            }
-                        }
-                    }
-                }
-                listeDirectory.remove(0);
-            }
-
-            HashMap<String, ArrayList> map240 = new HashMap<String, ArrayList>();
-            HashMap<String, ArrayList> map360 = new HashMap<String, ArrayList>();
-            HashMap<String, ArrayList> map480 = new HashMap<String, ArrayList>();
-            HashMap<String, ArrayList> map576 = new HashMap<String, ArrayList>();
-            HashMap<String, ArrayList> map720 = new HashMap<String, ArrayList>();
-            HashMap<String, ArrayList> map1080 = new HashMap<String, ArrayList>();
-            HashMap<String, ArrayList> map2160 = new HashMap<String, ArrayList>();
+            HashSet<File> listeFichier = FileDirParcours.getParcours("z://test/stockage", new String[]{".mp4",".mkv",".avi"});
 
             for (File fichierTemp : listeFichier) {
                 String episode = "";
-                StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
-                if(stk.hasMoreTokens()) {
-                    episode = stk.nextToken();
+                StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
+                if (stk.hasMoreTokens()) {
+                    episode = stk.nextToken().toLowerCase().trim();
                 }
                 if(stk.hasMoreTokens()) {
                     episode += " - " + stk.nextToken();
                 }
 
                 episode = episode.toLowerCase().trim();
-//                Pattern pattern = Pattern.compile("[a-zA-z0-9$()& ]+ - S[0-9]*E[0-9]*");
-//                Matcher matcher = pattern.matcher(fichierTemp.getName());
-//                String episode = "";
-//                try {
-//                    while (matcher.find()) {
-//                        episode = matcher.group(0);
-//                    }
-//                } catch (Exception e) {
-//
-//                }
+
                 if (!episode.equals("") && episode != null) {
                     if (fichierTemp.getName().toLowerCase().contains("720p")) {
                         ArrayList<File> listFile = map720.get(episode);
@@ -113,30 +45,6 @@ public class DeleteDuplicatesSeries {
                         } else {
                             listFile.add(fichierTemp);
                             map720.put(episode, listFile);
-                        }
-                    }
-
-                    if (fichierTemp.getName().toLowerCase().contains("1080p")) {
-                        ArrayList<File> listFile = map1080.get(episode);
-                        if (listFile == null) {
-                            listFile = new ArrayList<File>();
-                            listFile.add(fichierTemp);
-                            map1080.put(episode, listFile);
-                        } else {
-                            listFile.add(fichierTemp);
-                            map1080.put(episode, listFile);
-                        }
-                    }
-
-                    if (fichierTemp.getName().toLowerCase().contains("2160p")) {
-                        ArrayList<File> listFile = map2160.get(episode);
-                        if (listFile == null) {
-                            listFile = new ArrayList<File>();
-                            listFile.add(fichierTemp);
-                            map2160.put(episode, listFile);
-                        } else {
-                            listFile.add(fichierTemp);
-                            map2160.put(episode, listFile);
                         }
                     }
 
@@ -187,10 +95,33 @@ public class DeleteDuplicatesSeries {
                             map240.put(episode, listFile);
                         }
                     }
+
+                    if (fichierTemp.getName().toLowerCase().contains("1080p")) {
+                        ArrayList<File> listFile = map1080.get(episode);
+                        if (listFile == null) {
+                            listFile = new ArrayList<File>();
+                            listFile.add(fichierTemp);
+                            map1080.put(episode, listFile);
+                        } else {
+                            listFile.add(fichierTemp);
+                            map1080.put(episode, listFile);
+                        }
+                    }
+
+                    if (fichierTemp.getName().toLowerCase().contains("2160p")) {
+                        ArrayList<File> listFile = map2160.get(episode);
+                        if (listFile == null) {
+                            listFile = new ArrayList<File>();
+                            listFile.add(fichierTemp);
+                            map2160.put(episode, listFile);
+                        } else {
+                            listFile.add(fichierTemp);
+                            map2160.put(episode, listFile);
+                        }
+                    }
                 }
             }
 
-            compteur = 0;
 
             // ====================================2160
             if (map2160.size() > 0) {
@@ -213,7 +144,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -221,33 +152,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
-                                }
-                            }
-                        }
-
-                        if(!testHdr){
-                            for (File fichierTemp : listFile2) {
-                                StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
-                                String rate = "";
-                                while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
-                                    rate = stk.nextToken();
-                                }
-                                if(rate.contains("Mbps")){
-                                    rate = rate.substring(0, rate.indexOf("Mbps") - 1);
-                                    rate = rate.replaceAll(",", "").trim();
-                                    if (Double.parseDouble(rate) * 1000 >= taille) {
-                                        fichier = fichierTemp;
-                                        taille = Double.parseDouble(rate)*1000;
-                                    }
-                                }
-                                if(rate.contains("kbps")){
-                                    rate = rate.substring(0, rate.indexOf("kbps") - 1);
-                                    rate = rate.replaceAll(",", "").trim();
-                                    if (Double.parseDouble(rate) >= taille) {
-                                        fichier = fichierTemp;
-                                        taille = Double.parseDouble(rate);
-                                    }
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -255,17 +160,19 @@ public class DeleteDuplicatesSeries {
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
                                 System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
+
                         if (map1080.containsKey(lineTemp)) {
                             ArrayList<File> listDelete = map1080.get(lineTemp);
                             map1080.remove(lineTemp);
                             for (File fichierTemp : listDelete) {
                                 try {
-                                    System.out.println(fichierTemp.getPath() + " " + fichierTemp.length());
-                                    fichierTemp.delete();
+                                    System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -278,8 +185,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -292,8 +199,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -306,8 +213,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -320,8 +227,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -334,14 +241,13 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -356,9 +262,9 @@ public class DeleteDuplicatesSeries {
                         double taille = 0;
                         double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
-                            StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
+                            StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while (!rate.contains("Mbps") && stk.hasMoreTokens()) {
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
                             if(rate.contains("Mbps")){
@@ -366,7 +272,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -374,7 +280,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -382,21 +288,8 @@ public class DeleteDuplicatesSeries {
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
                                 System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
-                            }
-                        }
-                        if (map2160.containsKey(lineTemp)) {
-                            ArrayList<File> listDelete = map2160.get(lineTemp);
-                            map2160.remove(lineTemp);
-                            for (File fichierTemp : listDelete) {
-                                try {
-                                    System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
-                                } catch (Exception ex) {
-
-                                }
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
 
@@ -406,8 +299,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -420,8 +313,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -434,8 +327,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -448,8 +341,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -462,16 +355,18 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
                             }
                         }
+
                     }
                 }
             }
+
 
             // ====================================720
             if (map720.size() > 0) {
@@ -483,9 +378,9 @@ public class DeleteDuplicatesSeries {
                         double taille = 0;
                         double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
-                            StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
+                            StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while (!rate.contains("Mbps") && stk.hasMoreTokens()) {
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
                             if(rate.contains("Mbps")){
@@ -493,7 +388,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -501,7 +396,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -509,8 +404,8 @@ public class DeleteDuplicatesSeries {
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
                                 System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
 
@@ -520,8 +415,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -534,8 +429,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -548,8 +443,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -562,8 +457,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -583,9 +478,9 @@ public class DeleteDuplicatesSeries {
                         double taille = 0;
                         double tailleTemp = 0;
                         for (File fichierTemp : listFile2) {
-                            StringTokenizer stk = new StringTokenizer(fichierTemp.getName(), "-");
+                            StringTokenizer stk = new StringTokenizer(fichierTemp.getName(),"-");
                             String rate = "";
-                            while (!rate.contains("Mbps") && stk.hasMoreTokens()) {
+                            while(!(rate.contains("Mbps")||rate.contains("kbps"))&&stk.hasMoreTokens()){
                                 rate = stk.nextToken();
                             }
                             if(rate.contains("Mbps")){
@@ -593,7 +488,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -601,7 +496,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
@@ -609,8 +504,8 @@ public class DeleteDuplicatesSeries {
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
                                 System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
 
@@ -620,8 +515,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -634,8 +529,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -648,8 +543,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -679,7 +574,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -687,16 +582,17 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
 
+
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
                                 System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
 
@@ -706,8 +602,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -720,8 +616,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -751,7 +647,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -759,16 +655,17 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
 
+
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
                                 System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
 
@@ -778,8 +675,8 @@ public class DeleteDuplicatesSeries {
                             for (File fichierTemp : listDelete) {
                                 try {
                                     System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                    fichierTemp.delete();
-                                    compteur++;
+                                    taille3 += fichierTemp.length();
+                                    fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                                 } catch (Exception ex) {
 
                                 }
@@ -809,7 +706,7 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) * 1000 >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate)*1000;
+                                    taille3 = Double.parseDouble(rate)*1000;
                                 }
                             }
                             if(rate.contains("kbps")){
@@ -817,27 +714,34 @@ public class DeleteDuplicatesSeries {
                                 rate = rate.replaceAll(",", "").trim();
                                 if (Double.parseDouble(rate) >= taille) {
                                     fichier = fichierTemp;
-                                    taille = Double.parseDouble(rate);
+                                    taille3 = Double.parseDouble(rate);
                                 }
                             }
                         }
 
+
                         for (File fichierTemp : listFile2) {
                             if (fichierTemp != fichier) {
-                                System.out.println(fichierTemp.getPath() + "    " + fichierTemp.length());
-                                fichierTemp.delete();
-                                compteur++;
+                                double taille2 = fichierTemp.length()/1024/1024/1024;
+                                System.out.println(fichierTemp.getPath() + "    " + taille2);
+                                taille3 += fichierTemp.length();
+                                fichierTemp.renameTo(new File("z://test/temp/"+fichierTemp.getName()));
                             }
                         }
 
                     }
                 }
             }
-            System.out.println("Deleted " + compteur);
-        } catch (Exception ex) {
+
+        } catch (
+
+                Exception ex) {
             ex.printStackTrace();
         }
+        System.out.println("Taille gagnee "+(taille3/1000000000));
+//		DeleteFilmBeforeConvert del = new DeleteFilmBeforeConvert();
     }
+
 
     public String returnDate(Date date) {
         GregorianCalendar gc = new GregorianCalendar();

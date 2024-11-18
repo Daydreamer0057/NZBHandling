@@ -29,8 +29,9 @@ public class GetFavoriteMovie {
 			PrintWriter pw = new PrintWriter(new File("e://temp/list_films_apart_2.txt"));
 
 			HashSet<File> listeFichier = FileDirParcours.getParcours("z://film/new", new String[]{".mp4",".avi",".mkv"});
-			HashSet<File> listeFichier2 = FileDirParcours.getParcours("z://film/treated", new String[]{".mp4",".avi",".mkv"});
-			listeFichier.addAll(listeFichier2);
+
+			listeFichier.addAll(FileDirParcours.getParcours("z://film/treated", new String[]{".mp4",".avi",".mkv"}));
+			listeFichier.addAll(FileDirParcours.getParcours("z://test/test", new String[]{".mp4",".avi",".mkv"}));
 
 			int compteur = 0;
 			for (String lineTemp : listFavorites) {
@@ -40,10 +41,14 @@ public class GetFavoriteMovie {
 //						System.out.println("test");
 //					}
 					if(fichierFilm.getName().toLowerCase().contains(lineTemp.toLowerCase())){
-						System.out.println("z://film/viewed/"+fichierFilm.getName());
-						FileUtils.copyFile(fichierFilm,new File("z://film/viewed/"+fichierFilm.getName()));
-						test = true;
-						break;
+						if(!new File("z://film/viewed/"+fichierFilm).exists()) {
+							System.out.println("z://film/viewed/"+fichierFilm.getName());
+							FileUtils.copyFile(fichierFilm,new
+
+									File("z://film/viewed/"+fichierFilm.getName()));
+							test =true;
+							break;
+						}
 					}
 				}
 				if(!test){

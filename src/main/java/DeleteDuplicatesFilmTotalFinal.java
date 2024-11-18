@@ -9,6 +9,9 @@ public class DeleteDuplicatesFilmTotalFinal {
 		System.out.println("debut " + ms);
 		try {
 			HashSet<File> listeFichier = FileDirParcours.getParcours("z://film/new", new String[]{".mkv",".mp4","avi"});
+			HashSet<File> listeFichier2 = FileDirParcours.getParcours("z://film/treated", new String[]{".mkv",".mp4","avi"});
+
+			listeFichier.addAll(listeFichier2);
 
 			for (File fichierTemp : listeFichier) {
 				String year = "";

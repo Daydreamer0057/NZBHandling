@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Film {
+public class Series {
 	static String path2;
 	static int compteurDelete = 0;
 
 	static double tailleGagnee = 0.0;
-	public Film() {
+	public Series() {
 //		File basic = new File("z:/test/sabnzbd");
 //		File[] listFiles = basic.listFiles();
 //
@@ -17,12 +17,12 @@ public class Film {
 //			fichierTemp.renameTo(new File(fichierTemp.getPath().replaceAll("convert","")));
 //		}
 //
-		String eraseName = "z:/test/test";
+		String eraseName = "z:/test/test_series";
 //		String eraseName = "z:/film/france/convert";
 //		String eraseName = "z:/test/stockage";
 //		String eraseName = "e:/humour/h265";
 //		String baseName = "z:/temp/main";
-		String baseName = "z:/temp/convert";
+		String baseName = "z:/temp/convert2";
 //		String baseName = "z:/temp/convert av1";
 //		String baseName = "e:/humour/convert";
 
@@ -187,7 +187,7 @@ public class Film {
 	}
 
 	public static void main(String[] args) {
-		Film epguides = new Film();
+		Series epguides = new Series();
 
 	}
 

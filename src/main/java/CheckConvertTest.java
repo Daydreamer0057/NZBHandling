@@ -1,15 +1,19 @@
 import org.apache.commons.io.FilenameUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.StringTokenizer;
 
-public class Film {
+public class CheckConvertTest {
 	static String path2;
 	static int compteurDelete = 0;
 
 	static double tailleGagnee = 0.0;
-	public Film() {
+	public CheckConvertTest() {
 //		File basic = new File("z:/test/sabnzbd");
 //		File[] listFiles = basic.listFiles();
 //
@@ -17,12 +21,12 @@ public class Film {
 //			fichierTemp.renameTo(new File(fichierTemp.getPath().replaceAll("convert","")));
 //		}
 //
-		String eraseName = "z:/test/test";
+		String eraseName = "z:/test/test_series";
 //		String eraseName = "z:/film/france/convert";
 //		String eraseName = "z:/test/stockage";
 //		String eraseName = "e:/humour/h265";
 //		String baseName = "z:/temp/main";
-		String baseName = "z:/temp/convert";
+		String baseName = "z:/temp/convert2";
 //		String baseName = "z:/temp/convert av1";
 //		String baseName = "e:/humour/convert";
 
@@ -30,6 +34,8 @@ public class Film {
 		boolean test02 = replaceConvertFiles(eraseName);
 //		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles("e:/humour/h265");
 //		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles("z://test/Convert Videoproc");
+
+		verifyFiles(eraseName, baseName);
 
 		// Dossier a supprimer
 		File base = new File(eraseName);
@@ -186,8 +192,86 @@ public class Film {
 		return true;
 	}
 
+	public void verifyFiles(String baseName, String EraseName){
+		try {
+			HashMap<String,String> map = new HashMap<>();
+			FileReader fr = new FileReader(new File("e:/log/test_series.csv"));
+			BufferedReader br = new BufferedReader(fr);
+
+			String line = "";
+
+			while (line != null) {
+				line = br.readLine();
+				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")) {
+					try {
+						String duration = line.substring(line.lastIndexOf(",") + 1);
+						String name = line.substring(0, line.indexOf(duration) - 1);
+						String taille = name.substring(name.lastIndexOf(",") + 1);
+						name = name.substring(0, name.indexOf(taille) - 1);
+						name = name.replace("\"","");
+						name = name.toLowerCase();
+						map.put(name, duration);
+					} catch (Exception ex) {
+					}
+				}
+			}
+
+			br.close();
+			fr.close();
+
+			fr = new FileReader(new File("e:/log/test_convert.csv"));
+			br = new BufferedReader(fr);
+
+			line = "";
+
+			while (line != null) {
+				line = br.readLine();
+				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")) {
+					try {
+						String durationConvert = line.substring(line.lastIndexOf(",") + 1);
+						String nameConvert = line.substring(0, line.indexOf(durationConvert) - 1);
+						String tailleConvert = nameConvert.substring(nameConvert.lastIndexOf(",") + 1);
+						nameConvert = nameConvert.substring(0, nameConvert.indexOf(tailleConvert) - 1);
+						nameConvert = nameConvert.replace("\"","");
+						nameConvert = nameConvert.toLowerCase();
+
+						int durationConvertInt = 0;
+						if(durationConvert!=null) {
+							StringTokenizer stk2 = new StringTokenizer(durationConvert, ":");
+							durationConvertInt += Integer.parseInt(stk2.nextToken().replace("\"","")) * 60;
+							durationConvertInt += Integer.parseInt(stk2.nextToken().replace("\"",""));
+						}
+
+						String durationTest = map.get(nameConvert);
+						int durationTestInt = 0;
+						if(durationTest!=null) {
+							StringTokenizer stk2 = new StringTokenizer(durationTest, ":");
+							durationTestInt += Integer.parseInt(stk2.nextToken().replace("\"","")) * 60;
+							durationTestInt += Integer.parseInt(stk2.nextToken().replace("\"",""));
+						}
+
+
+						if(durationConvertInt<durationTestInt&&(durationTestInt-durationConvertInt>5)){
+							File fichierConvert = new File(baseName+"/"+nameConvert);
+							System.out.println("Delete Convert "+nameConvert);
+							fichierConvert.delete();
+						}
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+
+			br.close();
+			fr.close();
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
+
+	}
+
 	public static void main(String[] args) {
-		Film epguides = new Film();
+		CheckConvertTest epguides = new CheckConvertTest();
 
 	}
 

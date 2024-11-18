@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Film {
+public class FilmFrance {
 	static String path2;
 	static int compteurDelete = 0;
 
 	static double tailleGagnee = 0.0;
-	public Film() {
+	public FilmFrance() {
 //		File basic = new File("z:/test/sabnzbd");
 //		File[] listFiles = basic.listFiles();
 //
@@ -17,17 +17,17 @@ public class Film {
 //			fichierTemp.renameTo(new File(fichierTemp.getPath().replaceAll("convert","")));
 //		}
 //
-		String eraseName = "z:/test/test";
-//		String eraseName = "z:/film/france/convert";
+//		String eraseName = "z:/test/films france";
+		String eraseName = "z:/film/france/convert";
 //		String eraseName = "z:/test/stockage";
 //		String eraseName = "e:/humour/h265";
 //		String baseName = "z:/temp/main";
-		String baseName = "z:/temp/convert";
+		String baseName = "z:/temp/convert2";
 //		String baseName = "z:/temp/convert av1";
 //		String baseName = "e:/humour/convert";
 
-		boolean test01 = replaceConvertFiles(baseName);
-		boolean test02 = replaceConvertFiles(eraseName);
+		boolean test01 = ReplaceConvertFiles.ReplaceConvertFiles(baseName);
+		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles(eraseName);
 //		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles("e:/humour/h265");
 //		boolean test02 = ReplaceConvertFiles.ReplaceConvertFiles("z://test/Convert Videoproc");
 
@@ -160,34 +160,11 @@ public class Film {
 			}
 		}
 		System.out.println("Taille Gagnee "+(tailleGagnee/1000000000));
-	}
-
-	public boolean replaceConvertFiles(String chemin){
-		long ms = System.currentTimeMillis();
-		System.out.println("debut " + ms);
-		try {
-			File base = new File(chemin);
-			//File base = new File("d://te/film");
-
-			File[] fichiers = base.listFiles();
-
-			for(File fichierTemp : fichiers){
-				if(fichierTemp.getPath().contains("_")) {
-					fichierTemp.renameTo(new File(fichierTemp.getPath().replaceAll("_", "'")));
-				}
-			}
 		}
 
-		catch (
-
-				Exception ex) {
-			ex.printStackTrace();
-		}
-		return true;
-	}
 
 	public static void main(String[] args) {
-		Film epguides = new Film();
+		FilmFrance epguides = new FilmFrance();
 
 	}
 

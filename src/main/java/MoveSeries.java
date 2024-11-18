@@ -9,13 +9,14 @@ public class MoveSeries {
 
 	public MoveSeries() {
 //		File base = new File("z://test/stockage");
-		File base = new File("z://temp/convert");
+		File base = new File("z://temp/convert2");
 //		File base = new File("x://convert");
 
 		File[] fichiers = base.listFiles();
 
 		HashSet<File> listeFichier = new HashSet<File>();
 		ArrayList<File> listeDirectory = new ArrayList<File>();
+
 		//listeDirectory.add(new File("d://series"));
 		//listeDirectory.add(new File("d://temp 2/main"));
 

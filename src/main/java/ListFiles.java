@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -20,60 +19,64 @@ public class ListFiles {
 
 //			File base = new File("z://series");
 			
-			HashSet<File> listeFichier = new HashSet<File>();
-			ArrayList<File> listeDirectory = new ArrayList<File>();
-
-			listeDirectory.add(new File("z://Books"));
-			listeDirectory.add(new File("z://Documentaires"));
-			listeDirectory.add(new File("z://Film"));
-			listeDirectory.add(new File("z://Series"));
-
-			listeDirectory.add(new File("z://temp"));
-
-			for (File fichier : listeFichier) {
-				if (fichier.isDirectory()) {
-					listeDirectory.add(fichier);
-				} else {
-//						BasicFileAttributes attrs >= Files.readAttributes(fichier.toPath(), BasicFileAttributes.class);
-//						FileTime createTime = attrs.creationTime();
-//
-//						FileTime modifiedTime = attrs.lastModifiedTime();
-
-						// FileTime accessTime = attrs.lastAccessTime();
-
-//						pw.println(fichier.getPath() + "      Created " + returnDate(new Date(createTime.toMillis()))
-//								+ "    Modif " + returnDate(new Date(modifiedTime.toMillis())));
-						pw.println(fichier.getPath()+"/"+fichier.getName());
-					}
-
+			HashSet<File> listeFichier = FileDirParcours.getParcours("z://onedrive", new String[]{"*"});
+			while(Thread.activeCount()>2){
+				System.out.println(Thread.activeCount());
+				Thread.sleep(1000);
+			}
+			for(File fichierTemp : listeFichier){
+				pw.println(fichierTemp.getPath());
+				pw.flush();
 			}
 
-			while (listeDirectory.size() > 0) {
-				File fichier = listeDirectory.get(0);
+			HashSet<File> listeFichier2 = FileDirParcours.getParcours("z://Books", new String[]{"*"});
+			for(File fichierTemp : listeFichier2){
+				pw.println(fichierTemp.getPath());
+				pw.flush();
+			}
+			while(Thread.activeCount()>2){
+				System.out.println(Thread.activeCount());
+				Thread.sleep(1000);
+			}
 
-				File[] fichierListe = fichier.listFiles();
+			HashSet<File> listeFichier3 = FileDirParcours.getParcours("z://Documentaires", new String[]{"*"});
+			for(File fichierTemp : listeFichier3){
+				pw.println(fichierTemp.getPath());
+				pw.flush();
+			}
+			while(Thread.activeCount()>2){
+				System.out.println(Thread.activeCount());
+				Thread.sleep(1000);
+			}
 
-				if (fichierListe != null) {
-					for (File fichierTemp : fichierListe) {
-						if (fichierTemp.isDirectory()) {
-							listeDirectory.add(fichierTemp);
-						} else {
-//								BasicFileAttributes attrs = Files.readAttributes(fichierTemp.toPath(),
-//										BasicFileAttributes.class);
-//								FileTime createTime = attrs.creationTime();
-//
-//								FileTime modifiedTime = attrs.lastModifiedTime();
+			HashSet<File> listeFichier4 = FileDirParcours.getParcours("z://Film", new String[]{"*"});
+			for(File fichierTemp : listeFichier4){
+				pw.println(fichierTemp.getPath());
+				pw.flush();
+			}
+			while(Thread.activeCount()>2){
+				System.out.println(Thread.activeCount());
+				Thread.sleep(1000);
+			}
 
-								// FileTime accessTime = attrs.lastAccessTime();
+			HashSet<File> listeFichier5 = FileDirParcours.getParcours("z://Series", new String[]{"*"});
+			for(File fichierTemp : listeFichier5){
+				pw.println(fichierTemp.getPath());
+				pw.flush();
+			}
+			while(Thread.activeCount()>2){
+				System.out.println(Thread.activeCount());
+				Thread.sleep(1000);
+			}
 
-//								pw.println(fichierTemp.getPath() + "      Created "
-//										+ returnDate(new Date(createTime.toMillis())) + "    Modif "
-//										+ returnDate(new Date(modifiedTime.toMillis())));
-								pw.println(fichier.getPath()+"/"+fichier.getName());
-							}
-					}
-				}
-				listeDirectory.remove(0);
+			HashSet<File> listeFichier6 = FileDirParcours.getParcours("z://Temp", new String[]{"*"});
+			for(File fichierTemp : listeFichier6){
+				pw.println(fichierTemp.getPath());
+				pw.flush();
+			}
+			while(Thread.activeCount()>2){
+				System.out.println(Thread.activeCount());
+				Thread.sleep(1000);
 			}
 
 			pw.flush();

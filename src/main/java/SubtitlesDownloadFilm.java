@@ -45,7 +45,7 @@ public class SubtitlesDownloadFilm {
             ex.printStackTrace();
         }
 
-        File baseInit = new File("z:/film/new");
+        File baseInit = new File("z:/film/treated");
         File[] listInitFiles = baseInit.listFiles();
 
         File fichierBase = new File("C:/Users/bmonnet/Downloads/Film Subtitles/");
@@ -53,6 +53,7 @@ public class SubtitlesDownloadFilm {
 
         HashSet<File> listeFichier = new HashSet<File>();
         ArrayList<File> listeDirectory = new ArrayList<File>();
+//        listeDirectory.add(new File("z:/film/treated"));
         // listeDirectory.add(new File("z://temp/film"));
 
         for (File fichier : listInitFiles) {

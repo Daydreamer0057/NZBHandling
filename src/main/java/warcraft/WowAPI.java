@@ -91,24 +91,26 @@ public class WowAPI {
         HashMap<Integer, ArrayList<AuctionItem>> mapAuctions = new HashMap<>();
         try {
             ObjectMapper om = new ObjectMapper();
-            Root root = om.readValue(result, Root.class);
+            Root root = null;
 
-            for(Auction auctionTemp : root.auctions){
-                if(mapAuctions.get(auctionTemp.item.id)==null) {
-                    ArrayList<AuctionItem> listAuctionItem = new ArrayList<>();
-                    mapAuctions.put(auctionTemp.item.id, listAuctionItem);
-                } else{
-                    ArrayList<AuctionItem> listAuctionItem = mapAuctions.get(auctionTemp.item.id);
-                    if(listAuctionItem==null){
-                        listAuctionItem = new ArrayList<>();
-                        mapAuctions.put(auctionTemp.item.id, listAuctionItem);
-                    } else {
-                        AuctionItem auctionItem = new AuctionItem(auctionTemp.quantity, auctionTemp.buyout);
-                        listAuctionItem.add(auctionItem);
-                        mapAuctions.put(auctionTemp.item.id, listAuctionItem);
-                    }
-                }
-            }
+//               om.readValue(result, Root.class);
+//
+//            for(Auction auctionTemp : root.auctions){
+//                if(mapAuctions.get(auctionTemp.item.id)==null) {
+//                    ArrayList<AuctionItem> listAuctionItem = new ArrayList<>();
+//                    mapAuctions.put(auctionTemp.item.id, listAuctionItem);
+//                } else{
+//                    ArrayList<AuctionItem> listAuctionItem = mapAuctions.get(auctionTemp.item.id);
+//                    if(listAuctionItem==null){
+//                        listAuctionItem = new ArrayList<>();
+//                        mapAuctions.put(auctionTemp.item.id, listAuctionItem);
+//                    } else {
+//                        AuctionItem auctionItem = new AuctionItem(auctionTemp.quantity, auctionTemp.buyout);
+//                        listAuctionItem.add(auctionItem);
+//                        mapAuctions.put(auctionTemp.item.id, listAuctionItem);
+//                    }
+//                }
+//            }
         } catch(Exception ex){
             ex.printStackTrace();
         }
