@@ -18,7 +18,7 @@ public class VerifyDuration {
     public VerifyDuration() throws Exception{
         HashMap<String,String> map = new HashMap<>();
 
-        FileReader fr = new FileReader(new File("e:/log/temp.csv"));
+        FileReader fr = new FileReader(new File("e:/log/test_films.csv"));
         BufferedReader br = new BufferedReader(fr);
 
         String line = "";
@@ -40,15 +40,16 @@ public class VerifyDuration {
         br.close();
         fr.close();
 
-        HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/film temp", new String[]{".mp4",".mkv",".avi"});
+
+        HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/test", new String[]{".mp4",".mkv",".avi"});
 
         File[] listFiles = new File[listeFichierATraiter.size()+1];
         listeFichierATraiter.toArray(listFiles);
 
-//        int compteur = 0;
+        int compteur = 0;
         for(File fichierTemp : listFiles) {
-//            System.out.println(compteur+" / "+listFiles.length);
-//            compteur++;
+            System.out.println(compteur+" / "+listFiles.length+"    "+fichierTemp.getName());
+            compteur++;
             if(fichierTemp!=null) {
                 String name = fichierTemp.getName();
                 name = name.replace(".", " ");
@@ -125,7 +126,7 @@ public class VerifyDuration {
 
 //                                    if(!(durationMovie-1==durationFileInt||durationMovie+1==durationFileInt||(durationMovie==durationFileInt-1)||(durationMovie==durationFileInt+1)||(durationMovie==durationFileInt))){
                                     if(durationMovie<durationFileInt&&(durationFileInt-durationMovie>5)){
-                                        fichierTemp.delete();
+//                                        fichierTemp.delete();
                                         System.out.println(fichierTemp.getPath()+"    "+durationMovie+"    "+durationFileInt);
                                     }
                                 }
