@@ -7,7 +7,7 @@ public class DeleteRarFiles {
 
 	public DeleteRarFiles() {
 		double taille = 0;
-		String chemin = "Z://test/main a traiter";
+		String chemin = "Z://test/film a traiter";
 //		String chemin = "w://download";
 		// Dossier a supprimer
 		File base = new File(chemin);

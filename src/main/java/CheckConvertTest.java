@@ -21,12 +21,12 @@ public class CheckConvertTest {
 //			fichierTemp.renameTo(new File(fichierTemp.getPath().replaceAll("convert","")));
 //		}
 //
-		String eraseName = "z:/test/test_series";
+		String eraseName = "z:/test/test";
 //		String eraseName = "z:/film/france/convert";
 //		String eraseName = "z:/test/stockage";
 //		String eraseName = "e:/humour/h265";
 //		String baseName = "z:/temp/main";
-		String baseName = "z:/temp/convert2";
+		String baseName = "z:/temp/convert";
 //		String baseName = "z:/temp/convert av1";
 //		String baseName = "e:/humour/convert";
 
@@ -226,7 +226,7 @@ public class CheckConvertTest {
 
 			while (line != null) {
 				line = br.readLine();
-				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")) {
+				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")&&!line.isEmpty()) {
 					try {
 						String durationConvert = line.substring(line.lastIndexOf(",") + 1);
 						String nameConvert = line.substring(0, line.indexOf(durationConvert) - 1);

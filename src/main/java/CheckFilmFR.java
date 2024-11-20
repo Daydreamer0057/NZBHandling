@@ -22,8 +22,10 @@ public class CheckFilmFR {
 			File[] listFiles = new File[listeFichierATraiter.size()+1];
 			listeFichierATraiter.toArray(listFiles);
 
-
+			int compteurFiles = 0;
 			for(File fichierTemp : listFiles) {
+				System.out.println("Compteur "+compteurFiles+" / "+listFiles.length);
+				compteurFiles++;
 				if(fichierTemp!=null) {
 					String name = fichierTemp.getName();
 					name = name.replace(".", " ");
@@ -85,18 +87,18 @@ public class CheckFilmFR {
 										if (fichierTemp.getName().toLowerCase().contains(resultsPageTemp.title.toLowerCase()) && fichierTemp.getName().toLowerCase().contains("" + gc.get(Calendar.YEAR)) && resultsPageTemp.original_language.equals("fr")) {
 											System.out.println(fichierTemp.getName());
 											int compteur = 0;
-											String chemin = "z://film/france/convert/" + fichierTemp.getName();
+											String chemin = "z://test/films france/" + fichierTemp.getName();
 											String ext = FilenameUtils.getExtension(fichierTemp.getName());
 											String nameFile = FilenameUtils.removeExtension(fichierTemp.getName());
 
-											if(new File("z://film/france/convert/" + fichierTemp.getName()).exists()){
+											if(new File("z://test/films france/" + fichierTemp.getName()).exists()){
 												ext = FilenameUtils.getExtension(fichierTemp.getName());
 												nameFile = FilenameUtils.removeExtension(fichierTemp.getName());
-												chemin = "z://film/france/convert/"+nameFile+"_0."+ext;
+												chemin = "z://test/films france/"+nameFile+"_0."+ext;
 											}
 											compteur++;
-											while(new File("z://film/france/convert/"+nameFile+"_"+compteur+"."+ext).exists()) {
-												chemin = "z://film/france/convert/"+nameFile+"_"+compteur+"."+ext;
+											while(new File("z://test/films france/"+nameFile+"_"+compteur+"."+ext).exists()) {
+												chemin = "z://test/films france/"+nameFile+"_"+compteur+"."+ext;
 												compteur++;
 											}
 											try {
@@ -105,13 +107,13 @@ public class CheckFilmFR {
 												ex.printStackTrace();
 											}
 
-											break;
+//											break;
 										}
 									}
 								}
 							}
 						}
-					} catch (ConcurrentModificationException ex) {
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}

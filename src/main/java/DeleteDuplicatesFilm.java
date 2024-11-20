@@ -16,9 +16,9 @@ public class DeleteDuplicatesFilm {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			File base = new File("z://test/stockage");
+//			File base = new File("z://test/stockage");
 //			File base = new File("z://test/test");
-//			File base = new File("z://film/france");
+			File base = new File("z://film/france");
 
 			File[] fichiers = base.listFiles();
 
