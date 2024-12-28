@@ -1,24 +1,25 @@
-import com.uwetrottmann.tmdb2.Tmdb;
-import com.uwetrottmann.tmdb2.entities.Movie;
-import com.uwetrottmann.tmdb2.entities.MovieResultsPage;
-import com.uwetrottmann.tmdb2.services.MoviesService;
-import com.uwetrottmann.tmdb2.services.SearchService;
-import retrofit2.Call;
-import retrofit2.Response;
+package series;
+
+import Utilities.FileDirParcours;
+import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbSearch;
+import info.movito.themoviedbapi.TmdbTV;
+import info.movito.themoviedbapi.model.tv.TvSeries;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class VerifyDuration {
+public class FindMissingSeries {
 
-    public VerifyDuration() throws Exception{
+    public FindMissingSeries() throws Exception{
         HashMap<String,String> map = new HashMap<>();
 
-        FileReader fr = new FileReader(new File("z:/film/test_films.csv"));
+        FileReader fr = new FileReader(new File("e:/log/test_films.csv"));
         BufferedReader br = new BufferedReader(fr);
 
         String line = "";
@@ -48,6 +49,7 @@ public class VerifyDuration {
 
         int compteur = 0;
         for(File fichierTemp : listFiles) {
+            boolean test = false;
             System.out.print(compteur+"  ");
             compteur++;
             if(fichierTemp!=null) {
@@ -58,7 +60,7 @@ public class VerifyDuration {
                 StringTokenizer stk = new StringTokenizer(name, " ");
                 while (stk.hasMoreTokens()) {
                     String lineTemp = stk.nextToken();
-                    Pattern p = Pattern.compile(".*([0-9]{4}).*");
+                    Pattern p = Pattern.compile(".*([sS][0-9]+[eExX][0-9]+).*");
                     Matcher m = p.matcher(lineTemp.toLowerCase());
 
                     if (m.matches()) {
@@ -77,59 +79,43 @@ public class VerifyDuration {
 
 //					String auctionUrl = "https://api.themoviedb.org/3/search/movie?query="+fileName+"&primary_release_year="+year+"&include_adult=true&apikey=dcc0613cc47f8538e16634ad625b72cc";
 //					String auctionUrl = "https://api.themoviedb.org/3/authentication?apikey=dcc0613cc47f8538e16634ad625b72cc";
-                Tmdb tmdb = new Tmdb("dcc0613cc47f8538e16634ad625b72cc");
+                TmdbApi tmdbApi = new TmdbApi("dcc0613cc47f8538e16634ad625b72cc");
 
-                SearchService searchService = tmdb.searchService();
+                TmdbSearch searchService = tmdbApi.getSearch();
+                List<TvSeries> searchResults = searchService.searchTv(fileName, "en", 1).getResults();
 
-                // Movie title and year to search for
-                String movieTitle = fileName;
-                String releaseYear = year;
+                if (!searchResults.isEmpty()) {
+                    // Step 2: Get the TV show ID
+                    int tvShowId = searchResults.get(0).getId(); // Get the first result
 
-                // Call the searchMovies method with the title and release year
-                Call<MovieResultsPage> call = searchService.movie(
-                        movieTitle,           // The movie title to search for
-                        null,                 // Optional language
-                        year,          // Release year filter
-                        null,                 // Optional primary release year
-                        null,                 // Optional page number
-                        null,                 // Include adult content (null for default)
-                        null                  // Region
-                );
+                    // Step 3: Fetch TV show details
+                    TmdbTV tvSeriesService = tmdbApi.getTvSeries();
+                    TvSeries tvSeriesDetails = tvSeriesService.getSeries(tvShowId, "en");
 
-                Response<MovieResultsPage> response = call.execute();
+                    // Step 4: Get episode runtime
+                    List<Integer> runtimes = tvSeriesDetails.getEpisodeRuntime();
 
-                if (response.isSuccessful()) {
-                    MovieResultsPage results = response.body();
-                    if (results != null && results.results != null && !results.results.isEmpty()) {
-                        MoviesService moviesService = tmdb.moviesService();
-
-                        int movieId = results.results.get(0).id; // Example: 550 is the ID for Fight Club
-
-                        // Call the summary method to get movie details
-                        Call<Movie> callMovie = moviesService.summary(movieId, "en-US");
-
+                    if (!runtimes.isEmpty()) {
                         try {
-                            // Execute the request
-                            Response<Movie> responseMovie = callMovie.execute();
+                            boolean testRuntime = false;
+                            for(Integer runtime : runtimes) {
+                                int durationMovie = runtime;
+                                String durationFile = map.get(fichierTemp.getName());
+                                int durationFileInt = 0;
+                                if (durationFile != null) {
+                                    StringTokenizer stk2 = new StringTokenizer(durationFile, ":");
+                                    durationFileInt += Integer.parseInt(stk2.nextToken()) * 60;
+                                    durationFileInt += Integer.parseInt(stk2.nextToken());
 
-                            if (responseMovie.isSuccessful()) {
-                                Movie movie = responseMovie.body();
-                                if (movie != null) {
-                                    int durationMovie = movie.runtime;
-                                    String durationFile = map.get(fichierTemp.getName());
-                                    int durationFileInt = 0;
-                                    if (durationFile != null) {
-                                        StringTokenizer stk2 = new StringTokenizer(durationFile, ":");
-                                        durationFileInt += Integer.parseInt(stk2.nextToken()) * 60;
-                                        durationFileInt += Integer.parseInt(stk2.nextToken());
-
-                                        if ((durationMovie != 0) && ((Math.abs(durationFileInt - durationMovie)) > 5) && !(durationFileInt > durationMovie)) {
-                                            fichierTemp.delete();
-                                            System.out.println("");
-                                            System.out.println(fichierTemp.getPath() + "    " + durationMovie + "    " + durationFileInt);
-                                        }
+                                    if (Math.abs(durationFileInt - durationMovie) <= 5 && durationMovie != 0) {
+                                        testRuntime = true;
+                                        break;
                                     }
                                 }
+                            }
+                            if(!testRuntime){
+                                fichierTemp.delete();
+                                System.out.println(fichierTemp.getPath());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -139,6 +125,8 @@ public class VerifyDuration {
             }
         }
     }
+
+
     public String getVideoDuration(String videoFilePath) {
         String duration = null;
         String command = "C://ffmpeg/bin/ffmpeg.exe -i " + "\""+videoFilePath+"\"";
@@ -170,7 +158,7 @@ public class VerifyDuration {
 
     public static void main(String[] args) {
         try {
-            VerifyDuration verifyDuration = new VerifyDuration();
+            VerifyDurationSeries verifyDuration = new VerifyDurationSeries();
         }catch (Exception ex){
             ex.printStackTrace();
         }

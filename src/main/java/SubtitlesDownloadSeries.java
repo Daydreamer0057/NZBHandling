@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 
 public class SubtitlesDownloadSeries {
     public SubtitlesDownloadSeries() {
+        String chemin2 = "Z:/series";
+        String chemin = "C:/Users/bmonnet/Downloads/subtitles";
+
         String dirFind = "";
         String fileFind = "";
         String episode = "";
@@ -35,9 +38,9 @@ public class SubtitlesDownloadSeries {
             if (fichier.isDirectory()) {
                 listeDirectoryBase.add(fichier);
             } else {
-                    listeFichierBase.add(fichier);
-                }
+                listeFichierBase.add(fichier);
             }
+        }
 
         while (listeDirectoryBase.size() > 0) {
             File fichierBase2 = listeDirectoryBase.get(0);
@@ -48,28 +51,21 @@ public class SubtitlesDownloadSeries {
                 if (fichierTemp.isDirectory()) {
                     listeDirectoryBase.add(fichierTemp);
                 } else {
-                        listeFichierBase.add(fichierTemp);
+                    listeFichierBase.add(fichierTemp);
                 }
             }
             listeDirectoryBase.remove(0);
         }
 
 
-        File baseInit = new File("z:/series/Painkiller");
+        File baseInit = new File("z:/series");
         File[] listInitFiles = baseInit.listFiles();
 
         boolean test = false;
         boolean testFile = false;
         for (File fichierInit : listInitFiles) {
-            if (fichierInit.getName().toLowerCase().contains(dirFind.toLowerCase()) || dirFind.equals("")) {
-                test = true;
-            }
-            if (test) {
+            if ( fichierInit != null) {
                 long seconds = System.currentTimeMillis();
-                //        File base = new File("Z://film/new/main");
-                //                String chemin = "c:\\users\\bmonnet\\downloads\\" + fichierInit.getName();
-                String chemin = "C:/Users/bmonnet/Downloads/subtitles/" + fichierInit.getName()+"/subtitles";
-                String chemin2 = "Z:/series/" + fichierInit.getName();
                 try {
                     FileUtils.forceMkdir(new File(chemin));
                 } catch (IOException ex) {
@@ -77,11 +73,11 @@ public class SubtitlesDownloadSeries {
                 }
                 HashSet<File> listeFichier = new HashSet<File>();
                 ArrayList<File> listeDirectory = new ArrayList<File>();
-                if(listInitFiles.length!=1) {
+                if (listInitFiles.length != 1) {
                     File base = new File(chemin2);
 
                     File[] fichiers = base.listFiles();
-                    if (fichiers.length > 0) {
+                    if (fichiers != null && fichiers.length > 0) {
                         for (File fichierTemp : fichiers) {
                             if (fichierTemp.isDirectory()) {
                                 listeDirectory.add(fichierTemp);
@@ -92,7 +88,7 @@ public class SubtitlesDownloadSeries {
                     }
                 }
 
-                if(listInitFiles.length==1) {
+                if (listInitFiles.length == 1) {
                     listeFichier.add(fichierInit);
                 }
                 // listeDirectory.add(new File("z://temp/film"));
@@ -122,7 +118,7 @@ public class SubtitlesDownloadSeries {
 
                 HashSet<String> setLine = new HashSet<>();
 
-                for(File fichierTemp : listeFichier){
+                for (File fichierTemp : listeFichier) {
                     setLine.add(fichierTemp.getName());
                 }
 
@@ -133,7 +129,7 @@ public class SubtitlesDownloadSeries {
                 int compteur = 0;
                 for (File fichierTemp : listeFichier) {
                     boolean testDuplicate = false;
-                    if(!(setLine.contains(fichierTemp))){
+                    if (!(setLine.contains(fichierTemp))) {
 
 						/*Pattern pattern = Pattern.compile("\\([0-9]+");
                 Matcher matcher = pattern.matcher(fichierTemp.getName());
@@ -149,13 +145,13 @@ public class SubtitlesDownloadSeries {
                             name2 = name2.replaceAll(" ", "+");
                             System.out.println("name " + name2);
 
-                            Pattern pattern = Pattern.compile("[xXsS][0-9]+");
+                            Pattern pattern = Pattern.compile("[sS][0-9]+");
                             Matcher matcher = pattern.matcher(fichierTemp.getName());
 
                             try {
                                 int compteurMatch = 0;
                                 if (matcher.find()) {
-                                    season = matcher.group(0).substring(1,3);
+                                    season = matcher.group(0).substring(1, 3);
                                 }
                             } catch (Exception e) {
 
@@ -194,7 +190,6 @@ public class SubtitlesDownloadSeries {
                             String pageSource = doc.text();
 
 
-
                             int pageMax2 = 1;
 
                             Pattern pattern = Pattern.compile(";page=[0-9]+");
@@ -218,15 +213,6 @@ public class SubtitlesDownloadSeries {
                             final int pageMax = pageMax2;
                             final String name = name2;
 
-                            System.out.println("Nb Threads  " + Thread.activeCount());
-                            while (Thread.activeCount() > 25) {
-                                try {
-                                    System.out.print("");
-                                } catch (Exception ex) {
-                                    System.out.println("crash thread active count");
-                                }
-                            }
-
                             final String name3 = name2;
                             final String season2 = season;
                             final String episode2 = episode;
@@ -234,84 +220,65 @@ public class SubtitlesDownloadSeries {
                             final File fichierFinal = fichierTemp;
                             final String cheminFinal = chemin;
 
-                            new Thread(() -> {
-                                for (int page = 1; page < (pageMaxFinal + 1); page++) {
-                                    System.out.println("Page " + page);
-                                    Document doc2 = null;
+                            for (int page = 1; page < (pageMaxFinal + 1); page++) {
+                                System.out.println("Page " + page);
+                                Document doc2 = null;
 //                                    new Document("test");
-                                    boolean testTimeOut = true;
-                                    while (doc2 == null) {
-                                        try {
-                                            doc2 = Jsoup.connect("https://www.podnapisi.net/en/subtitles/search/?keywords=" + name3 + "&movie_type=tv-series&seasons=" + season2 + "&episodes=" + episode2 + "&year=" + "&page=" + page).get();
-                                        } catch (Exception ex) {
+                                boolean testTimeOut = true;
+                                while (doc2 == null) {
+                                    try {
+                                        doc2 = Jsoup.connect("https://www.podnapisi.net/en/subtitles/search/?keywords=" + name3 + "&movie_type=tv-series&seasons=" + season2 + "&episodes=" + episode2 + "&year=" + "&page=" + page).get();
+                                    } catch (Exception ex) {
 //                                    ex.printStackTrace();
-                                        }
                                     }
+                                }
 
 
-                                    Elements element = doc2.select("a");
+                                Elements element = doc2.select("a");
 
 
-                                    //for(;it.hasNext();){
-                                    for (int index503 = 0; index503 < element.size(); index503++) {
-                                        Element elementTemp = element.get(index503);
+                                //for(;it.hasNext();){
+                                for (int index503 = 0; index503 < element.size(); index503++) {
+                                    Element elementTemp = element.get(index503);
 
 //                                        System.out.println("Element "+index+" / "+element.size());
-                                        String elementString = elementTemp.attr("abs:href");
+                                    String elementString = elementTemp.attr("abs:href");
 
-                                        if (elementString != null && elementString.toLowerCase().indexOf("download") != -1 && (!elementString.toLowerCase().contains("fr") && elementString.toLowerCase().contains("en"))
-                                                && elementString.toLowerCase().endsWith("download")) {
+                                    if (elementString != null && elementString.toLowerCase().indexOf("download") != -1 && (!elementString.toLowerCase().contains("fr") && elementString.toLowerCase().contains("en"))
+                                            && elementString.toLowerCase().endsWith("download")) {
+                                        try {
+                                            Pattern pattern3 = Pattern.compile("[sS][0-9]+[xXeE][0-9]+");
+                                            Matcher matcher3 = pattern3.matcher(elementString);
+
+                                            Pattern pattern4 = Pattern.compile("[sS][0-9]+[xXeE][0-9]+");
+                                            Matcher matcher4 = pattern4.matcher(fichierFinal.getName());
                                             try {
-                                                Pattern pattern3 = Pattern.compile("[sS][0-9]+[xXeE][0-9]+");
-                                                Matcher matcher3 = pattern3.matcher(elementString);
-
-                                                Pattern pattern4 = Pattern.compile("[sS][0-9]+[xXeE][0-9]+");
-                                                Matcher matcher4 = pattern4.matcher(fichierFinal.getName());
-                                                try {
-                                                    if (matcher3.find() && matcher4.find() && matcher3.group(0).toLowerCase().equals(matcher4.group(0).toLowerCase())) {
-                                                        FileUtils.copyURLToFile(new URL(elementString), new File(cheminFinal + "/" + FilenameUtils.removeExtension(fichierFinal.getName()) + index503 + ".zip"));
-                                                    }
-                                                } catch (Exception ex) {
-//                                        ex.printStackTrace();
-                                                    if (ex.toString().toLowerCase().contains("503") || ex.toString().toLowerCase().contains("504") || ex.toString().toLowerCase().contains("502")) {
-                                                        index503--;
-                                                        try {
-                                                            Thread.sleep(10000);
-                                                        } catch (Exception ex2) {
-//                                                ex2.printStackTrace();
-                                                        }
-                                                    }
+                                                if (matcher3.find() && matcher4.find() && matcher3.group(0).toLowerCase().equals(matcher4.group(0).toLowerCase())) {
+                                                    FileUtils.copyURLToFile(new URL(elementString), new File(cheminFinal + "/" + FilenameUtils.removeExtension(fichierFinal.getName()) + index503 + ".zip"));
                                                 }
                                             } catch (Exception ex) {
-
+//                                        ex.printStackTrace();
+                                                if (ex.toString().toLowerCase().contains("503") || ex.toString().toLowerCase().contains("504") || ex.toString().toLowerCase().contains("502")) {
+                                                    index503--;
+                                                    try {
+                                                        Thread.sleep(10000);
+                                                    } catch (Exception ex2) {
+//                                                ex2.printStackTrace();
+                                                    }
+                                                }
                                             }
+                                        } catch (Exception ex) {
+
                                         }
                                     }
                                 }
-                            }).start();
-//                        if(listeFichier.size()==1){
-//                            while(Thread.activeCount()>0){
-//
-//                            }
-//                        }
+                            }
+                            System.out.println("Download done");
                         }
                     }
                 }
-//                System.exit(0);
             }
-
-//            try {
-//                ProcessBuilder p = new ProcessBuilder("d://au3/process killer.exe");
-//                p.start();
-//                Thread.sleep(2000);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
         }
-        while(Thread.activeCount()>0){
-
-        }
-        System.out.println("Download done");
     }
 
 

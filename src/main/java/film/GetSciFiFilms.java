@@ -1,54 +1,36 @@
+package film;
+
+import Utilities.FileDirParcoursArrayList;
 import com.uwetrottmann.tmdb2.Tmdb;
+import com.uwetrottmann.tmdb2.entities.Genre;
 import com.uwetrottmann.tmdb2.entities.Movie;
 import com.uwetrottmann.tmdb2.entities.MovieResultsPage;
 import com.uwetrottmann.tmdb2.services.MoviesService;
 import com.uwetrottmann.tmdb2.services.SearchService;
+import org.apache.commons.io.FileUtils;
 import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import Utilities.FileDirParcours;
 
-public class VerifyDuration {
+public class GetSciFiFilms {
 
-    public VerifyDuration() throws Exception{
-        HashMap<String,String> map = new HashMap<>();
+    public GetSciFiFilms() throws Exception{
 
-        FileReader fr = new FileReader(new File("z:/film/test_films.csv"));
-        BufferedReader br = new BufferedReader(fr);
+        ArrayList<File> listeFichierATraiter = FileDirParcoursArrayList.getParcours("z://film/new", new String[]{".mp4",".mkv",".avi"});
+        listeFichierATraiter.addAll(FileDirParcoursArrayList.getParcours("z://film/treated", new String[]{".mp4",".mkv",".avi"}));
 
-        String line = "";
-
-        while(line!=null){
-            line = br.readLine();
-            if(line!=null&&!line.contains("Duration")&&!line.isEmpty()){
-                try {
-                    String duration = line.substring(line.lastIndexOf(",")+2,line.length()-1 );
-                    String name = line.substring(1, line.indexOf(duration) - 3);
-                    String taille = name.substring(name.lastIndexOf(",")+2);
-                    name = name.substring(0, name.indexOf(taille) - 3);
-                    map.put(name, duration);
-                } catch (Exception ex){
-                }
-            }
-        }
-
-        br.close();
-        fr.close();
-
-
-        HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/stockage", new String[]{".mp4",".mkv",".avi"});
 
         File[] listFiles = new File[listeFichierATraiter.size()+1];
         listeFichierATraiter.toArray(listFiles);
 
         int compteur = 0;
         for(File fichierTemp : listFiles) {
-            System.out.print(compteur+"  ");
+            System.out.println(compteur+"  ");
             compteur++;
             if(fichierTemp!=null) {
                 String name = fichierTemp.getName();
@@ -115,18 +97,13 @@ public class VerifyDuration {
                             if (responseMovie.isSuccessful()) {
                                 Movie movie = responseMovie.body();
                                 if (movie != null) {
-                                    int durationMovie = movie.runtime;
-                                    String durationFile = map.get(fichierTemp.getName());
-                                    int durationFileInt = 0;
-                                    if (durationFile != null) {
-                                        StringTokenizer stk2 = new StringTokenizer(durationFile, ":");
-                                        durationFileInt += Integer.parseInt(stk2.nextToken()) * 60;
-                                        durationFileInt += Integer.parseInt(stk2.nextToken());
-
-                                        if ((durationMovie != 0) && ((Math.abs(durationFileInt - durationMovie)) > 5) && !(durationFileInt > durationMovie)) {
-                                            fichierTemp.delete();
-                                            System.out.println("");
-                                            System.out.println(fichierTemp.getPath() + "    " + durationMovie + "    " + durationFileInt);
+                                    if(movie.vote_average>=7){
+                                        List<Genre> listGenre = movie.genres;
+                                        for(Genre genreTemp : listGenre) {
+                                            if(genreTemp.name.toLowerCase().contains("science fiction")){
+                                                System.out.println(fichierTemp.getName());
+                                                FileUtils.moveFile(fichierTemp,new File("e:/video/film/"+fichierTemp.getName()));
+                                            }
                                         }
                                     }
                                 }
@@ -139,38 +116,10 @@ public class VerifyDuration {
             }
         }
     }
-    public String getVideoDuration(String videoFilePath) {
-        String duration = null;
-        String command = "C://ffmpeg/bin/ffmpeg.exe -i " + "\""+videoFilePath+"\"";
-
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-            processBuilder.redirectErrorStream(true); // FFmpeg outputs to stderr
-            Process process = processBuilder.start();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            Pattern pattern = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
-
-            while ((line = reader.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    duration = matcher.group(1) + ":" + matcher.group(2) + ":" + matcher.group(3);
-                    break;
-                }
-            }
-            process.waitFor();
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return duration;
-    }
 
     public static void main(String[] args) {
         try {
-            VerifyDuration verifyDuration = new VerifyDuration();
+            GetSciFiFilms verifyDuration = new GetSciFiFilms();
         }catch (Exception ex){
             ex.printStackTrace();
         }

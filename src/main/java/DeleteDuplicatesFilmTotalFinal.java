@@ -8,8 +8,8 @@ public class DeleteDuplicatesFilmTotalFinal {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-//			HashSet<File> listeFichier = FileDirParcours.getParcours("z://film/new", new String[]{".mkv",".mp4","avi"});
-			HashSet<File> listeFichier = FileDirParcours.getParcours("z://film/treated", new String[]{".mkv",".mp4","avi"});
+			HashSet<File> listeFichier = FileDirParcours.getParcours("z://film/new", new String[]{".mkv",".mp4","avi"});
+			listeFichier.addAll(FileDirParcours.getParcours("z://film/treated", new String[]{".mkv",".mp4","avi"}));
 
 //			listeFichier.addAll(listeFichier2);
 
@@ -167,6 +167,18 @@ public class DeleteDuplicatesFilmTotalFinal {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	public static class Film{
+		public String name;
+		public int year;
+		public int definition;
+
+		public Film(String name, int year, int definition) {
+			this.name = name;
+			this.year = year;
+			this.definition = definition;
 		}
 	}
 

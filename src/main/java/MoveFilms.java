@@ -1,4 +1,5 @@
 import org.apache.commons.io.FileUtils;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -110,7 +111,8 @@ public class MoveFilms {
 //				String chemin = path.replaceAll("\\\\", "/");
 				System.out.println(chemin + "/" + nameLowerCase);
 				String chemin3 = chemin + "/" + fichierTemp.getName();
-				fichierTemp.renameTo(new File(chemin3));
+					FileUtils.moveFileToDirectory(fichierTemp,new File(chemin),true);
+//				fichierTemp.renameTo(new File(chemin3));
 //						System.out.println(chemin + "/" + fichierTemp.getName());
 				} catch (Exception ex) {
 					ex.printStackTrace();

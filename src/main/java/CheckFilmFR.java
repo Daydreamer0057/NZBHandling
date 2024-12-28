@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 public class CheckFilmFR {
 	public CheckFilmFR() {
 		try {
-//				HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/stockage", new String[]{".mp4",".mkv",".avi"});
-			HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/film temp", new String[]{".mp4",".mkv",".avi"});
+				HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/stockage", new String[]{".mp4",".mkv",".avi"});
+//			HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/film temp", new String[]{".mp4",".mkv",".avi"});
 
 			File[] listFiles = new File[listeFichierATraiter.size()+1];
 			listeFichierATraiter.toArray(listFiles);

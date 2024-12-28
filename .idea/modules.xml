@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NZBToSql.iml" filepath="$PROJECT_DIR$/NZBToSql.iml" />
-      <module fileurl="file://E:/Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/main/main.iml" filepath="E:/Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/main/main.iml" />
-      <module fileurl="file://E:/Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/test/test.iml" filepath="E:/Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/main/main.iml" filepath="$PROJECT_DIR$/../Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/test/test.iml" filepath="$PROJECT_DIR$/../Temp/ffmpeg-cli-wrapper-master/ffmpeg-cli-wrapper-master/src/test/test.iml" />
     </modules>
   </component>
 </project>

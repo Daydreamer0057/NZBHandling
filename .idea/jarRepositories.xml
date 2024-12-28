@@ -37,6 +37,11 @@
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="spring-milestone" />
+      <option name="name" value="Spring Milestone Repository" />
+      <option name="url" value="https://repo.spring.io/milestone" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="sealtx" />
       <option name="name" value="sealtx" />
       <option name="url" value="https://mvnrepository.com/artifact/com.github.sealedtx/java-youtube-downloader" />
@@ -55,6 +60,11 @@
       <option name="id" value="xuggle repo" />
       <option name="name" value="xuggle repo" />
       <option name="url" value="https://files.liferay.com/mirrors/xuggle.googlecode.com/svn/trunk/repo/share/java/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="springplugins" />
+      <option name="name" value="springplugins" />
+      <option name="url" value="https://repo.spring.io/plugins-release/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jboss.community" />

@@ -22,11 +22,13 @@ public class CheckConvertTest {
 //		}
 //
 		String eraseName = "z:/test/test";
+//		String eraseName = "z:/test/test_series";
 //		String eraseName = "z:/film/france/convert";
 //		String eraseName = "z:/test/stockage";
 //		String eraseName = "e:/humour/h265";
 //		String baseName = "z:/temp/main";
 		String baseName = "z:/temp/convert";
+//		String baseName = "z:/temp/convert2";
 //		String baseName = "z:/temp/convert av1";
 //		String baseName = "e:/humour/convert";
 
@@ -195,19 +197,20 @@ public class CheckConvertTest {
 	public void verifyFiles(String baseName, String EraseName){
 		try {
 			HashMap<String,String> map = new HashMap<>();
-			FileReader fr = new FileReader(new File("e:/log/test_series.csv"));
+			FileReader fr = new FileReader(new File("z:/film/test_series.csv"));
 			BufferedReader br = new BufferedReader(fr);
 
 			String line = "";
 
 			while (line != null) {
 				line = br.readLine();
-				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")) {
+				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")&&!line.contains("\"1080\",\"0 MB\",")&&!line.contains("\"720\",\"0 MB\",")&&!line.contains("\"2160\",\"0 MB\",")
+						&&!line.contains("\"Retry\",\"0 MB\",\"01:39:17\"")&&!line.contains("\"01\",\"0 MB\",\"01:39:17\"")&&!line.contains("\"02\",\"0 MB\",\"01:39:17\"")) {
 					try {
-						String duration = line.substring(line.lastIndexOf(",") + 1);
-						String name = line.substring(0, line.indexOf(duration) - 1);
-						String taille = name.substring(name.lastIndexOf(",") + 1);
-						name = name.substring(0, name.indexOf(taille) - 1);
+						String duration = line.substring(line.lastIndexOf(",")+2,line.length()-1);
+						String name = line.substring(0, line.indexOf("\""+duration) - 1);
+						String taille = name.substring(name.lastIndexOf("\",") + 2);
+						name = name.substring(0, name.indexOf(taille) - 2);
 						name = name.replace("\"","");
 						name = name.toLowerCase();
 						map.put(name, duration);
@@ -219,7 +222,7 @@ public class CheckConvertTest {
 			br.close();
 			fr.close();
 
-			fr = new FileReader(new File("e:/log/test_convert.csv"));
+			fr = new FileReader(new File("z:/film/test_convert.csv"));
 			br = new BufferedReader(fr);
 
 			line = "";
@@ -228,10 +231,14 @@ public class CheckConvertTest {
 				line = br.readLine();
 				if (line != null&&!line.contains("\"Name\",\"Size\",\"Duration\"")&&!line.isEmpty()) {
 					try {
-						String durationConvert = line.substring(line.lastIndexOf(",") + 1);
-						String nameConvert = line.substring(0, line.indexOf(durationConvert) - 1);
-						String tailleConvert = nameConvert.substring(nameConvert.lastIndexOf(",") + 1);
-						nameConvert = nameConvert.substring(0, nameConvert.indexOf(tailleConvert) - 1);
+						if(line.endsWith(",\"\"")){
+							line = line.substring(0,line.length()-2)+"\"99:99:00\"";
+						}
+
+						String durationConvert = line.substring(line.lastIndexOf(",")+2,line.length()-1);
+						String nameConvert = line.substring(0, line.indexOf("\""+durationConvert) - 1);
+						String tailleConvert = nameConvert.substring(nameConvert.lastIndexOf("\",") + 2);
+						nameConvert = nameConvert.substring(0, nameConvert.indexOf(tailleConvert) - 2);
 						nameConvert = nameConvert.replace("\"","");
 						nameConvert = nameConvert.toLowerCase();
 
@@ -251,13 +258,14 @@ public class CheckConvertTest {
 						}
 
 
-						if(durationConvertInt<durationTestInt&&(durationTestInt-durationConvertInt>5)){
+						if((durationTestInt-durationConvertInt>5&&durationConvertInt!=0&&durationTestInt!=0)||durationConvertInt==6039){
 							File fichierConvert = new File(baseName+"/"+nameConvert);
 							System.out.println("Delete Convert "+nameConvert);
 							fichierConvert.delete();
 						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
+						System.exit(0);
 					}
 				}
 			}
