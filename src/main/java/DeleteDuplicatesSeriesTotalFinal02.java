@@ -10,7 +10,7 @@ public class DeleteDuplicatesSeriesTotalFinal02 {
 		long ms = System.currentTimeMillis();
 		System.out.println("debut " + ms);
 		try {
-			File base = new File("z://series");
+			File base = new File("e://series");
 			//File base = new File("d://film/new/Film 20200226");
 
 			File[] fichiers = base.listFiles();
@@ -80,7 +80,7 @@ public class DeleteDuplicatesSeriesTotalFinal02 {
 					}
 				}
 
-				if (!episode.equals("") && episode != null && fichierTemp.getName().contains("- subs -")) {
+				if (!episode.equals("") && episode != null && fichierTemp.getName().contains("- subs")) {
 						ArrayList<File> listFile = null;
 						try {
 							listFile = (ArrayList<File>) mapnameFilm.get(nameSeries).get(episode);
@@ -236,7 +236,7 @@ public class DeleteDuplicatesSeriesTotalFinal02 {
 								File fichierTemp = keepFile.get(i);
 
 									System.out.println(fichierTemp.getPath());
-//									fichierTemp.delete();
+									fichierTemp.delete();
 //								try {
 //									FileUtils.moveFileToDirectory(fichierTemp, new File("z://test/error"), false);
 //								} catch(FileExistsException fex){

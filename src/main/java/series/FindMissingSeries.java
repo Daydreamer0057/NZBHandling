@@ -1,167 +1,162 @@
 package series;
 
 import Utilities.FileDirParcours;
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbSearch;
-import info.movito.themoviedbapi.TmdbTV;
-import info.movito.themoviedbapi.model.tv.TvSeries;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FindMissingSeries {
 
-    public FindMissingSeries() throws Exception{
-        HashMap<String,String> map = new HashMap<>();
+    public FindMissingSeries() throws Exception {
+        PrintWriter pw = new PrintWriter(new File("c:/temp/list_episodes_missing.txt"));
 
-        FileReader fr = new FileReader(new File("e:/log/test_films.csv"));
-        BufferedReader br = new BufferedReader(fr);
-
-        String line = "";
-
-        while(line!=null){
-            line = br.readLine();
-            if(line!=null&&!line.contains("Duration")&&!line.isEmpty()){
-                try {
-                    String duration = line.substring(line.lastIndexOf(",")+2,line.length()-1 );
-                    String name = line.substring(1, line.indexOf(duration) - 3);
-                    String taille = name.substring(name.lastIndexOf(",")+2);
-                    name = name.substring(0, name.indexOf(taille) - 3);
-                    map.put(name, duration);
-                } catch (Exception ex){
-                }
-            }
-        }
-
-        br.close();
-        fr.close();
-
-
-        HashSet<File> listeFichierATraiter = FileDirParcours.getParcours("z://test/stockage", new String[]{".mp4",".mkv",".avi"});
-
-        File[] listFiles = new File[listeFichierATraiter.size()+1];
-        listeFichierATraiter.toArray(listFiles);
+        File base = new File("e:/series");
+        File[] listFolders = base.listFiles();
 
         int compteur = 0;
-        for(File fichierTemp : listFiles) {
-            boolean test = false;
-            System.out.print(compteur+"  ");
+        for (File fichierTemp : listFolders) {
+            System.out.println(compteur + " / " + listFolders.length);
             compteur++;
-            if(fichierTemp!=null) {
-                String name = fichierTemp.getName();
-                name = name.replace(".", " ");
-                String fileName = "";
-                String year = "";
-                StringTokenizer stk = new StringTokenizer(name, " ");
-                while (stk.hasMoreTokens()) {
-                    String lineTemp = stk.nextToken();
-                    Pattern p = Pattern.compile(".*([sS][0-9]+[eExX][0-9]+).*");
-                    Matcher m = p.matcher(lineTemp.toLowerCase());
+            String name = fichierTemp.getName();
+            name = name.replace(".", " ");
 
-                    if (m.matches()) {
-                        year = m.group(1);
-                        break;
-                    } else {
-                        fileName += lineTemp + " ";
-                    }
-                }
+            if(!name.toLowerCase().contains("france")&&!name.toLowerCase().contains("anime")) {
 
+                ArrayList<String> listFilesEpisodes = FileDirParcours.getNameParcours(fichierTemp.getPath(), new String[]{".mp4", ".mkv", ".avi"});
+
+                String fileName = name;
                 fileName = fileName.trim();
 
                 fileName = fileName.replace("é", "e");
                 fileName = fileName.replace("è", "e");
+                fileName = fileName.replace("ê", "e");
+                fileName = fileName.replace("à", "a");
+
+                ArrayList<String> listEpisodes = new ArrayList<>();
+                for (String fichierEpisodeTemp : listFilesEpisodes) {
+                    Pattern p = Pattern.compile(".*([sS][0-9]+[eExX][0-9]+).*");
+                    Matcher m = p.matcher(fichierEpisodeTemp.toLowerCase());
+
+                    if (m.matches()) {
+                        listEpisodes.add(m.group(1));
+                    }
+                }
+
 //					fileName = fileName.replace(" ","%20");
 
 //					String auctionUrl = "https://api.themoviedb.org/3/search/movie?query="+fileName+"&primary_release_year="+year+"&include_adult=true&apikey=dcc0613cc47f8538e16634ad625b72cc";
 //					String auctionUrl = "https://api.themoviedb.org/3/authentication?apikey=dcc0613cc47f8538e16634ad625b72cc";
-                TmdbApi tmdbApi = new TmdbApi("dcc0613cc47f8538e16634ad625b72cc");
+                if (!listEpisodes.isEmpty()) {
+                    String showName = fileName;
+                    String API_KEY = "dcc0613cc47f8538e16634ad625b72cc";
 
-                TmdbSearch searchService = tmdbApi.getSearch();
-                List<TvSeries> searchResults = searchService.searchTv(fileName, "en", 1).getResults();
+                    // Search for the TV show
+                    String searchUrl = "https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&query=" + showName.replace(" ", "%20");
+                    JsonObject searchResult = makeApiRequest(searchUrl);
+                    JsonArray results = searchResult.getAsJsonArray("results");
 
-                if (!searchResults.isEmpty()) {
-                    // Step 2: Get the TV show ID
-                    int tvShowId = searchResults.get(0).getId(); // Get the first result
+                    if (!results.isEmpty()) {
+                        JsonObject firstResult = results.get(0).getAsJsonObject();
+                        int showId = firstResult.get("id").getAsInt();
 
-                    // Step 3: Fetch TV show details
-                    TmdbTV tvSeriesService = tmdbApi.getTvSeries();
-                    TvSeries tvSeriesDetails = tvSeriesService.getSeries(tvShowId, "en");
+                        // Fetch TV show details
+                        String detailsUrl = "https://api.themoviedb.org/3/tv/" + showId + "?api_key=" + API_KEY;
+                        JsonObject showDetails = makeApiRequest(detailsUrl);
 
-                    // Step 4: Get episode runtime
-                    List<Integer> runtimes = tvSeriesDetails.getEpisodeRuntime();
+                        if(showDetails!=null) {
+                            int numberOfSeasons = showDetails.get("number_of_seasons").getAsInt();
 
-                    if (!runtimes.isEmpty()) {
-                        try {
-                            boolean testRuntime = false;
-                            for(Integer runtime : runtimes) {
-                                int durationMovie = runtime;
-                                String durationFile = map.get(fichierTemp.getName());
-                                int durationFileInt = 0;
-                                if (durationFile != null) {
-                                    StringTokenizer stk2 = new StringTokenizer(durationFile, ":");
-                                    durationFileInt += Integer.parseInt(stk2.nextToken()) * 60;
-                                    durationFileInt += Integer.parseInt(stk2.nextToken());
+                            JsonArray seasons = showDetails.getAsJsonArray("seasons");
+                            for (int i = 0; i < numberOfSeasons; i++) {
+                                JsonObject season = seasons.get(i).getAsJsonObject();
+                                int seasonNumber = season.get("season_number").getAsInt();
+                                int episodeCount = season.get("episode_count").getAsInt();
 
-                                    if (Math.abs(durationFileInt - durationMovie) <= 5 && durationMovie != 0) {
-                                        testRuntime = true;
-                                        break;
+                                String seasonDetailsUrl = "https://api.themoviedb.org/3/tv/" + showId + "/season/" + seasonNumber + "?api_key=" + API_KEY;
+                                JsonObject seasonResponse = makeApiRequest(seasonDetailsUrl);
+
+                                JsonArray episodes = seasonResponse.getAsJsonArray("episodes");
+
+                                for (int j = 1; j <= episodeCount; j++) {
+                                    if (!containsName(listEpisodes, seasonNumber, j)) {
+                                        JsonObject episode = (JsonObject) episodes.get(j-1);
+                                        String episodeTitle = episode.get("name").getAsString();
+                                        if (seasonNumber < 10) {
+                                            if (j < 10) {
+                                                pw.println(fileName + " " + "S0" + seasonNumber + "E0" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            } else {
+                                                pw.println(fileName + " " + "S0" + seasonNumber + "E" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            }
+                                        } else {
+                                            if (j < 10) {
+                                                pw.println(fileName + " " + "S" + seasonNumber + "E0" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            } else {
+                                                pw.println(fileName + " " + "S" + seasonNumber + "E" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            }
+                                        }
                                     }
                                 }
                             }
-                            if(!testRuntime){
-                                fichierTemp.delete();
-                                System.out.println(fichierTemp.getPath());
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                    } else {
+                        System.out.println("TV show not found.");
                     }
                 }
             }
         }
+        pw.flush();
+        pw.close();
     }
 
+    public boolean containsName(final List<String> list, final int season, final int episode) {
+        return list.stream().anyMatch(o -> (o.toLowerCase().contains("s0"+season) && o.toLowerCase().contains("e0"+episode)) ||
+                (o.toLowerCase().contains("s0"+season) && o.toLowerCase().contains("e"+episode)) ||
+                (o.toLowerCase().contains("s"+season) && o.toLowerCase().contains("e0"+episode)) ||
+                (o.toLowerCase().contains("s"+season) && o.toLowerCase().contains("e"+episode))
+        );
+    }
 
-    public String getVideoDuration(String videoFilePath) {
-        String duration = null;
-        String command = "C://ffmpeg/bin/ffmpeg.exe -i " + "\""+videoFilePath+"\"";
+    private static JsonObject makeApiRequest(String apiUrl) throws Exception {
+        URL url = new URL(apiUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
 
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-            processBuilder.redirectErrorStream(true); // FFmpeg outputs to stderr
-            Process process = processBuilder.start();
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder content = new StringBuilder();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            Pattern pattern = Pattern.compile("Duration: (\\d{2}):(\\d{2}):(\\d{2}\\.\\d{2})");
-
-            while ((line = reader.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    duration = matcher.group(1) + ":" + matcher.group(2) + ":" + matcher.group(3);
-                    break;
-                }
-            }
-            process.waitFor();
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
         }
+        in.close();
+        connection.disconnect();
 
-        return duration;
+        return JsonParser.parseString(content.toString()).getAsJsonObject();
     }
 
     public static void main(String[] args) {
         try {
-            VerifyDurationSeries verifyDuration = new VerifyDurationSeries();
-        }catch (Exception ex){
+            FindMissingSeries verifyDuration = new FindMissingSeries();
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 }
+
+
 
