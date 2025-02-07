@@ -9,8 +9,11 @@ public class MoveSeries {
 
 	public MoveSeries() {
 //		File base = new File("z://test/stockage");
-		File base = new File("z://temp/convert");
+//		File base = new File("z://temp/convert");
+		File base = new File("e://sitcoms/convert");
 //		File base = new File("x://convert");
+
+		String series = "e://series/";
 
 		File[] fichiers = base.listFiles();
 
@@ -56,10 +59,10 @@ public class MoveSeries {
 					int pos = nameLowerCase.indexOf(" - ");
 					nameLowerCase = nameLowerCase.substring(0,pos);
 
-					Files.createDirectories(Paths.get("z:/series/"+nameLowerCase));
+					Files.createDirectories(Paths.get(series+nameLowerCase));
 //							System.out.println(chemin + "/" + fichierTemp.getName());
 
-				Path p = Paths.get("z:/series/"+ nameLowerCase);
+				Path p = Paths.get(series+ nameLowerCase);
 
 				String path = p.toString();
 				String chemin = path.replaceAll("\\\\", "/");

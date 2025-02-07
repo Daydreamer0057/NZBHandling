@@ -6,7 +6,7 @@ public class TrimFailedUnpack {
 	static String path2;
 
 	public TrimFailedUnpack(String chemin) {
-//		chemin = "z://test/film a traiter";
+		chemin = "v://d movies";
 		// Dossier a supprimer
 		File base = new File(chemin);
 

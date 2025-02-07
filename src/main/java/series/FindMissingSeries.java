@@ -57,65 +57,63 @@ public class FindMissingSeries {
 
 //					String auctionUrl = "https://api.themoviedb.org/3/search/movie?query="+fileName+"&primary_release_year="+year+"&include_adult=true&apikey=dcc0613cc47f8538e16634ad625b72cc";
 //					String auctionUrl = "https://api.themoviedb.org/3/authentication?apikey=dcc0613cc47f8538e16634ad625b72cc";
-                if (!listEpisodes.isEmpty()) {
-                    String showName = fileName;
-                    String API_KEY = "dcc0613cc47f8538e16634ad625b72cc";
+                String showName = fileName;
+                String API_KEY = "dcc0613cc47f8538e16634ad625b72cc";
 
-                    // Search for the TV show
-                    String searchUrl = "https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&query=" + showName.replace(" ", "%20");
-                    JsonObject searchResult = makeApiRequest(searchUrl);
-                    JsonArray results = searchResult.getAsJsonArray("results");
+                // Search for the TV show
+                String searchUrl = "https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&query=" + showName.replace(" ", "%20");
+                JsonObject searchResult = makeApiRequest(searchUrl);
+                JsonArray results = searchResult.getAsJsonArray("results");
 
-                    if (!results.isEmpty()) {
-                        JsonObject firstResult = results.get(0).getAsJsonObject();
-                        int showId = firstResult.get("id").getAsInt();
+                if (!results.isEmpty()) {
+                    JsonObject firstResult = results.get(0).getAsJsonObject();
+                    int showId = firstResult.get("id").getAsInt();
 
-                        // Fetch TV show details
-                        String detailsUrl = "https://api.themoviedb.org/3/tv/" + showId + "?api_key=" + API_KEY;
-                        JsonObject showDetails = makeApiRequest(detailsUrl);
+                    // Fetch TV show details
+                    String detailsUrl = "https://api.themoviedb.org/3/tv/" + showId + "?api_key=" + API_KEY;
+                    JsonObject showDetails = makeApiRequest(detailsUrl);
 
-                        if(showDetails!=null) {
-                            int numberOfSeasons = showDetails.get("number_of_seasons").getAsInt();
+                    if(showDetails!=null) {
+                        int numberOfSeasons = showDetails.get("number_of_seasons").getAsInt();
 
-                            JsonArray seasons = showDetails.getAsJsonArray("seasons");
-                            for (int i = 0; i < numberOfSeasons; i++) {
-                                JsonObject season = seasons.get(i).getAsJsonObject();
-                                int seasonNumber = season.get("season_number").getAsInt();
-                                int episodeCount = season.get("episode_count").getAsInt();
+                        JsonArray seasons = showDetails.getAsJsonArray("seasons");
+                        for (int i = 0; i < numberOfSeasons; i++) {
+                            JsonObject season = seasons.get(i).getAsJsonObject();
+                            int seasonNumber = season.get("season_number").getAsInt();
+                            int episodeCount = season.get("episode_count").getAsInt();
 
-                                String seasonDetailsUrl = "https://api.themoviedb.org/3/tv/" + showId + "/season/" + seasonNumber + "?api_key=" + API_KEY;
-                                JsonObject seasonResponse = makeApiRequest(seasonDetailsUrl);
+                            String seasonDetailsUrl = "https://api.themoviedb.org/3/tv/" + showId + "/season/" + seasonNumber + "?api_key=" + API_KEY;
+                            JsonObject seasonResponse = makeApiRequest(seasonDetailsUrl);
 
-                                JsonArray episodes = seasonResponse.getAsJsonArray("episodes");
+                            JsonArray episodes = seasonResponse.getAsJsonArray("episodes");
 
-                                for (int j = 1; j <= episodeCount; j++) {
-                                    if (!containsName(listEpisodes, seasonNumber, j)) {
-                                        JsonObject episode = (JsonObject) episodes.get(j-1);
-                                        String episodeTitle = episode.get("name").getAsString();
-                                        if (seasonNumber < 10) {
-                                            if (j < 10) {
-                                                pw.println(fileName + " " + "S0" + seasonNumber + "E0" + j + " " + episodeTitle);
-                                                pw.flush();
-                                            } else {
-                                                pw.println(fileName + " " + "S0" + seasonNumber + "E" + j + " " + episodeTitle);
-                                                pw.flush();
-                                            }
+                            for (int j = 1; j <= episodeCount; j++) {
+                                if (!containsName(listEpisodes, seasonNumber, j)) {
+                                    JsonObject episode = (JsonObject) episodes.get(j-1);
+                                    String episodeTitle = episode.get("name").getAsString();
+                                    if (seasonNumber < 10) {
+                                        if (j < 10) {
+                                            pw.println(fileName + " " + "S0" + seasonNumber + "E0" + j + " " + episodeTitle);
+                                            pw.flush();
                                         } else {
-                                            if (j < 10) {
-                                                pw.println(fileName + " " + "S" + seasonNumber + "E0" + j + " " + episodeTitle);
-                                                pw.flush();
-                                            } else {
-                                                pw.println(fileName + " " + "S" + seasonNumber + "E" + j + " " + episodeTitle);
-                                                pw.flush();
-                                            }
+                                            pw.println(fileName + " " + "S0" + seasonNumber + "E" + j + " " + episodeTitle);
+                                            pw.flush();
+                                        }
+                                    } else {
+                                        if (j < 10) {
+                                            pw.println(fileName + " " + "S" + seasonNumber + "E0" + j + " " + episodeTitle);
+                                            pw.flush();
+                                        } else {
+                                            pw.println(fileName + " " + "S" + seasonNumber + "E" + j + " " + episodeTitle);
+                                            pw.flush();
                                         }
                                     }
                                 }
                             }
                         }
-                    } else {
-                        System.out.println("TV show not found.");
                     }
+                } else {
+                    System.out.println("TV show not found.");
                 }
             }
         }

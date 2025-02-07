@@ -22,15 +22,10 @@ public class CheckConvertTest {
 //		}
 //
 		String eraseName = "z:/test/test";
-//		String eraseName = "z:/test/test_series";
-//		String eraseName = "z:/film/france/convert";
-//		String eraseName = "z:/test/stockage";
-//		String eraseName = "e:/humour/h265";
-//		String baseName = "z:/temp/main";
+//		String eraseName = "e://sitcoms/";
+
 		String baseName = "z:/temp/convert";
-//		String baseName = "z:/temp/convert2";
-//		String baseName = "z:/temp/convert av1";
-//		String baseName = "e:/humour/convert";
+//		String baseName = "e://sitcoms/convert";
 
 		boolean test01 = replaceConvertFiles(baseName);
 		boolean test02 = replaceConvertFiles(eraseName);

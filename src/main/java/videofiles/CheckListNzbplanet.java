@@ -27,6 +27,7 @@ public class CheckListNzbplanet {
             while (line != null) {
                 line = br.readLine();
                 if (line != null) {
+                    line = line.replace(":","");
                     listFilms.add(line.toLowerCase());
                 }
             }
@@ -34,21 +35,21 @@ public class CheckListNzbplanet {
             br.close();
             fr.close();
 
-            fr = new FileReader(("e://temp/list_file_cancel.txt"));
-            br = new BufferedReader(fr);
-
-            ArrayList<String> listFilmsCancel = new ArrayList<>();
-
-            line = "";
-            while (line != null) {
-                line = br.readLine();
-                if (line != null) {
-                    listFilms.add(line.toLowerCase());
-                }
-            }
-
-            br.close();
-            fr.close();
+//            fr = new FileReader(("e://temp/list_file_cancel.txt"));
+//            br = new BufferedReader(fr);
+//
+//            ArrayList<String> listFilmsCancel = new ArrayList<>();
+//
+//            line = "";
+//            while (line != null) {
+//                line = br.readLine();
+//                if (line != null) {
+//                    listFilms.add(line.toLowerCase());
+//                }
+//            }
+//
+//            br.close();
+//            fr.close();
 
             WebDriver driver = null;
 
@@ -112,6 +113,7 @@ public class CheckListNzbplanet {
                     lineDoc = lineDoc.trim();
                     if (lineDoc.toLowerCase().contains("/details/")) {
                         lineDoc = lineDoc.replace('.',' ');
+                        lineDoc = lineDoc.replace(":","");
                         listDoc.add(lineDoc);
                     }
                 }
@@ -139,6 +141,8 @@ public class CheckListNzbplanet {
                         int pos2 = lineSource.indexOf("</a>");
                         String movie = lineSource.substring(0, pos2);
                         movie = movie.toLowerCase();
+                        String movieFinal = movie;
+                        movie = movie.replace(":","");
 
                         int pos3 = lineSource.indexOf("title=\"");
                         String year = "(" + lineSource.substring(pos3 + 7, pos3 + 11) + ")";
@@ -160,6 +164,16 @@ public class CheckListNzbplanet {
                                 if (resolutionTemp > resolutionDoc) {
                                     resolutionDoc = resolutionTemp;
                                 }
+                            } else {
+                                Pattern p3 = Pattern.compile(".*([0-9]{3}[pP]).*");
+                                Matcher m3 = p3.matcher(lineTemp.toLowerCase());
+
+                                if (m3.matches()) {
+                                    int resolutionTemp = Integer.parseInt(m3.group(1).toLowerCase().substring(0, m3.group(1).length() - 1));
+                                    if (resolutionTemp > resolutionDoc) {
+                                        resolutionDoc = resolutionTemp;
+                                    }
+                                }
                             }
                         }
                         int resolutionSource = 0;
@@ -177,23 +191,37 @@ public class CheckListNzbplanet {
 
                             if (m3.matches()) {
                                 resolutionSource = Integer.parseInt(m3.group(1).toLowerCase().substring(0, m3.group(1).length() - 1));
+                            } else {
+                                Pattern p4 = Pattern.compile(".*([0-9]{3}[pP]).*");
+                                Matcher m4 = p4.matcher(lineSourceTemp.toLowerCase());
+
+                                if (m4.matches()) {
+                                    resolutionSource = Integer.parseInt(m4.group(1).toLowerCase().substring(0, m4.group(1).length() - 1));
+                                }
                             }
 
-                            String lineCancel = null;
+//                            String lineCancel = null;
+//
+//                            try {
+//                                lineCancel = getByName(listFilmsCancel, movie + " " + year);
+//                            } catch(NoSuchElementException ex) {
+//
+//                            }
 
-                            try {
-                                lineCancel = getByName(listFilmsCancel, movie + " " + year);
-                            } catch(NoSuchElementException ex) {
-
-                            }
-
-                            if ((resolutionDoc > resolutionSource)&&lineCancel==null&&resolutionSource!=0&&resolutionDoc!=0) {
-                                pw.println(movie + " " + year);
-                                pw.flush();
+                            if(lineSourceTemp.toLowerCase().contains("treated")) {
+                                if (resolutionDoc > resolutionSource) {
+                                    pw.println(movieFinal + " " + year + " treated");
+                                    pw.flush();
+                                }
+                            } else {
+                                if (resolutionDoc >= resolutionSource) {
+                                    pw.println(movieFinal + " " + year);
+                                    pw.flush();
+                                }
                             }
                         } else {
-                                pw.println(movie + " " + year);
-                                pw.flush();
+                            pw.println(movieFinal + " " + year);
+                            pw.flush();
                         }
                     }
                 }
@@ -214,7 +242,7 @@ public class CheckListNzbplanet {
     }
 
     public String getByName(final List<String> list, final String name) throws NoSuchElementException {
-        return list.stream().filter(o -> o.toLowerCase().contains(name.toLowerCase())).findFirst().get();
+        return list.stream().filter(o -> o.toLowerCase().startsWith(name.toLowerCase())).findFirst().get();
     }
 
     public List<String> getAllByName(final List<String> list, final String name){

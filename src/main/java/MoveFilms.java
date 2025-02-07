@@ -1,5 +1,4 @@
 import org.apache.commons.io.FileUtils;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -99,6 +98,7 @@ public class MoveFilms {
 
 //					String chemin = "z://film/New/"+resolution+"/"+ folder2;
 					String chemin = "z://film/Treated/"+resolution+"/"+ folder2;
+
 
 					System.out.println("Chemin "+ chemin);
 					FileUtils.forceMkdir(new File(chemin));

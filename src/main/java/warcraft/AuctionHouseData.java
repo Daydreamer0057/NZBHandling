@@ -1,5 +1,7 @@
 package warcraft;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -10,9 +12,7 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -23,34 +23,8 @@ public class AuctionHouseData {
 
     public AuctionHouseData(){
         HashSet<Long> listItems  = new HashSet<>();
-        try {
-            FileReader fr = new FileReader(new File("d://games/world of warcraft/items.txt"));
-            BufferedReader br = new BufferedReader(fr);
 
-            String line = "";
-            String totalItems = "";
-            while(line!=null){
-                line = br.readLine();
-                if(line!=null){
-                    totalItems += line;
-                }
-            }
-
-            br.close();
-            fr.close();
-
-            String[] listItemsString = totalItems.split("i:");
-            for(String lineTemp : listItemsString){
-                if(!lineTemp.isEmpty()) {
-//                    Long id = getItemId(Long.parseLong(lineTemp.trim()));
-                    listItems.add(Long.parseLong(lineTemp.trim()));
-                }
-            }
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
-
-//        String auctionUrl = "https://eu.api.blizzard.com/data/wow/connected-realm/1390/auctions?namespace=dynamic-eu&locale=en_US&access_token="+token;
+        //        String auctionUrl = "https://eu.api.blizzard.com/data/wow/connected-realm/1390/auctions?namespace=dynamic-eu&locale=en_US&access_token="+token;
         String auctionUrl = "https://eu.api.blizzard.com/data/wow/auctions/commodities?namespace=dynamic-eu&locale=en_US&access_token="+token;
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -60,11 +34,13 @@ public class AuctionHouseData {
 
                 String result = EntityUtils.toString(response.getEntity());
 
-                HashMap<Long, ArrayList<AuctionItem>> mapItems = getMapItems(result,listItems);
+//                HashMap<Long, ArrayList<AuctionItem>> mapItems = getMapItems(result,listItems);
 
-                mapItems = sortItems(mapItems);
+                HashSet<Auction> auctions = getMapItems(result);
 
-                getInterval(mapItems);
+                auctions = sortItems(auctions);
+
+                getInterval(auctions);
 
                 httpClient.close();
             }
@@ -112,19 +88,20 @@ public class AuctionHouseData {
         return "";
     }
 
-    public HashMap<Long, ArrayList<AuctionItem>> getMapItems(String result, HashSet<Long> set){
-        HashMap<Long, ArrayList<AuctionItem>> mapAuctions = new HashMap<>();
+    public HashSet<Auction> getMapItems(String result){
+        HashSet<Auction> listAuctions = new HashSet<>();
         try {
             // Initialize ObjectMapper
             ObjectMapper objectMapper = new ObjectMapper();
-//            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//
-////            Root root = om.readValue(result, Root.class);
-////            List<Auction> listItems = objectMapper.readValue(result, new TypeReference<List<Auction>>(){});
-////            List<Auction> auctions = objectMapper.readValue(result, new TypeReference<List<Auction>>() {});
-//
-//            AuctionHouseDataItems auctionHouseDataItems = objectMapper.readValue(result, AuctionHouseDataItems.class);
-//            List<Auction> auctions = auctionHouseDataItems.getAuctions();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            Root root = objectMapper.readValue(result, Root.class);
+            List<Auction> listItems = objectMapper.readValue(result, new TypeReference<List<Auction>>(){});
+            List<Auction> auctions = objectMapper.readValue(result, new TypeReference<List<Auction>>() {});
+
+            AuctionHouseDataItems auctionHouseDataItems = objectMapper.readValue(result, AuctionHouseDataItems.class);
+            List<Auction> auctionList = auctionHouseDataItems.getAuctions();
+            listAuctions = new HashSet<>(auctionList);
 //
 //            for(Auction auctionTemp : auctions) {
 //                if (set.contains(auctionTemp.item.id)) {
@@ -142,80 +119,101 @@ public class AuctionHouseData {
         } catch(Exception ex){
             ex.printStackTrace();
         }
-        return mapAuctions;
+        return listAuctions;
     }
 
-    public HashMap<Long, ArrayList<AuctionItem>> sortItems(HashMap<Long, ArrayList<AuctionItem>> map){
-        HashMap<Long, ArrayList<AuctionItem>> mapTemp = new HashMap<>();
-        for(Long id : map.keySet()) {
-            ArrayList<AuctionItem> listItems = map.get(id);
-            listItems.sort(new Comparator<AuctionItem>() {
-                @Override
-                public int compare(AuctionItem o1, AuctionItem o2) {
-                    int retour = 0;
-                    if (o1.price < o2.price) retour = -1;
-                    if (o1.price == o2.price) retour = 0;
-                    if (o1.price > o2.price) retour = 1;
-                    return retour;
-                }
-            });
-            mapTemp.put(id,listItems);
-        }
-
-        return mapTemp;
+    public HashSet<Auction> sortItems(HashSet<Auction> setAuctions){
+        ArrayList<Auction> listItems = new ArrayList<>(setAuctions);
+        listItems.sort(new Comparator<Auction>() {
+            @Override
+            public int compare(Auction o1, Auction o2) {
+                int retour = 0;
+                if (o1.quantity*o1.unit_price < o2.quantity*o2.unit_price) retour = -1;
+                if (o1.quantity*o1.unit_price == o2.quantity*o2.unit_price) retour = 0;
+                if (o1.quantity*o1.unit_price > o2.quantity*o2.unit_price) retour = 1;
+                return retour;
+            }
+        });
+        setAuctions = new HashSet<>(listItems);
+        return setAuctions;
     }
 
-    public void getInterval(HashMap<Long, ArrayList<AuctionItem>> map){
+    public void getInterval(HashSet<Auction> set){
         try {
-            PrintWriter pw = new PrintWriter(new File("d://games/world of warcraft/items_to_buy.txt"));
+            HashMap<Long,ArrayList<Long>> mapItems = new HashMap<Long, ArrayList<Long>>();
+            for(Auction auctionTemp : set){
+                ArrayList<Long> item = mapItems.get(auctionTemp.id);
 
-            for(Long auctionTemp : map.keySet()){
-                ArrayList<AuctionItem> listAuction = map.get(auctionTemp);
+                Long price = auctionTemp.unit_price*auctionTemp.quantity;
 
-                if(!listAuction.isEmpty()){
-                    long cout = 0;
-                    ItemToBuy itemToBuy = new ItemToBuy(0,0);
-                    double percent = 0;
-                    for(int i=0;i<listAuction.size()-1;i++){
-                        AuctionItem itemTemp = listAuction.get(i);
-                        cout += (itemTemp.price * itemTemp.quantity);
-                        if(cout < 100000000L){
-                            AuctionItem itemTempNext = listAuction.get(i+1);
-                            long priceNext = itemTempNext.price;
-                            long priceCurrent = itemTemp.price;
-                            double percentage = ((double) priceNext / priceCurrent * 100) - 100;
-                            if(percentage > 20){
-                                percent = percentage;
-                                itemToBuy = new ItemToBuy(auctionTemp, priceCurrent);
-//                                break;
-                            }
+                if(auctionTemp.unit_price<=1000000000L) {
+                    if (item != null) {
+                        if (mapItems.get(auctionTemp.id) != null) {
+                            item.add(price);
+                            mapItems.put(auctionTemp.id, item);
+                        } else {
+                            ArrayList<Long> items = new ArrayList<>();
+                            items.add(price);
+                            mapItems.put(auctionTemp.id, items);
                         }
                     }
-                    pw.println("i:"+itemToBuy.id+";"+itemToBuy.price);
-                    pw.flush();
                 }
+
             }
 
-            pw.flush();
-            pw.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
+            PrintWriter pw = new PrintWriter(new File("d://games/world of warcraft/items_to_buy.txt"));
 
-    public static Long getItemId(long itemId) throws Exception {
-        String url = WOWHEAD_API_URL + itemId;
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet request = new HttpGet(url);
+            for(Long items : mapItems.keySet()) {
+                ArrayList<Long> listPrice = mapItems.get("items");
+
+                listPrice.sort(new Comparator<Long>() {
+                    @Override
+                    public int compare(Long o1, Long o2) {
+                        int retour = 0;
+                        if (o1 > o2) retour = -1;
+                        if (o1.equals(o2)) retour = 0;
+                        if (o1 < o2) retour = 1;
+                        return retour;
+                    }
+                });
+
+                for (int i = 0; i < listPrice.size() - 1; i++) {
+                    if (listPrice.get(i) < 100000000L && (listPrice.get(i + 1) < 100000000L)) {
+                        Long price = listPrice.get(i);
+                        Long priceNext = listPrice.get(i + 1);
+
+                        double percentage = ((double) priceNext / price * 100) - 100;
+                        if (percentage > 30) {
+                            pw.print("i:" + items + ";");
+                            pw.flush();
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+
+        pw.flush();
+        pw.close();
+    } catch (Exception ex){
+        ex.printStackTrace();
+    }
+}
+
+public static Long getItemId(long itemId) throws Exception {
+    String url = WOWHEAD_API_URL + itemId;
+    CloseableHttpClient httpClient = HttpClients.createDefault();
+    HttpGet request = new HttpGet(url);
 //        HttpResponse response = client.execute(request);
 //
 //        JSONObject jsonObject = new JSONObject(response);
 
-        CloseableHttpResponse response = httpClient.execute(request);
-        System.out.println("Response Code: " + response.getCode());
-        String jsonResponse = EntityUtils.toString(response.getEntity());
+    CloseableHttpResponse response = httpClient.execute(request);
+    System.out.println("Response Code: " + response.getCode());
+    String jsonResponse = EntityUtils.toString(response.getEntity());
 
-        ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = new ObjectMapper();
 
 //        JsonNode rootNode = mapper.readTree(jsonResponse);
 //        JsonNode queueNode = rootNode.path("queue");
@@ -223,89 +221,89 @@ public class AuctionHouseData {
 
 //        Long id = jsonObject.getLong("id");
 
-        httpClient.close();
-        return 0L;
+    httpClient.close();
+    return 0L;
+}
+
+public static void main(String[] args) {
+    AuctionHouseData a = new AuctionHouseData();
+}
+
+
+
+public static class Auction{
+    public long id;
+    public Item item;
+    public long unit_price;
+    public long quantity;
+    public String time_left;
+    public long bid;
+}
+
+public static class Commodities{
+    public String href;
+}
+
+public static class ConnectedRealm{
+    public String href;
+}
+
+public static class Item{
+    public long id;
+    public long context;
+    public ArrayList<Long> bonus_lists;
+    public ArrayList<Modifier> modifiers;
+}
+
+public static class Links{
+    public Self self;
+}
+
+public static class Modifier{
+    public long type;
+    public long value;
+}
+
+public static class Root{
+    public Links _links;
+    public ConnectedRealm connected_realm;
+    public ArrayList<Auction> auctions;
+    public Commodities commodities;
+}
+
+public static class Self{
+    public String href;
+}
+
+public static class AuctionItem{
+    public long quantity;
+    public long price;
+
+    public AuctionItem(long quantity, long price){
+        this.quantity = quantity;
+        this.price = price;
+    }
+}
+
+public static class AuctionHouseDataItems {
+    private List<Auction> auctions;
+
+    public List<Auction> getAuctions() {
+        return auctions;
     }
 
-    public static void main(String[] args) {
-        AuctionHouseData a = new AuctionHouseData();
+    public void setAuctions(List<Auction> auctions) {
+        this.auctions = auctions;
     }
+}
 
+public class ItemToBuy {
+    public long id;
+    public long price;
 
-
-    public static class Auction{
-        public long id;
-        public Item item;
-        public long unit_price;
-        public long quantity;
-        public String time_left;
-        public long bid;
+    public ItemToBuy(long id, long price) {
+        this.id = id;
+        this.price = price;
     }
-
-    public static class Commodities{
-        public String href;
-    }
-
-    public static class ConnectedRealm{
-        public String href;
-    }
-
-    public static class Item{
-        public long id;
-        public long context;
-        public ArrayList<Long> bonus_lists;
-        public ArrayList<Modifier> modifiers;
-    }
-
-    public static class Links{
-        public Self self;
-    }
-
-    public static class Modifier{
-        public long type;
-        public long value;
-    }
-
-    public static class Root{
-        public Links _links;
-        public ConnectedRealm connected_realm;
-        public ArrayList<Auction> auctions;
-        public Commodities commodities;
-    }
-
-    public static class Self{
-        public String href;
-    }
-
-    public static class AuctionItem{
-        public long quantity;
-        public long price;
-
-        public AuctionItem(long quantity, long price){
-            this.quantity = quantity;
-            this.price = price;
-        }
-    }
-
-    public static class AuctionHouseDataItems {
-        private List<Auction> auctions;
-
-        public List<Auction> getAuctions() {
-            return auctions;
-        }
-
-        public void setAuctions(List<Auction> auctions) {
-            this.auctions = auctions;
-        }
-    }
-
-    public class ItemToBuy {
-        public long id;
-        public long price;
-
-        public ItemToBuy(long id, long price) {
-            this.id = id;
-            this.price = price;
-        }
-    }
+}
 }
