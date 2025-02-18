@@ -24,7 +24,7 @@ public class ListeFilms {
 
         HashSet<File> listeFichier = FileDirParcours.getParcours("z:/film/new",new String[]{"avi","mp4","mkv"});
         listeFichier.addAll(FileDirParcours.getParcours("z:/film/treated",new String[]{"avi","mp4","mkv"}));
-//        HashSet<File> listeFichier3 = FileDirParcours.getParcours("z:/test/test",new String[]{"avi","mp4","mkv"});
+        listeFichier.addAll(FileDirParcours.getParcours("z:/test/test",new String[]{"avi","mp4","mkv"}));
 
 //        listeFichier.addAll(listeFichier2);
 //        listeFichier.addAll(listeFichier3);

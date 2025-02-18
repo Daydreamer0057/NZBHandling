@@ -146,7 +146,7 @@ public class AuctionHouseData {
 
                 Long price = auctionTemp.unit_price*auctionTemp.quantity;
 
-                if(auctionTemp.unit_price<=1000000000L) {
+                if(auctionTemp.unit_price<=10000000L) {
                     if (item != null) {
                         if (mapItems.get(auctionTemp.id) != null) {
                             item.add(price);
@@ -178,7 +178,7 @@ public class AuctionHouseData {
                 });
 
                 for (int i = 0; i < listPrice.size() - 1; i++) {
-                    if (listPrice.get(i) < 100000000L && (listPrice.get(i + 1) < 100000000L)) {
+                    if (listPrice.get(i) < 10000000L && (listPrice.get(i + 1) < 10000000L)) {
                         Long price = listPrice.get(i);
                         Long priceNext = listPrice.get(i + 1);
 

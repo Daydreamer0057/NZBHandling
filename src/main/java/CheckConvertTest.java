@@ -22,7 +22,7 @@ public class CheckConvertTest {
 //		}
 //
 		String eraseName = "z:/test/test";
-//		String eraseName = "e://sitcoms/";
+//		String eraseName = "e://sitcoms/720";
 
 		String baseName = "z:/temp/convert";
 //		String baseName = "e://sitcoms/convert";

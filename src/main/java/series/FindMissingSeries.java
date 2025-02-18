@@ -89,24 +89,29 @@ public class FindMissingSeries {
 
                             for (int j = 1; j <= episodeCount; j++) {
                                 if (!containsName(listEpisodes, seasonNumber, j)) {
-                                    JsonObject episode = (JsonObject) episodes.get(j-1);
-                                    String episodeTitle = episode.get("name").getAsString();
-                                    if (seasonNumber < 10) {
-                                        if (j < 10) {
-                                            pw.println(fileName + " " + "S0" + seasonNumber + "E0" + j + " " + episodeTitle);
-                                            pw.flush();
+                                    try {
+                                        JsonObject episode = episodes.get(j - 1).getAsJsonObject();
+                                        String episodeTitle = episode.get("name").getAsString();
+                                        if (seasonNumber < 10) {
+                                            if (j < 10) {
+                                                pw.println(fileName + " " + "S0" + seasonNumber + "E0" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            } else {
+                                                pw.println(fileName + " " + "S0" + seasonNumber + "E" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            }
                                         } else {
-                                            pw.println(fileName + " " + "S0" + seasonNumber + "E" + j + " " + episodeTitle);
-                                            pw.flush();
+                                            if (j < 10) {
+                                                pw.println(fileName + " " + "S" + seasonNumber + "E0" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            } else {
+                                                pw.println(fileName + " " + "S" + seasonNumber + "E" + j + " " + episodeTitle);
+                                                pw.flush();
+                                            }
                                         }
-                                    } else {
-                                        if (j < 10) {
-                                            pw.println(fileName + " " + "S" + seasonNumber + "E0" + j + " " + episodeTitle);
-                                            pw.flush();
-                                        } else {
-                                            pw.println(fileName + " " + "S" + seasonNumber + "E" + j + " " + episodeTitle);
-                                            pw.flush();
-                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        System.out.println("i "+i+"    j "+j);
                                     }
                                 }
                             }

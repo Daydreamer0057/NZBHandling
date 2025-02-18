@@ -1,3 +1,5 @@
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,7 +75,7 @@ public class MoveSeries {
 					}
 				Thread t = new Thread(() -> {
 						try {
-							fichierTemp.renameTo(new File(chemin + "/" + fichierTemp.getName()));
+							FileUtils.moveFile(fichierTemp,new File(chemin + "/" + fichierTemp.getName()));
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
